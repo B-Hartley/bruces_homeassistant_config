@@ -1,0 +1,15 @@
+notify:
+  - name: alert_jyggy_doors
+    platform: group
+    services:
+      - service: mobile_app_bruce_iphone
+        data:
+          # title: ''
+          # message: ''
+          data:
+            apns_headers:
+              apns-collapse-id: "alert_jyggy_doors"
+            push:
+              category: 'alert_acknowledgement'
+              action_data:
+                entity_id: alert.jyggy_doors

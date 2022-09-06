@@ -1,0 +1,32 @@
+automation:
+  - id: event_telegram_sent_capture_id
+    alias: 'Telegram capture message ID'
+    mode: parallel
+    
+    description: >
+      Capture Message ID into helper for later
+      
+    trigger:
+      - platform: event
+        id: 'sent'
+        event_type: telegram_sent
+        
+    action:
+      - choose:
+          - conditions: "{{ trigger.event.data.message_tag == 'startup' }}"
+            sequence:
+              - delay: 00:01:00
+              - service: telegram_bot.delete_message
+                data:
+                  message_id: "{{ trigger.event.data.message_id }}"
+                  chat_id: "{{ trigger.event.data.chat_id }}"    
+          - conditions: "{{ trigger.event.data.message_tag is defined }}"
+            sequence:
+              - service: input_text.set_value
+                target:
+                  entity_id: "input_text.{{ trigger.event.data.message_tag }}_message_id"
+                data:
+                  value: "{{ trigger.event.data.message_id }}"           
+        
+                
+                  

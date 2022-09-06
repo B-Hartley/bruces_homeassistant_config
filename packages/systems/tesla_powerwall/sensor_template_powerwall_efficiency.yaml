@@ -1,0 +1,6 @@
+template:
+  sensor:
+    - name: "Powerwall Efficiency"
+      availability: "{{ states('binary_sensor.powerwall_connected_to_tesla') != 'Unavailable' }}"
+      state: "{{ ((states('sensor.powerwall_battery_export')|float(0)/states('sensor.powerwall_battery_import')|float(0))*100.00)|round(1) }}"
+      unit_of_measurement: "%"

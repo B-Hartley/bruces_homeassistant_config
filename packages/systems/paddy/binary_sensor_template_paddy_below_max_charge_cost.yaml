@@ -1,0 +1,6 @@
+template:
+  binary_sensor:  
+    - name: "Paddy Below Max Charge Cost"
+      unique_id: paddy_below_max_charge_cost
+      availability:  "{{ states('sensor.import_price') != 'unknown' }}"        
+      state: "{{ (states('sensor.import_price')|float(35)) <= (states('input_number.paddy_charge_below_x_pence')|float(0)) }}"

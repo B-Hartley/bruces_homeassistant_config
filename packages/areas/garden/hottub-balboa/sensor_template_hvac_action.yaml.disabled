@@ -1,0 +1,6 @@
+template:
+  sensor:
+    - name: "HotTub HVAC Action"
+      unique_id: hottub_hvac_action
+      availability: "{{ states('binary_sensor.bwa_wi_fi_module') }}"
+      state: "{{ state_attr('climate.spa_climate','hvac_action') }}"

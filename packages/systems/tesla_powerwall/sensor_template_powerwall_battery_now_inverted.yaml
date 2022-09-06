@@ -1,0 +1,8 @@
+template:
+  sensor:
+    - name: "Powerwall Battery Now Inverted"
+      unique_id: powerwall_battery_now_inverted
+      availability: "{{ states('binary_sensor.powerwall_connected_to_tesla') != 'Unavailable' }}"
+      device_class: power
+      unit_of_measurement: "kW"
+      state: "{{ states('sensor.powerwall_battery_now')|float(0) * -1}}"

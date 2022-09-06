@@ -1,0 +1,8 @@
+template:
+  sensor:
+    - name: "Floorplan Powerwall Grid"
+      unique_id: floorplan_powerwall_grid
+      availability: "{{ states('binary_sensor.powerwall_connected_to_tesla') != 'Unavailable' }}"
+      unit_of_measurement: 'kW'
+      state: "{{ states('sensor.powerwall_site_now')|round(2) }}"
+      device_class: power

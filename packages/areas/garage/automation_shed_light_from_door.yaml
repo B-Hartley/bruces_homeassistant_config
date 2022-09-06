@@ -1,0 +1,34 @@
+automation:
+  - id: shed_light_from_door
+    alias: 'Shed lights on and off from door'
+    mode: restart
+    
+    description: >-
+      Shed lights on and off with open and close door
+
+    trigger: 
+      - platform: homeassistant
+        id: "start"
+        event: start
+      - platform: event
+        id: "reload"
+        event_type: automation_reloaded    
+      - platform: state
+        id: "door"
+        entity_id: binary_sensor.shed_door
+
+    condition:
+      condition: state
+      entity_id: binary_sensor.shed_door
+      state: 
+        - 'on'
+        - 'off'      
+        
+    action:
+      - service: light.turn_{{ states('binary_sensor.shed_door') }}
+        target:
+          entity_id: light.shed_light          
+      - delay: 00:15:00
+      - service: light.turn_off
+        target:
+          entity_id: light.shed_light            

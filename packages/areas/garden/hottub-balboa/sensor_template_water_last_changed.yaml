@@ -1,0 +1,9 @@
+template:
+  sensor:
+    - name: "HotTub Water Last Changed"
+      unique_id: hottub_water_last_changed
+      unit_of_measurement: days
+      state: "{{ ((as_timestamp(now()) - as_timestamp(states('input_button.hottub_water_last_changed')))|int(0))// 86400 }}"
+      icon: mdi:water-opacity       
+
+        

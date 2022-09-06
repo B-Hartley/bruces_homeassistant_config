@@ -1,0 +1,514 @@
+automation:
+  - id: flichub_click_webhook
+    alias: Flic button events from Flic Hub - Webhook
+    mode: parallel
+    
+    description: >
+      Flic Button commands from flic hub
+      Receive as Webhook
+
+    trigger:
+      - platform: webhook
+        id: "flic"
+        webhook_id: !secret flic_webhook
+  
+    variables: 
+      button_name: "{{ trigger.json.button_name }}"
+      click_type: "{{ trigger.json.click_type }}"
+      littertray_type: "{% set mapper = {'click':'wee','double_click':'poo','hold':'reset'} %}{{mapper[trigger.json.click_type]}}"
+
+    action:   
+      - service: input_text.set_value
+        target:
+          entity_id: input_text.flic_debug
+        data:
+          value: "{{ trigger.json.button_name }}"
+          
+        # Update Battery Level
+#      - service: input_number.set_value  
+#        data:
+#          entity_id: "input_number.{{ button_name }}_battery"
+#          value: "{{ trigger.json.battery_status }}"
+          
+      - choose:
+
+##########################################################
+##               HRT                                    ##
+##########################################################      
+          - conditions: "{{ button_name == 'hrt' and click_type == 'click' }}"
+            sequence:
+              - service: input_button.press
+                target: 
+                  entity_id: input_button.hrt_last_used
+              - service: counter.increment
+                target: 
+                  entity_id: counter.hrt_squirts_used
+
+          - conditions: "{{ button_name == 'hrt' and click_type == 'double_click' }}"
+            sequence:
+              - service: telegram_bot.send_message
+                data:
+                  target: !secret telegram_chat_id_bruce_and_sarah
+                  title: "HRT Gel"
+                  message: "Last used: {{ states('input_datetime.hrt_last_used')}}"
+
+          - conditions: "{{ button_name == 'hrt' and click_type == 'hold' }}"
+            sequence:
+              - service: input_button.press
+                target: 
+                  entity_id: input_button.hrt_bottle_opened
+              - service: counter.reset
+                target: 
+                  entity_id: counter.hrt_squirts_used
+                  
+##########################################################
+##               Kitchen Radio                          ##
+##########################################################      
+      
+          - conditions: "{{ button_name == 'kitchen_radio' and click_type == 'click' and is_state('media_player.kitchen_sonos','playing') and state_attr('media_player.kitchen_sonos','media_channel')[0:7]=='Radio 1' }}"
+            sequence:
+              - service: sonos.unjoin
+                target:
+                  entity_id: media_player.kitchen_sonos          
+              - service: media_player.media_pause
+                target:
+                  entity_id: media_player.kitchen_sonos
+          - conditions: "{{ button_name == 'kitchen_radio' and click_type == 'click' }}"
+            sequence:
+              - service: sonos.unjoin
+                target:
+                  entity_id: media_player.kitchen_sonos          
+              - service: media_player.select_source
+                target:
+                  entity_id: media_player.kitchen_sonos
+                data:
+                  source: Radio 1              
+          - conditions: "{{ button_name == 'kitchen_radio' and click_type == 'double_click' and is_state('media_player.kitchen_sonos','playing') and state_attr('media_player.kitchen_sonos','media_channel')[0:7]=='Radio 2' }}"
+            sequence:
+              - service: sonos.unjoin
+                target:
+                  entity_id: media_player.kitchen_sonos          
+              - service: media_player.media_pause
+                target:
+                  entity_id: media_player.kitchen_sonos
+          - conditions: "{{ button_name == 'kitchen_radio' and click_type == 'double_click' }}"
+            sequence:
+              - service: sonos.unjoin
+                target:
+                  entity_id: media_player.kitchen_sonos          
+              - service: media_player.select_source
+                target:
+                  entity_id: media_player.kitchen_sonos
+                data:
+                  source: Radio 2               
+          - conditions: "{{ button_name == 'kitchen_radio' and click_type == 'hold' and is_state('media_player.kitchen_sonos','playing') and state_attr('media_player.kitchen_sonos','media_channel')=='KISS 97.2 (Top 40 & Pop Music)' }}"
+            sequence:
+              - service: sonos.unjoin
+                target:
+                  entity_id: media_player.kitchen_sonos          
+              - service: media_player.media_pause
+                target:
+                  entity_id: media_player.kitchen_sonos   
+          - conditions: "{{ button_name == 'kitchen_radio' and click_type == 'hold' }}"
+            sequence:
+              - service: sonos.unjoin
+                target:
+                  entity_id: media_player.kitchen_sonos                 
+              - service: media_player.select_source
+                target:
+                  entity_id: media_player.kitchen_sonos  
+                data:                  
+                  source: KISS 97.2 (Top 40 & Pop Music)                       
+            
+
+
+
+
+##########################################################
+##               Guest Bedside                          ##
+##########################################################      
+          - conditions: "{{ button_name == 'bedside_guest' and click_type == 'click' }}"
+            sequence:
+              - service: light.toggle
+                target:
+                  entity_id: light.guest_bedroom_bedside
+              - service: "input_boolean.turn_off"
+                target:
+                  entity_id: input_boolean.guest_is_asleep                  
+
+          - conditions: "{{ button_name == 'bedside_guest' and click_type == 'double_click' }}"
+            sequence:
+              - service: "light.turn_{{ 'off' if is_state('light.guest_bedroom','on') else 'on' }}"
+                target:
+                  entity_id: light.guest_bedroom            
+              - service: "input_boolean.turn_{{ states('light.guest_bedroom') }}"
+                target:
+                  entity_id: input_boolean.guest_is_asleep
+
+          - conditions: "{{ button_name == 'bedside_guest' and click_type == 'hold' }}"
+            sequence:
+              - service: light.turn_on
+                target:
+                  entity_id: light.guest_bedroom             
+
+##########################################################
+##               Sarah Bedside                          ##
+##########################################################
+          - conditions: "{{ button_name == 'bedside_sarah' and click_type == 'click' and is_state('alarm_control_panel.texecom','armed_night')}}"
+            sequence:
+              - service: input_text.set_value
+                target:
+                  entity_id: input_text.alarm_user
+                data:
+                  value: 'Sarah'               
+              - service: light.toggle
+                target:
+                  entity_id: light.master_bedroom_bedside_right      
+              - service: telegram_bot.send_message
+                data:
+                  target: !secret telegram_chat_id_sarah
+                  message: "Alarm disarming.............."
+                  message_tag: alarm_disarming                  
+              - service: alarm_control_panel.alarm_disarm
+                target:
+                  entity_id: alarm_control_panel.texecom
+                data:
+                  code: !secret alarm_code
+              - wait_for_trigger:
+                  - platform: state
+                    entity_id: alarm_control_panel.texecom
+                    to: disarmed
+                timeout: 00:00:20
+              - service: telegram_bot.edit_message
+                data:
+                  message_id: "{{ states('input_text.alarm_disarming_message_id') }}"                
+                  chat_id: !secret telegram_chat_id_sarah
+                  message: "Alarm currently {{states('alarm_control_panel.texecom').replace('_',' ')}}"
+
+          - conditions: "{{ button_name == 'bedside_sarah' and click_type == 'click' and is_state('input_boolean.someone_has_been_downstairs','off') }}"
+            sequence:
+              - service: light.toggle
+                target:
+                  entity_id: light.master_bedroom_bedside_right
+              - service: telegram_bot.send_message
+                data:
+                  target: !secret telegram_chat_id_sarah
+                  message: "Alarm currently {{states('alarm_control_panel.texecom').replace('_',' ')}}"    
+
+          - conditions: "{{ button_name == 'bedside_sarah' and click_type == 'click' }}"
+            sequence:
+              - service: light.toggle
+                target:
+                  entity_id: light.master_bedroom_bedside_right      
+
+          - conditions: "{{ button_name == 'bedside_sarah' and click_type == 'double_click' }}"
+            sequence:
+              - service: light.turn_off
+                target:
+                  entity_id: 
+                    - light.master_bedroom_wall_left
+                    - light.master_bedroom_wall_right
+                    - light.master_bedroom_lamp
+                    - light.master_bedroom_wardrobe
+                    - light.master_bedroom_wardrobe_bars
+                    - light.master_bedroom_bedside_right
+              - service: switch.turn_off
+                target:
+                  entity_id: switch.electric_blanket_sarah      
+              - service: input_boolean.turn_on
+                target:
+                  entity_id: input_boolean.sarah_is_asleep
+              - condition: template
+                value_template: "{{ (is_state('input_boolean.bruce_is_asleep','on') or states('person.bruce_hartley')!= 'home') and is_state('alarm_control_panel.texecom','disarmed') and is_state('binary_sensor.lounge_door','off') and is_state('binary_sensor.bar_door','off')}}"
+              - service: light.turn_off
+                target:
+                  entity_id: 
+                    - light.kitchen_floor_lamp
+              - service: light.turn_on
+                target:
+                  entity_id: light.master_bedroom_bedside_right
+                data:
+                  brightness: 10
+                  rgb_color: [255,0,0]
+                  transition: 1
+              - service: telegram_bot.send_message
+                data:
+                  target: !secret telegram_chat_id_bruce_and_sarah
+                  message: "Alarm arming.............."
+                  message_tag: alarm_arming                  
+              - service: alarm_control_panel.alarm_arm_night 
+                target:
+                  entity_id: alarm_control_panel.texecom
+                data:
+                  code: !secret alarm_code
+              - wait_for_trigger:
+                  - platform: state
+                    entity_id: alarm_control_panel.texecom
+                    to: armed_night
+                timeout: 00:00:20
+              - service: light.turn_on
+                target:
+                  entity_id: light.master_bedroom_bedside_right
+                data:
+                  brightness: 10
+                  rgb_color: [0,255,0]
+                  transition: 1                
+              - service: telegram_bot.edit_message
+                data:
+                  message_id: "{{ states('input_text.alarm_arming_message_id') }}"                
+                  chat_id: !secret telegram_chat_id_bruce_and_sarah
+                  message: "Alarm currently {{states('alarm_control_panel.texecom').replace('_',' ')}}"
+              - service: light.turn_on
+                target:
+                  entity_id: light.master_bedroom_bedside_right
+                data:
+                  brightness: 10
+                  color_temp: 447
+                  transition: 1   
+              - delay: 1
+              - service: light.turn_off
+                target:
+                  entity_id: 
+                    - light.master_bedroom_bedside_left
+                    - light.master_bedroom_bedside_right                    
+                    - light.downstairs
+                    - light.landing
+                    - light.hall_stairs_lightstrip   
+                    - light.garden_colour                    
+                
+          - conditions: "{{ button_name == 'bedside_sarah' and click_type == 'hold' }}"
+            sequence:
+              - service: fan.turn_off
+                target:
+                  entity_id: fan.master_bedroom_fan
+              - service: switch.turn_off
+                target:
+                  entity_id: switch.electric_blanket_bruce    
+              - service: light.turn_off
+                target:
+                  entity_id:
+                    - light.master_bedroom
+                    - light.downstairs
+                    - light.outside               
+                    - light.landing
+                    - light.hall_stairs_lightstrip                
+
+      
+##########################################################
+##               Bruce Bedside                          ##
+##########################################################
+          - conditions: "{{ button_name == 'bedside_bruce' and click_type == 'click' and is_state('alarm_control_panel.texecom','armed_night') }}"
+            sequence:
+              - service: input_text.set_value
+                target:
+                  entity_id: input_text.alarm_user
+                data:
+                  value: 'Bruce'               
+              - service: light.toggle
+                target:
+                  entity_id: light.master_bedroom_bedside_left    
+              - service: telegram_bot.send_message
+                data:
+                  target: !secret telegram_chat_id_bruce
+                  message: "Alarm disarming.............."
+                  message_tag: alarm_disarming             
+              - service: alarm_control_panel.alarm_disarm
+                target:
+                  entity_id: alarm_control_panel.texecom
+                data:
+                  code: !secret alarm_code
+              - wait_for_trigger:
+                  - platform: state
+                    entity_id: alarm_control_panel.texecom
+                    to: disarmed
+                timeout: 00:00:20
+              - service: telegram_bot.edit_message
+                data:
+                  message_id: "{{ states('input_text.alarm_disarming_message_id') }}"                
+                  chat_id: !secret telegram_chat_id_bruce
+                  message: "Alarm currently {{states('alarm_control_panel.texecom').replace('_',' ')}}"
+                  
+          - conditions: "{{ button_name == 'bedside_bruce' and click_type == 'click' and is_state('input_boolean.someone_has_been_downstairs','off') }}"
+            sequence:
+              - service: light.toggle
+                target:
+                  entity_id: light.master_bedroom_bedside_left
+              - service: telegram_bot.send_message
+                data:
+                  target: !secret telegram_chat_id_bruce
+                  message: "Alarm currently {{states('alarm_control_panel.texecom').replace('_',' ')}}"                
+      
+          - conditions: "{{ button_name == 'bedside_bruce' and click_type == 'click' }}"
+            sequence:
+              - service: light.toggle
+                target:
+                  entity_id: light.master_bedroom_bedside_left
+                  
+          - conditions: "{{ button_name == 'bedside_bruce' and click_type == 'double_click' }}"
+            sequence:
+              - service: light.turn_off
+                target:
+                  entity_id: 
+                    - light.master_bedroom_wall_left
+                    - light.master_bedroom_wall_right
+                    - light.master_bedroom_lamp
+                    - light.master_bedroom_wardrobe
+                    - light.master_bedroom_wardrobe_bars
+                    - light.master_bedroom_bedside_left
+              - service: switch.turn_off
+                target:
+                  entity_id: switch.electric_blanket_bruce     
+              - service: input_boolean.turn_on
+                target:
+                  entity_id: input_boolean.bruce_is_asleep
+              - condition: template
+                value_template: "{{ (is_state('input_boolean.sarah_is_asleep','on') or states('person.sarah_hartley')|lower != 'home') and is_state('alarm_control_panel.texecom','disarmed') and is_state('binary_sensor.lounge_door','off') and is_state('binary_sensor.bar_door','off')}}"
+              - service: light.turn_off
+                target:
+                  entity_id: 
+                    - light.kitchen_floor_lamp
+              - service: light.turn_on
+                target:
+                  entity_id: light.master_bedroom_bedside_left
+                data:
+                  brightness: 10
+                  rgb_color: [255,0,0]
+                  transition: 1
+              - service: telegram_bot.send_message
+                data:
+                  target: !secret telegram_chat_id_bruce_and_sarah
+                  message: "Alarm arming.............."
+                  message_tag: alarm_arming                  
+              - service: alarm_control_panel.alarm_arm_night 
+                target:
+                  entity_id: alarm_control_panel.texecom
+                data:
+                  code: !secret alarm_code
+              - wait_for_trigger:
+                  - platform: state
+                    entity_id: alarm_control_panel.texecom
+                    to: armed_night
+                timeout: 00:00:20
+              - service: light.turn_on
+                target:
+                  entity_id: light.master_bedroom_bedside_left
+                data:
+                  brightness: 10
+                  rgb_color: [0,255,0]
+                  transition: 1                
+              - service: telegram_bot.edit_message
+                data:
+                  message_id: "{{ states('input_text.alarm_arming_message_id') }}"                
+                  chat_id: !secret telegram_chat_id_bruce_and_sarah
+                  message: "Alarm currently {{states('alarm_control_panel.texecom').replace('_',' ')}}"
+              - service: light.turn_on
+                target:
+                  entity_id: light.master_bedroom_bedside_left
+                data:
+                  brightness: 10
+                  color_temp: 447
+                  transition: 1
+              - delay: 1
+              - service: light.turn_off
+                target:
+                  entity_id: 
+                    - light.master_bedroom_bedside_left
+                    - light.master_bedroom_bedside_right                    
+                    - light.downstairs
+                    - light.landing_lights
+                    - light.hall_stairs_lightstrip
+                    - light.garden_colour                    
+
+                
+          - conditions: "{{ button_name == 'bedside_bruce' and click_type == 'hold' }}"
+            sequence:
+              - service: fan.turn_off
+                target:
+                  entity_id: fan.master_bedroom_fan
+              - service: switch.turn_off
+                target:
+                  entity_id: switch.electric_blanket_sarah                
+              - service: light.turn_off
+                target:
+                  entity_id:
+                    - light.master_bedroom_lights
+                    - light.downstairs_lights
+                    - light.outside_lights                  
+                    - light.landing_lights
+                    - light.hall_stairs_lightstrip
+                  
+
+##########################################################
+##               Sophie Bedside                         ##
+##########################################################                  
+          - conditions: "{{ click_type == 'click' and button_name == 'bedside_sophie' }}"
+            sequence:
+              - service: light.toggle
+                target:
+                  entity_id: light.sophies_bedroom_bedhead
+
+          - conditions: "{{ click_type == 'double_click' and button_name == 'bedside_sophie' }}"
+            sequence:
+              - service: "input_boolean.turn_{{ states('light.sophies_bedroom') }}"
+                target:
+                  entity_id: input_boolean.sophie_is_asleep
+              - service: "light.turn_{{ 'off' if is_state('light.sophies_bedroom','on') else 'on' }}"
+                target:
+                  entity_id: light.sophies_bedroom
+
+          - conditions: "{{ click_type == 'click' and button_name == 'bedside_sophie' }}"
+            sequence:
+              - service: light.turn_on
+                target:
+                  entity_id: light.sophies_bedroom    
+
+##########################################################
+##               Kate Bedside                           ##
+##########################################################                   
+          - conditions: "{{ click_type == 'click' and button_name == 'bedside_kate'  }}"
+            sequence:
+              - service: light.toggle
+                target:
+                  entity_id: light.kates_bedroom_lamp
+
+          - conditions: "{{ click_type == 'double_click' and button_name == 'bedside_kate' }}"
+            sequence:
+              - service: "input_boolean.turn_{{ states('light.kates_bedroom') }}"
+                target:
+                  entity_id: input_boolean.kate_is_asleep
+              - service: "light.turn_{{ 'off' if is_state('light.kates_bedroom','on') else 'on' }}"
+                target:
+                  entity_id: light.kates_bedroom
+
+          - conditions: "{{ click_type == 'hold' and button_name == 'bedside_kate' }}"
+            sequence:
+              - service: light.turn_on
+                target:
+                  entity_id: light.kates_bedroom 
+
+
+##########################################################
+##               Litter Trays                           ##
+##########################################################                    
+          - conditions: "{{ littertray_type == 'reset' }}"
+            sequence:
+              - service: counter.reset
+                target:
+                  entity_id: "counter.litter{{ button_name }}_poo"
+              - service: counter.reset
+                target:
+                  entity_id: "counter.litter{{ button_name }}_wee"
+              - service: input_button.press
+                target:
+                  entity_id: "input_button.litter{{ button_name }}"
+              - service: input_button.press
+                target:
+                  entity_id: "input_button.litter{{ button_name }}_last_scooped"
+        default:
+          - service: counter.increment
+            target:
+              entity_id: "counter.litter{{ button_name }}_{{ littertray_type }}"
+          - service: input_button.press
+            target:
+              entity_id: "input_button.litter{{ button_name }}_last_scooped"
+

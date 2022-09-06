@@ -1,0 +1,9 @@
+mqtt:
+  binary_sensor:
+    - name: Bar Mqtt Room
+      state_topic: espresense/rooms/bar/status
+      unique_id: bar_mqtt_room    
+      json_attributes_topic: espresense/rooms/bar/telemetry
+      payload_on: online
+      payload_off: offline
+      device_class: connectivity

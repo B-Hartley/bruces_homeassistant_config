@@ -1,0 +1,33 @@
+someone_home:
+  name: Is someone at home?
+  entities:
+  - person.bruce_hartley
+  - person.sarah_hartley
+  - person.sophie_hartley
+  - person.kate_hartley
+  - person.cleaner
+  - person.moira
+  - person.guest
+  
+somone_home_iphone:
+  name: Is Someone at home? (phones)
+  entities:
+    - device_tracker.bruce_iphone
+    - device_tracker.sarah_iphone
+    - device_tracker.sophie_iphone
+    - device_tracker.kate_iphone    
+  
+bruce_or_sarah_home:
+  name: Is Bruce or Sarah at home?
+  entities:
+  - person.bruce_hartley
+  - person.sarah_hartley
+
+media_players:
+  name: Media Players
+  entities:
+    - media_player.kitchen_sonos
+    - media_player.master_bed_sonos
+    - media_player.bar_sonos
+    - media_player.lounge_sonos
+    

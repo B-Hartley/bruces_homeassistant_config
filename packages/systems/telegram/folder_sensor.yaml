@@ -1,0 +1,3 @@
+sensor:
+  - platform: folder
+    folder: /config/www/cam_snaps

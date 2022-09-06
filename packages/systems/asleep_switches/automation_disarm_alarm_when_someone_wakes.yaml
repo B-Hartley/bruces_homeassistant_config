@@ -1,0 +1,106 @@
+automation:
+  - id: disarm_alarm_when_somone_wakes
+    alias: 'Disarm the alarm when someone wakes up'
+    
+    description: >
+      If input boolean changes to off disarm the alarm
+      
+    trigger:
+      - platform: state
+        id: "bruce awake"
+        entity_id: input_boolean.bruce_is_asleep
+        from: 'on'
+        to: 'off'
+      - platform: state
+        id: "sarah awake"
+        entity_id: input_boolean.sarah_is_asleep
+        from: 'on'
+        to: 'off'        
+        
+    action:
+      - choose:
+          - conditions: 
+              - condition: trigger
+                id: "bruce awake"
+              - condition: state
+                entity_id: alarm_control_panel.texecom
+                state: 'armed_night'
+            sequence:
+              - service: input_text.set_value
+                target:
+                  entity_id: input_text.alarm_user
+                data:
+                  value: 'Bruce'
+              - service: telegram_bot.send_message
+                data:
+                  target: !secret telegram_chat_id_bruce
+                  message: "Alarm disarming.............."
+                  message_tag: alarm_disarming                  
+              - service: alarm_control_panel.alarm_disarm 
+                target:
+                  entity_id: alarm_control_panel.texecom
+                data:
+                  code: !secret alarm_code
+              - wait_for_trigger:
+                  - platform: state
+                    entity_id: alarm_control_panel.texecom
+                    to: 'disarmed'
+                timeout: 00:00:05
+              - service: telegram_bot.edit_message
+                data:
+                  chat_id: !secret telegram_chat_id_bruce
+                  message_id: "{{ states('input_text.alarm_disarming_message_id') }}"                     
+                  message: "Alarm is now {{states('alarm_control_panel.texecom').replace('_',' ')}}"    
+
+          - conditions: 
+              - condition: trigger
+                id: "sarah awake"
+              - condition: state
+                entity_id: alarm_control_panel.texecom
+                state: 'armed_night'
+            sequence:
+              - service: input_text.set_value
+                target:
+                  entity_id: input_text.alarm_user
+                data:
+                  value: 'Sarah'
+              - service: telegram_bot.send_message
+                data:
+                  target: !secret telegram_chat_id_sarah
+                  message: "Alarm disarming.............."
+                  message_tag: alarm_disarming                  
+              - service: alarm_control_panel.alarm_disarm 
+                target:
+                  entity_id: alarm_control_panel.texecom
+                data:
+                  code: !secret alarm_code
+              - wait_for_trigger:
+                  - platform: state
+                    entity_id: alarm_control_panel.texecom
+                    to: 'disarmed'
+                timeout: 00:00:05
+              - service: telegram_bot.edit_message
+                data:
+                  chat_id: !secret telegram_chat_id_sarah
+                  message_id: "{{ states('input_text.alarm_disarming_message_id') }}"                     
+                  message: "Alarm is now {{states('alarm_control_panel.texecom').replace('_',' ')}}"
+
+          - conditions: 
+              - condition: trigger
+                id: "bruce awake"
+            sequence:
+              - service: telegram_bot.send_message
+                data:
+                  target: !secret telegram_chat_id_bruce
+                  message_id: "{{ states('input_text.alarm_disarming_message_id') }}"                     
+                  message: "Alarm is now {{states('alarm_control_panel.texecom').replace('_',' ')}}"
+
+          - conditions: 
+              - condition: trigger
+                id: "sarah awake"
+            sequence:
+              - service: telegram_bot.edit_message
+                data:
+                  target: !secret telegram_chat_id_sarah
+                  message_id: "{{ states('input_text.alarm_disarming_message_id') }}"                     
+                  message: "Alarm is now {{states('alarm_control_panel.texecom').replace('_',' ')}}"

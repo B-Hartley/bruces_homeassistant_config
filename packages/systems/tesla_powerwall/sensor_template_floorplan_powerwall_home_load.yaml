@@ -1,0 +1,8 @@
+template:
+  sensor:
+    - name: "Floorplan Powerwall Home Load"
+      unique_id: floorplan_powerwall_home_load
+      availability: "{{ states('binary_sensor.powerwall_connected_to_tesla') != 'Unavailable' }}"
+      unit_of_measurement: 'kW'
+      state: "{{ (states('sensor.powerwall_load_now')|float(0)  - (states('sensor.eddi_power')|float(0) ) - (states('sensor.zappi_jyggy_power')|float(0) )  - (states('sensor.zappi_paddy_power')|float(0) ))|round(1) }}"
+      device_class: power

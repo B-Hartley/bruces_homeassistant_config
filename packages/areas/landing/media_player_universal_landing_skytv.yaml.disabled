@@ -1,0 +1,47 @@
+media_player: # Universal landing player
+  - platform: universal
+    name: Landing SkyTV
+    children:
+      - media_player.landing_skyq
+    commands:
+      turn_on:
+        service: switch.turn_on
+        data:
+          entity_id: switch.switch_landing_skytv
+      turn_off:
+        service: switch.turn_off
+        data:
+          entity_id: switch.switch_landing_skytv
+      volume_up:
+        service: media_player.volume_up
+        data:
+          entity_id: media_player.landing_tv
+      volume_down:
+        service: media_player.volume_down
+        data:
+          entity_id: media_player.landing_tv
+      volume_mute:
+        service: media_player.volume_mute
+        data:
+          entity_id: media_player.landing_tv
+          is_volume_muted:  >-
+            {% if states.media_player.landingtv.attributes.is_volume_muted == false %}
+            true
+            {% else %}
+            false
+            {% endif %}
+      select_source:
+        service: media_player.select_source
+        data:
+          entity_id: media_player.landing_tv
+          source: '{{ source }}'
+      volume_set:
+        service: media_player.volume_set
+        data:
+          entity_id: media_player.landing_tv
+          volume_level: '{{ volume_level }}'
+    attributes:
+      is_volume_muted: media_player.landing_tv|is_volume_muted
+      source: media_player.landing_tv|source
+      volume_level: media_player.landing_tv|volume_level
+      source_list: media_player.landing_tv|source_list

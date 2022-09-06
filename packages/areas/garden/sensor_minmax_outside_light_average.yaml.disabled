@@ -1,0 +1,8 @@
+sensor:
+  - platform: min_max
+    name: Outside Light
+    type: mean
+    round_digits: 0
+    entity_ids:
+      - sensor.patio_sensor_light_level
+      - sensor.patio_garage_sensor_light_level

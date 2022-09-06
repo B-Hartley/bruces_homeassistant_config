@@ -1,0 +1,486 @@
+"""
+Monitors and controls the Tesla gateway.
+"""
+import logging
+
+import aiohttp
+import asyncio
+import async_timeout
+import base64
+import hashlib
+import json
+import os
+import re
+import time
+from urllib.parse import parse_qs
+import voluptuous as vol
+from homeassistant import config_entries, core
+from homeassistant.const import (
+    CONF_USERNAME,
+    CONF_PASSWORD,
+    CONF_ACCESS_TOKEN,
+)
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
+import homeassistant.helpers.config_validation as cv
+
+from .const import DOMAIN, CONF_REFRESH_TOKEN
+
+_LOGGER = logging.getLogger(__name__)
+
+DEFAULT_TIMEOUT = 100
+
+CONFIG_SCHEMA = vol.Schema(
+    {
+        DOMAIN: vol.Schema(
+            {
+                vol.Required(CONF_USERNAME): cv.string,
+                vol.Required(CONF_PASSWORD): cv.string,
+                vol.Optional(CONF_ACCESS_TOKEN, default=""): cv.string,
+                vol.Optional(CONF_REFRESH_TOKEN, default=""): cv.string,
+            }
+        ),
+    },
+    extra=vol.ALLOW_EXTRA,
+)
+
+tesla_base_url = "https://owner-api.teslamotors.com"
+tesla_auth_url = "https://auth.tesla.com"
+
+step_max_attempts = 7
+step_attempt_sleep = 3
+TESLA_CLIENT_ID = "81527cff06843c8634fdc09e8ac0abefb46ac849f38fe1e431c2ef2106796384"
+
+
+@asyncio.coroutine
+def async_setup(hass: core.HomeAssistant, config: dict) -> bool:
+    websession = async_get_clientsession(hass, verify_ssl=False)
+    hass.data.setdefault(DOMAIN, {})
+    domain_config = config[DOMAIN]
+    setup_common(domain_config=domain_config)
+    return True
+
+
+@asyncio.coroutine
+def async_setup_entry(
+    hass: core.HomeAssistant, config_entry: config_entries.ConfigEntry
+) -> bool:
+    websession = async_get_clientsession(hass, verify_ssl=False)
+
+    hass.data.setdefault(DOMAIN, {})
+    hass.data[DOMAIN][config_entry.entry_id] = config_entry.data
+    domain_config = dict(config_entry.data)
+    # conf_user = domain_config[CONF_USERNAME]
+    # conf_password = domain_config[CONF_PASSWORD]
+    setup_common(domain_config=domain_config)
+    return True
+
+
+@asyncio.coroutine
+def setup_common(domain_config: dict):
+    @asyncio.coroutine
+    def SSO_login():
+
+        # Code extracted from https://github.com/enode-engineering/tesla-oauth2/blob/2414d74a50f38ab7b3ad5424de4e867ac2709dcf/tesla.py
+        # Login process explained at https://tesla-api.timdorr.com/api-basics/authentication
+
+        authorize_url = tesla_auth_url + "/oauth2/v3/authorize"
+        callback_url = tesla_auth_url + "/void/callback"
+
+        headers = {
+            "User-Agent": "curl",
+            "x-tesla-user-agent": "TeslaApp/3.10.9-433/adff2e065/android/10",
+            "X-Requested-With": "com.teslamotors.tesla",
+        }
+
+        verifier_bytes = os.urandom(86)
+        code_verifier = base64.urlsafe_b64encode(verifier_bytes).rstrip(b"=")
+        code_challenge = (
+            base64.urlsafe_b64encode(hashlib.sha256(code_verifier).digest())
+            .rstrip(b"=")
+            .decode("utf-8")
+        )
+        state = base64.urlsafe_b64encode(os.urandom(16)).rstrip(b"=").decode("utf-8")
+
+        params = (
+            ("client_id", "ownerapi"),
+            ("code_challenge", code_challenge),
+            ("code_challenge_method", "S256"),
+            ("redirect_uri", callback_url),
+            ("response_type", "code"),
+            ("scope", "openid email offline_access"),
+            ("state", state),
+        )
+
+        try:
+            # Step 1: Obtain the login page
+            _LOGGER.debug("Step 1: GET %s\nparams %s", authorize_url, params)
+            for attempt in range(step_max_attempts):
+                with async_timeout.timeout(DEFAULT_TIMEOUT, loop=hass.loop):
+                    response = yield from websession.get(
+                        authorize_url,
+                        headers=headers,
+                        params=params,
+                        raise_for_status=False,
+                    )
+
+                returned_text = yield from response.text()
+                if response.status == 200 and "<title>" in returned_text:
+                    crsf_regex_result = re.search(
+                        r'name="_csrf".+value="([^"]+)"', returned_text
+                    )
+                    if crsf_regex_result:
+                        _LOGGER.debug("Step 1: Success on attempt %d", attempt)
+                        break
+
+                _LOGGER.warning(
+                    "Step 1: Error %d on attempt %d, call %s:\n%s",
+                    response.status,
+                    attempt,
+                    response.url,
+                    returned_text,
+                )
+                time.sleep(step_attempt_sleep)
+            else:
+                raise ValueError(
+                    "Step 1: failed after %d attempts, last response %s:\n%s",
+                    step_max_attempts,
+                    response.status,
+                    returned_text,
+                )
+
+            # Step 2: Obtain an authorization code
+            csrf = crsf_regex_result.group(1)
+            transaction_id = re.search(
+                r'name="transaction_id".+value="([^"]+)"', returned_text
+            ).group(1)
+
+            body = {
+                "_csrf": csrf,
+                "_phase": "authenticate",
+                "_process": "1",
+                "transaction_id": transaction_id,
+                "cancel": "",
+                "identity": domain_config[CONF_USERNAME],
+                "credential": domain_config[CONF_PASSWORD],
+            }
+
+            _LOGGER.debug(
+                "Step 2: POST %s\nparams: %s\nbody: %s", authorize_url, params, body
+            )
+            for attempt in range(step_max_attempts):
+                with async_timeout.timeout(DEFAULT_TIMEOUT, loop=hass.loop):
+                    response = yield from websession.post(
+                        authorize_url,
+                        headers=headers,
+                        params=params,
+                        data=body,
+                        raise_for_status=False,
+                        allow_redirects=False,
+                    )
+
+                returned_text = yield from response.text()
+
+                if (
+                    "We could not sign you in" in returned_text
+                    and response.status == 401
+                ):
+                    raise ValueError(
+                        "Step 2: Invalid credentials. Error %d on call %s:\n%s",
+                        response.status,
+                        response.url,
+                        returned_text,
+                    )
+
+                if response.status == 302 or "<title>" in returned_text:
+                    _LOGGER.debug("Step 2: Success on attempt %d", attempt)
+                    break
+
+                _LOGGER.warning(
+                    "Step 2: Error %d on call %s:\n%s",
+                    response.status,
+                    response.url,
+                    returned_text,
+                )
+                time.sleep(step_attempt_sleep)
+            else:
+                raise ValueError(
+                    "Step 2: failed after %d attempts, last response %s:\n%s",
+                    step_max_attempts,
+                    response.status,
+                    returned_text,
+                )
+
+            is_mfa = (
+                True
+                if response.status == 200 and "/mfa/verify" in returned_text
+                else False
+            )
+            if is_mfa:
+                raise ValueError(
+                    "Multi-factor authentication enabled for the account and not supported"
+                )
+
+            # Step 3: Exchange authorization code for bearer token
+            code = parse_qs(response.headers["location"])[callback_url + "?code"]
+
+            token_url = tesla_auth_url + "/oauth2/v3/token"
+            body = {
+                "grant_type": "authorization_code",
+                "client_id": "ownerapi",
+                "code_verifier": code_verifier.decode("utf-8"),
+                "code": code,
+                "redirect_uri": callback_url,
+            }
+
+            _LOGGER.debug("Step 3: POST %s", token_url)
+            with async_timeout.timeout(DEFAULT_TIMEOUT, loop=hass.loop):
+                response = yield from websession.post(
+                    token_url, headers=headers, data=body, raise_for_status=False
+                )
+
+            returned_json = yield from response.json()
+            access_token = returned_json["access_token"]
+            domain_config[CONF_ACCESS_TOKEN] = access_token
+            domain_config[CONF_REFRESH_TOKEN] = returned_json["refresh_token"]
+            return access_token
+
+        except asyncio.TimeoutError:
+            _LOGGER.warning("Timeout call %s.", response.url)
+
+        except aiohttp.ClientError:
+            _LOGGER.error("Client error %s.", response.url)
+
+        return None
+
+    @asyncio.coroutine
+    def SSO_refresh_token():
+        token_oauth2_url = tesla_auth_url + "/oauth2/v3/token"
+        headers = {
+            "User-Agent": "curl",
+            "x-tesla-user-agent": "TeslaApp/3.10.9-433/adff2e065/android/10",
+            "X-Requested-With": "com.teslamotors.tesla",
+        }
+        body = {
+            "grant_type": "refresh_token",
+            "refresh_token": domain_config[CONF_REFRESH_TOKEN],
+            "client_id": "ownerapi",
+            "scope": "openid email offline_access",
+        }
+        with async_timeout.timeout(DEFAULT_TIMEOUT, loop=hass.loop):
+            response = yield from websession.post(
+                token_oauth2_url, headers=headers, data=body, raise_for_status=False
+            )
+        returned_json = yield from response.json()
+        access_token = returned_json["access_token"]
+        domain_config[CONF_ACCESS_TOKEN] = access_token
+        domain_config[CONF_REFRESH_TOKEN] = returned_json["refresh_token"]
+        return access_token
+
+    @asyncio.coroutine
+    def OWNER_get_token(access_token):
+        try:
+            token_oauth_url = tesla_base_url + "/oauth/token"
+            headers = {
+                "User-Agent": "curl",
+                "authorization": "bearer " + access_token,
+            }
+            body = {
+                "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+                "client_id": TESLA_CLIENT_ID,
+            }
+            with async_timeout.timeout(DEFAULT_TIMEOUT, loop=hass.loop):
+                response = yield from websession.post(
+                    token_oauth_url, headers=headers, data=body, raise_for_status=False
+                )
+            returned_json = yield from response.json()
+            owner_access_token = returned_json["access_token"]
+            return owner_access_token
+
+        except asyncio.TimeoutError:
+            _LOGGER.warning("Timeout call %s.", response.url)
+
+        except aiohttp.ClientError:
+            _LOGGER.error("Client error %s.", response.url)
+
+        return None
+
+    @asyncio.coroutine
+    def OWNER_revoke(owner_token):
+        revoke_url = tesla_base_url + "/oauth/revoke"
+        headers = {"Content-type": "application/json"}
+        body = {"token": owner_token}
+
+        try:
+            with async_timeout.timeout(DEFAULT_TIMEOUT, loop=hass.loop):
+                response = yield from websession.post(
+                    revoke_url, headers=headers, json=body, raise_for_status=False
+                )
+
+            if response.status != 200:
+                returned_text = yield from response.text()
+                _LOGGER.warning(
+                    "Error %d on call %s:\n%s",
+                    response.status,
+                    response.url,
+                    returned_text,
+                )
+            else:
+                _LOGGER.debug("revoke completed")
+                return True
+
+        except asyncio.TimeoutError:
+            _LOGGER.warning("Timeout call %s.", response.url)
+
+        except aiohttp.ClientError:
+            _LOGGER.error("Client error %s.", response.url)
+
+        return False
+
+    @asyncio.coroutine
+    def get_energy_site_id(owner_token):
+        list_url = tesla_base_url + "/api/1/products"
+        headers = {"Authorization": "Bearer " + owner_token}
+        body = {}
+
+        try:
+            with async_timeout.timeout(DEFAULT_TIMEOUT, loop=hass.loop):
+                response = yield from websession.get(
+                    list_url, headers=headers, json=body, raise_for_status=False
+                )
+
+            if response.status != 200:
+                returned_text = yield from response.text()
+                _LOGGER.warning(
+                    "Error %d on call %s:\n%s",
+                    response.status,
+                    response.url,
+                    returned_text,
+                )
+            else:
+                returned_json = yield from response.json()
+                for r in returned_json["response"]:
+                    if "energy_site_id" in r:
+                        return r["energy_site_id"]
+                return None
+
+        except asyncio.TimeoutError:
+            _LOGGER.warning("Timeout call %s.", response.url)
+
+        except aiohttp.ClientError:
+            _LOGGER.error("Client error %s.", response.url)
+
+        return None
+
+    @asyncio.coroutine
+    def set_operation(owner_token, energy_site_id, service_data):
+        operation_url = tesla_base_url + "/api/1/energy_sites/{}/operation".format(
+            energy_site_id
+        )
+        headers = {
+            "Content-type": "application/json",
+            "Authorization": "Bearer " + owner_token,
+        }
+        body = {
+            "default_real_mode": service_data["real_mode"],
+            "backup_reserve_percent": int(service_data["backup_reserve_percent"]),
+        }
+        try:
+
+            with async_timeout.timeout(DEFAULT_TIMEOUT, loop=hass.loop):
+                response = yield from websession.post(
+                    operation_url, json=body, headers=headers, raise_for_status=False
+                )
+
+            if response.status != 200:
+                returned_text = yield from response.text()
+                _LOGGER.warning(
+                    "Error %d on call %s:\n%s",
+                    response.status,
+                    response.url,
+                    returned_text,
+                )
+            else:
+                returned_json = yield from response.json()
+                _LOGGER.debug(
+                    "set operation successful, request: %s response: %s",
+                    body,
+                    returned_json,
+                )
+
+        except asyncio.TimeoutError:
+            _LOGGER.warning("Timeout call %s.", response.url)
+
+        except aiohttp.ClientError:
+            _LOGGER.error("Client error %s.", response.url)
+
+    @asyncio.coroutine
+    def get_owner_api_token():
+        access_token = domain_config[CONF_ACCESS_TOKEN]
+        if not access_token:
+            access_token = yield from SSO_login()
+        else:
+            access_token = yield from SSO_refresh_token()
+        if not access_token:
+            return None
+        owner_token = yield from OWNER_get_token(access_token)
+        return owner_token
+
+    @asyncio.coroutine
+    def async_set_operation(service):
+        owner_token = yield from get_owner_api_token()
+        if owner_token:
+            energy_site_id = yield from get_energy_site_id(owner_token)
+            if energy_site_id:
+                yield from set_operation(owner_token, energy_site_id, service.data)
+            yield from OWNER_revoke(owner_token)
+
+    hass.services.async_register(DOMAIN, "set_operation", async_set_operation)
+
+    @asyncio.coroutine
+    def set_reserve(owner_token, energy_site_id, service_data):
+        operation_url = tesla_base_url + "/api/1/energy_sites/{}/backup".format(
+            energy_site_id
+        )
+        headers = {
+            "Content-type": "application/json",
+            "Authorization": "Bearer " + owner_token,
+        }
+        body = {"backup_reserve_percent": int(service_data["reserve_percent"])}
+        _LOGGER.debug(body)
+
+        try:
+            with async_timeout.timeout(DEFAULT_TIMEOUT, loop=hass.loop):
+                response = yield from websession.post(
+                    operation_url, json=body, headers=headers, raise_for_status=False
+                )
+
+            if response.status != 200:
+                returned_text = yield from response.text()
+                _LOGGER.warning(
+                    "Error %d on call %s:\n%s",
+                    response.status,
+                    response.url,
+                    returned_text,
+                )
+            else:
+                returned_json = yield from response.json()
+                _LOGGER.debug("set reserve successful, response: %s", returned_json)
+
+        except asyncio.TimeoutError:
+            _LOGGER.warning("Timeout call %s.", response.url)
+
+        except aiohttp.ClientError:
+            _LOGGER.error("Client error %s.", response.url)
+
+    @asyncio.coroutine
+    def async_set_reserve(service):
+        owner_token = yield from get_owner_api_token()
+        if owner_token:
+            energy_site_id = yield from get_energy_site_id(owner_token)
+            if energy_site_id:
+                yield from set_reserve(owner_token, energy_site_id, service.data)
+            yield from OWNER_revoke(owner_token)
+
+    hass.services.async_register(DOMAIN, "set_reserve", async_set_reserve)
+
+    return True

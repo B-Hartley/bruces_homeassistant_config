@@ -1,0 +1,4 @@
+light:
+  - platform: switch
+    name: HotTub Lights
+    entity_id: switch.spa_light1

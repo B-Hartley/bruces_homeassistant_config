@@ -1,0 +1,32 @@
+automation:
+  - id: reset_asleep_switches_at_noon
+    alias: 'reset asleep switches'
+    
+    description: >
+      reset asleep switches
+      
+    trigger:
+      - platform: time
+        id: "noon"
+        at: '12:00:00'
+      - platform: homeassistant
+        id: "start"
+        event: start
+      - platform: event
+        id: "reload"
+        event_type: automation_reloaded          
+        
+    condition:
+      - condition: time
+        after: '11:55:00'
+        before: '12:05:00'
+        
+    action:
+    - service: input_boolean.turn_off
+      target:
+        entity_id: 
+          - input_boolean.sarah_is_asleep
+          - input_boolean.bruce_is_asleep          
+          - input_boolean.kate_is_asleep
+          - input_boolean.sophie_is_asleep  
+          - input_boolean.guest_is_asleep         

@@ -1,0 +1,6 @@
+template:
+  sensor:
+    - name: "Lounge SkyQ Media"
+      unique_id: lounge_skyq_media
+      availability: "{{ states('media_player.lounge_skyq')!='off' }}"
+      state: "{{ state_attr('media_player.lounge_skyq','media_series_title') }}"

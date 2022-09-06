@@ -1,0 +1,7 @@
+template:
+  - sensor:
+      - name: "Hottub At Or Below Max Heat Cost"
+        unique_id: hottub_at_or_below_max_charge_cost
+        availability:  "{{ states('sensor.octopus_agile_current_rate') != 'unknown' and is_state('binary_sensor.bwa_wi_fi_module','on') }}"       
+        state: "{{  (states('sensor.octopus_agile_current_rate') | float) <= (states('input_number.hottub_heat_below_x_pence') | float) }}"
+

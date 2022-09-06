@@ -1,0 +1,36 @@
+automation:
+  - id: getting_up_for_dog
+    alias: 'turn on landing and Hall after 5:45am'
+    
+    description: >
+      turn on hall and landing when motion after 05:45 and dark
+    
+    trigger:
+      platform: state
+      id: "motion"
+      entity_id: binary_sensor.landing_motion
+      from: 'off'
+      to: 'on'
+      
+    condition:
+      - condition: sun
+        before: sunrise
+      - condition: time
+        after: '05:45:00'
+        before: '08:00:00'
+      - condition: state
+        entity_id: light.landing
+        state: 'off'      
+      - condition: state
+        entity_id: light.hall
+        state: 'off'
+        
+    action:
+      - service: scene.turn_on
+        target:
+          entity_id: scene.getupdog_lights
+      - service: input_boolean.turn_off
+        target:
+          entity_id: 
+            - input_boolean.bruce_is_asleep
+            - input_boolean.sarah_is_asleep

@@ -1,0 +1,12 @@
+template:
+  sensor:
+    - name: "Solaredge Lifetime Energy MWh"
+      unique_id: solaredge_lifetime_energy_mwh
+      availability: "{{ states('sensor.solaredge_mb_ac_energy_kwh')|is_number }}"         
+      state: "{{ (states('sensor.solaredge_mb_ac_energy_kwh')|float(0) / 1000.0)|round(2,'',0) }}"
+      unit_of_measurement: 'MWh'
+# Can't be MWh for Energy Class
+#      device_class: energy      
+      state_class: total   
+      icon: mdi:solar-power      
+

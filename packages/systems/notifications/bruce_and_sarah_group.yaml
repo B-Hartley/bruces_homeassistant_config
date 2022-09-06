@@ -1,0 +1,7 @@
+notify:
+  - name: bruce_and_sarah_phones
+    unique_id: bruce_and_sarah_phones
+    platform: group
+    services:
+      - service: mobile_app_bruce_iphone
+      - service: mobile_app_sarah_iphone

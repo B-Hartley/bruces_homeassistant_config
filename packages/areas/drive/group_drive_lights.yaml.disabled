@@ -1,0 +1,8 @@
+group:
+  drive_lights_group:
+    name: Drive Lights
+    entities:
+    - light.drive_1
+    - light.drive_2
+    - light.front_door_1
+    - light.front_door_2    

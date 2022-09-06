@@ -1,0 +1,10 @@
+light:           
+  - platform: group
+    name: Outside Lights
+    entities:
+    - light.back_door
+    - light.patio_lights
+    - light.front_door_and_drive
+    - light.shed_light
+    - light.shed_outside_lights
+    - light.garden_colour

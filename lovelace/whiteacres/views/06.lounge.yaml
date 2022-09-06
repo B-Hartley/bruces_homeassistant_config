@@ -1,0 +1,163 @@
+icon: 'mdi:sofa'
+path: lounge
+title: Lounge
+badges:
+  - entity: sensor.lounge_rad_current_temperature
+    name: Lounge
+  - entity: sensor.lounge_bay_rad_current_temperature
+    name: Lounge Bay
+cards:
+  - cards:
+      - cards:
+          - entity: light.lounge_left_front
+            hold_action:
+              action: more-info
+            icon: 'mdi:wall-sconce-round-variant'
+            name: Left Front
+            show_icon: true
+            show_name: true
+            state:
+              - value: 'on'              
+                styles:
+                  card:
+                    - -webkit-box-shadow: 0px 0px 9px 3px var(--button-card-light-color)
+                    - box-shadow: 0px 0px 9px 3px var(--button-card-light-color)  
+            tap_action:
+              action: toggle
+              haptic: success
+            type: 'custom:button-card'
+          - entity: light.lounge_left_back
+            hold_action:
+              action: more-info
+            icon: 'mdi:wall-sconce-round-variant'
+            name: Left Back
+            show_icon: true
+            show_name: true
+            state:
+              - value: 'on'              
+                styles:
+                  card:
+                    - -webkit-box-shadow: 0px 0px 9px 3px var(--button-card-light-color)
+                    - box-shadow: 0px 0px 9px 3px var(--button-card-light-color)  
+            tap_action:
+              action: toggle
+              haptic: success
+            type: 'custom:button-card'
+          - entity: light.lounge_right
+            hold_action:
+              action: more-info
+            icon: 'mdi:wall-sconce-round-variant'
+            name: Right Back
+            show_icon: true
+            show_name: true
+            state:
+              - value: 'on'              
+                styles:
+                  card:
+                    - -webkit-box-shadow: 0px 0px 9px 3px var(--button-card-light-color)
+                    - box-shadow: 0px 0px 9px 3px var(--button-card-light-color)  
+            tap_action:
+              action: toggle
+              haptic: success
+            type: 'custom:button-card'
+        type: horizontal-stack
+      - cards:
+          - entity: light.lounge_bar_cart
+            hold_action:
+              action: more-info
+            icon: 'hue:bloom'
+            name: Bar Cart
+            show_icon: true
+            show_name: true
+            state:
+              - value: 'on'              
+                styles:
+                  card:
+                    - -webkit-box-shadow: 0px 0px 9px 3px var(--button-card-light-color)
+                    - box-shadow: 0px 0px 9px 3px var(--button-card-light-color)  
+            tap_action:
+              action: toggle
+              haptic: success
+            type: 'custom:button-card'
+          - entity: light.lounge_lamp
+            hold_action:
+              action: more-info
+            icon: 'hue:table-shade'
+            name: Lamp
+            show_icon: true
+            show_name: true
+            state:
+              - value: 'on'              
+                styles:
+                  card:
+                    - -webkit-box-shadow: 0px 0px 9px 3px var(--button-card-light-color)
+                    - box-shadow: 0px 0px 9px 3px var(--button-card-light-color)  
+            tap_action:
+              action: toggle
+              haptic: success
+            type: 'custom:button-card'
+          - entity: light.lounge_corner
+            hold_action:
+              action: more-info
+            icon: 'hue:go'
+            name: Corner
+            show_icon: true
+            show_name: true
+            state:
+              - value: 'on'              
+                styles:
+                  card:
+                    - -webkit-box-shadow: 0px 0px 9px 3px var(--button-card-light-color)
+                    - box-shadow: 0px 0px 9px 3px var(--button-card-light-color)  
+            tap_action:
+              action: toggle
+              haptic: success
+            type: 'custom:button-card'
+        type: horizontal-stack
+      - cards:
+          - entity: light.lounge_tv_left
+            hold_action:
+              action: more-info
+            icon: 'hue:play-bar'
+            name: TV Left
+            show_icon: true
+            show_name: true
+            state:
+              - value: 'on'              
+                styles:
+                  card:
+                    - -webkit-box-shadow: 0px 0px 9px 3px var(--button-card-light-color)
+                    - box-shadow: 0px 0px 9px 3px var(--button-card-light-color)  
+            tap_action:
+              action: toggle
+              haptic: success
+            type: 'custom:button-card'
+          - color_type: blank-card
+            type: 'custom:button-card'
+          - entity: light.lounge_tv_right
+            hold_action:
+              action: more-info
+            icon: 'hue:play-bar'
+            name: TV Right
+            show_icon: true
+            show_name: true
+            state:
+              - value: 'on'              
+                styles:
+                  card:
+                    - -webkit-box-shadow: 0px 0px 9px 3px var(--button-card-light-color)
+                    - box-shadow: 0px 0px 9px 3px var(--button-card-light-color)  
+            tap_action:
+              action: toggle
+              haptic: success
+            type: 'custom:button-card'
+        type: horizontal-stack
+    type: vertical-stack
+  - cards:
+      - entity: sensor.lounge_rad_current_temperature
+        graph: line
+        type: sensor
+      - entity: sensor.lounge_bay_rad_current_temperature
+        graph: line
+        type: sensor
+    type: horizontal-stack

@@ -1,0 +1,8 @@
+template:
+  sensor:
+    - name: "Zappi Paddy Power"
+      unique_id: zappi_paddy_power
+      availability: "{{ states('sensor.myenergi_paddy_power_ct_internal_load') != 'Unavailable' }}"
+      state: "{{ (states('sensor.myenergi_paddy_power_ct_internal_load')|float(0)/1000)|round(1) }}"
+      unit_of_measurement: 'kW'
+      device_class: power 

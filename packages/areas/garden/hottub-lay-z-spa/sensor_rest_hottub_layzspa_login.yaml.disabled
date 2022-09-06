@@ -1,0 +1,13 @@
+sensor:
+  - platform: rest
+    name: hottub_login
+    scan_interval: 172000
+    resource: "https://mobileapi.lay-z-spa.co.uk/v1/auth/login"
+    headers:
+      Content-Type: application/x-www-form-urlencoded
+    method: POST
+    payload: !secret hottub_email_password
+    value_template: "{{ value_json.data.api_token }}"    
+    json_attributes_path: "$.devices[0]"
+    json_attributes:
+      - did

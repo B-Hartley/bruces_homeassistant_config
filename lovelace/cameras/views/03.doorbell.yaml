@@ -1,0 +1,18 @@
+icon: 'mdi:doorbell-video'
+panel: true
+path: frontdoor
+title: FrontDoor
+badges: []
+visible:
+  - user: 86df00251766415c9acf21b3b3e51496
+  - user: 1de5d8e2c14c47939a8174d6e4147f31
+cards:
+  - aspect_ratio: 56%
+#    camera_image: camera.ring_livestream
+    camera_image: camera.dorbell_medium
+    camera_view: live
+    entities:
+      - entity: binary_sensor.doorbell_doorbell
+    title: Front Door
+    type: picture-glance
+

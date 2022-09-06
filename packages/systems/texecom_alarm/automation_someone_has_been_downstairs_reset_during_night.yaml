@@ -1,0 +1,17 @@
+automation:
+  - id: reset_someone_has_been_downstairs
+    alias: reset someone has been downstairs toggle
+    
+    description: >
+      Used by alarm warning system
+    
+    trigger:
+      - platform: time
+        id: 'time'
+        at: '04:00:00'
+        
+    action:
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.someone_has_been_downstairs
+          

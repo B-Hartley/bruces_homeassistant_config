@@ -1,0 +1,8 @@
+sensor:
+  - platform: rest
+    resource: !secret solcast_server_resource
+    name: Solcast Upload
+    value_template: "{{ value_json.result }}"
+    json_attributes:
+      - date
+

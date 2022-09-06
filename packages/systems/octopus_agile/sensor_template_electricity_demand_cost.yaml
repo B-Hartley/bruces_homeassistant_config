@@ -1,0 +1,7 @@
+template:
+  sensor:
+    - name: "Electricity Demand Cost"
+      unique_id: electricity_demand_cost
+      #availability: "{{ states('sensor.import_price')|is_number and states('sensor.mqtt_import_power')|is_number }}"
+      unit_of_measurement: 'p/h'
+      state: "{{ (states('sensor.import_price')|float(0) * (states('sensor.mqtt_import_power')|float(0)) / 1000.0)|int }}"

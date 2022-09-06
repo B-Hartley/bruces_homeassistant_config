@@ -1,0 +1,111 @@
+automation:
+    # Door bell has rung
+    - id: doorbell_has_rung
+      alias: Doorbell has rung
+      trigger:
+        platform: state
+        entity_id: binary_sensor.doorbell_doorbell
+        from: "off"
+        to: "on"
+
+      action:                
+#        - alias: Create persistent noticaction
+#          service: persistent_notification.create
+#          data:
+#            title: "Doorbell"
+#            message: "Doorbell has rung"
+#            notification_id: doorbell
+            
+        - alias: Send ding dong to Kitchen Sonos
+          service: script.turn_on
+          target:
+            entity_id: script.sonos_doorbell
+          data:
+            variables:             
+              sonos_entity: media_player.kitchen_sonos
+              volume: 0.5
+              delay: '00:00:05'  
+
+        - alias: Send ding dong to Landing Sonos
+          service: script.turn_on
+          target:
+            entity_id: script.sonos_doorbell
+          data:
+            variables:             
+              sonos_entity: media_player.sonos_move
+              volume: 0.5
+              delay: '00:00:05' 
+              
+        - choose:            
+            - alias: "Check that Bruce and Sarah are Awake"
+              conditions:
+                  condition: state
+                  entity_id: 
+                    - input_boolean.bruce_is_asleep
+                    - input_boolean.sarah_is_asleep
+                  state: "off"        
+              sequence:
+                - alias: Send ding dong to Master Bedroom Sonos
+                  service: script.turn_on
+                  target:
+                    entity_id: script.sonos_doorbell
+                  data:
+                    variables:                  
+                      sonos_entity: media_player.master_bedroom_sonos
+                      volume: 0.5
+                      delay: '00:00:05'      
+          default:   
+            - alias: Send ding dong to Master Bedroom Sonos          
+              service: script.turn_on
+              target:
+                entity_id: script.sonos_doorbell
+              data:
+                variables:                 
+                  sonos_entity: media_player.master_bedroom_sonos
+                  volume: 0.2
+                  delay: '00:00:05'             
+        - choose:            
+            - alias: "Check if Sophie home and awake"
+              conditions:
+                - alias: "Check that Sophie is not asleep"
+                  condition: state
+                  entity_id: input_boolean.sophie_is_asleep
+                  state: "off"   
+                - alias: "Check that Sophie is home"                  
+                  condition: state
+                  entity_id: person.sophie_hartley
+                  state: "home"                    
+
+              sequence:
+                - alias: Send ding dong to Sophie's Bedroom Sonos              
+                  service: script.turn_on
+                  target:
+                    entity_id: script.sonos_doorbell
+                  data:
+                    variables:                     
+                      sonos_entity: media_player.sophies_bedroom_sonos
+                      volume: 0.5
+                      delay: '00:00:05'  
+                      
+        - choose:            
+            - alias: "Check if Kate is home and awake"
+              conditions:
+                - alias: "Check that Kate is not asleep"              
+                  condition: state
+                  entity_id: input_boolean.kate_is_asleep
+                  state: "off"   
+                - alias: "Check that Kate is home"                     
+                  condition: state
+                  entity_id: person.kate_hartley
+                  state: "home"                    
+                  
+              sequence:
+                - alias: Send ding dong to Kate's Bedroom Sonos                
+                  service: script.turn_on
+                  target:
+                    entity_id: script.sonos_doorbell
+                  data:
+                    variables:                     
+                      sonos_entity: media_player.kates_bedroom_sonos
+                      volume: 0.5
+                      delay: '00:00:05'                      

@@ -1,0 +1,11 @@
+group:
+  conservatory_lights_group:
+    name: Conservatory Lights Group
+    entities:
+      - light.conservatory_fan_light
+#      - light.conservatory_lamp
+      - light.conservatory_left
+      - light.conservatory_right
+#      - light.conservatory_table_lamp
+      - light.conservatory_bright
+      - light.conservatory_wall_light

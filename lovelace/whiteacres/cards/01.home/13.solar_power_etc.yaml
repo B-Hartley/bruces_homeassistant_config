@@ -1,0 +1,24 @@
+type: entities
+entities:
+  - entity: sensor.powerwall_charge_corrected
+  - entity: sensor.powerwall_battery_now
+    name: Powerwall
+  - entity: sensor.solar_production
+    name: Solar
+  - entity: sensor.floorplan_powerwall_home_load
+    icon: mdi:home
+    name: Home
+  - entity: sensor.solaredge_grid
+    name: Grid
+  - entity: sensor.myenergi_jyggy_power_ct_internal_load
+    name: Jyggy
+  - entity: sensor.myenergi_paddy_power_ct_internal_load
+    name: Paddy
+  - entity: sensor.myenergi_eddi_power_ct_internal_load
+    name: Eddi  
+    icon: mdi:water-boiler
+  - entity: sensor.hottub_power_kw
+    name: Hot Tub    
+    icon: mdi:hot-tub
+show_header_toggle: false
+state_color: true

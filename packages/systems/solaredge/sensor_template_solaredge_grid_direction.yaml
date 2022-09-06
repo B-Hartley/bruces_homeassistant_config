@@ -1,0 +1,9 @@
+template:
+  sensor:
+    - name: "Solaredge Grid Direction"
+      unique_id: solaredge_grid_direction
+      unit_of_measurement: "kW"
+      device_class: power
+      icon: "mdi:transmission-tower"
+      state: "{% if states('sensor.solaredge_mb_m1_ac_power')|int(0)< -150 %}import{% elif states('sensor.solaredge_mb_m1_ac_power')|int(0) > 150 %}export{% else %}off{%endif%}"
+

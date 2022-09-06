@@ -1,0 +1,9 @@
+sensor:
+  - platform: history_stats
+    name: HotTub Heating This Week
+    entity_id: climate.spa_thermostat
+    state: "heat"
+    type: time
+    end: "{{ today_at('00:00') }}"
+    duration:
+      days: 7

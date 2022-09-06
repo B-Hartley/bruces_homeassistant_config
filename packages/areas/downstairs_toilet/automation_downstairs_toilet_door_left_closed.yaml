@@ -1,0 +1,67 @@
+automation:
+  - id: downstairs_toilet_door_left_closed
+    alias: 'Downstairs Toilet Door Left Closed'
+    
+    description: >-
+      Telegram messages to warn that Toilet Door left closed for a long time
+
+    trigger:
+      - platform: state
+        id: "Closed for 10"
+        entity_id: binary_sensor.downstairs_toilet_door        
+        to: 'off'
+        for: '00:10:00'
+      - platform: state
+        id: "Open"      
+        entity_id: binary_sensor.downstairs_toilet_door        
+        to: 'on'
+        
+    action:
+      - choose:
+            # Delete previous message
+          - alias: "Delete Previous message if any"
+            conditions: 
+              - condition: numeric_state
+                entity_id: input_text.downstairs_toilet_door_message_id
+                above: 0
+                
+            sequence:
+                # Delete previous message 
+              - alias: "Delete Previous Message - Closed"
+                service: telegram_bot.delete_message
+                data:
+                  message_id: "{{ states('input_text.downstairs_toilet_door_message_id') }}"
+                  chat_id: !secret telegram_chat_id_bruce_and_sarah
+                  
+              - alias: "Clear Message ID"                    
+                service: input_text.set_value
+                target:
+                  entity_id: input_text.downstairs_toilet_door_message_id
+                data:
+                  value: 0
+                  
+                # Message that door is open if there was a previous message                 
+              - condition: trigger
+                id: "Open"
+                
+              - alias: "Send Message"                     
+                service: telegram_bot.send_message
+                data:
+                  target: !secret telegram_chat_id_bruce_and_sarah
+                  message: "Downstairs toilet door is open"   
+      - choose:
+            # Door Closed 
+          - alias: "Door Closed"
+            conditions: 
+              - condition: trigger
+                id: "Closed for 10"
+            sequence:
+            
+              - alias: "Send Message"                  
+                service: telegram_bot.send_message
+                data:
+                  target: !secret telegram_chat_id_bruce_and_sarah
+                  message_tag: downstairs_toilet_door
+                  message: "Downstairs Toilet door has been closed for 10 minutes"
+     
+                  

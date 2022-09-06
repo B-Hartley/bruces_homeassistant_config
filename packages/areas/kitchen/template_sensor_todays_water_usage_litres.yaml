@@ -1,0 +1,9 @@
+template:
+  - sensor:
+      - name: "Today's Water Usage - Litres"
+        unique_id: water_daily_lites
+        unit_of_measurement: l
+        availability: "{{states('sensor.today_s_water_usage')|is_number}}"
+        state: "{{ (states('sensor.today_s_water_usage')|float*4.54609)|round(2)}}"
+        state_class: total_increasing
+

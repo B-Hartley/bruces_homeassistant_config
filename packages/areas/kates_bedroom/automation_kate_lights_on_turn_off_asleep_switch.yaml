@@ -1,0 +1,23 @@
+automation:
+  - id: turn_off_kate_asleep_with_lights
+    alias: 'Turn off Kate Asleep switch from lights on'
+    mode: single
+    
+    description: >-
+      Turn off asleep switch when lights are switched on
+
+    trigger:
+      - platform: state
+        id: "lights"
+        entity_id: light.kates_bedroom_lights     
+        to: 'on'    
+
+    condition:
+      - condition: state
+        entity_id: input_boolean.kate_is_asleep
+        state: 'on'       
+
+    action:
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.kate_is_asleep  

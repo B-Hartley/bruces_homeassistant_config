@@ -1,0 +1,10 @@
+group:
+  master_bedroom_lights_group:
+    name: Master Bedroom Lights Group
+    entities:
+    - light.master_bedroom_bedside_left
+    - light.master_bedroom_bedside_right
+    - light.master_bedroom_lamp
+    - light.master_bedroom_wall_left
+    - light.master_bedroom_wall_right
+    - light.master_bedroom_wardrobe_bars

@@ -1,0 +1,27 @@
+localtuya:
+  - host: tuya_lounge_ip
+    device_id: tuya_lounge_device_id
+    local_key: tuya_lounge_local_key
+    friendly_name: Tuya Lounge
+    protocol_version: "3.3"
+    entities:
+      - platform: sensor
+        friendly_name: Tuya Lounge Temperature
+        id: 8
+        device_class: temperature
+        unit_of_measurement: "°C" 
+      - platform: sensor
+        friendly_name: Tuya Lounge Humidity
+        id: 9
+        device_class: humidity
+        unit_of_measurement: "%"
+      - platform: sensor
+        friendly_name: Tuya Lounge PM2.5
+        id: 33
+        device_class: pm25
+        unit_of_measurement: "µg/m³"
+      - platform: sensor
+        friendly_name: Tuya Lounge CO2
+        id: 37
+        device_class: carbon_dioxide
+        unit_of_measurement: "ppm"      

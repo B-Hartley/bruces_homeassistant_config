@@ -1,0 +1,10 @@
+sensor:
+  - platform: statistics
+    unique_id: statistics_mb_co2_mean
+    entity_id: sensor.master_bedroom_environment_co2
+    sampling_size: 250
+    precision: 0
+    name: Master Bedroom Environment CO2 Mean
+    state_characteristic: mean    
+    max_age:
+      hours: 24

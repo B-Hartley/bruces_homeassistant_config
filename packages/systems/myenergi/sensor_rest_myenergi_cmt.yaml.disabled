@@ -1,0 +1,29 @@
+#######################
+## Zappis can switch around the json so I have to check which is which.
+## Jyggy Serial number is numerically lower so compare them
+## Avoids listing the serial numbers in this file
+#######################
+
+rest:
+  - resource: https://s18.myenergi.net/cgi-jstatus-*
+#  - resource_template: "https://{{ 's18.myenergi.net' if states('sensor.myenergi_asn') in ('Unavailable','unknown') else states('sensor.myenergi_asn') }}/cgi-jstatus-*"
+    scan_interval: 1440
+    timeout: 30
+    authentication: digest
+    username: !secret myenergi_serial
+    password: !secret myenergi_password
+    headers:
+      User-Agent: Home Assistant
+      Content-Type: application/json
+      Accept: application/json
+        
+    sensor:
+
+      - name: Zappi Jyggy CMT
+        value_template: "{{ value_json[1].zappi[0].cmt if value_json[1].zappi[0].sno|int(0) < value_json[1].zappi[1].sno|int(0) else value_json[1].zappi[1].cmt }}"
+
+      - name: Zappi Paddy CMT
+        value_template: "{{ value_json[1].zappi[0].cmt if value_json[1].zappi[0].sno|int(0) > value_json[1].zappi[1].sno|int(0) else value_json[1].zappi[1].cmt }}"
+
+      - name: Eddi CMT
+        value_template: "{{ value_json[0].eddi[0].cmt }}"

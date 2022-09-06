@@ -1,0 +1,7 @@
+template:
+  sensor:
+    - name: "Octopus Current Price Pounds"
+      availability: "{{ states('sensor.import_price')|is_number }}"
+      unique_id: octopus_current_price_pounds
+      unit_of_measurement: '£'
+      state: "{{ states('sensor.import_price')|float(0) / 100.0 }}"

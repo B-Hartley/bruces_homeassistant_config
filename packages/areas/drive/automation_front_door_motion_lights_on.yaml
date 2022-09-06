@@ -1,0 +1,65 @@
+automation:
+  - id: any_motion_front_door_lights_on
+    alias: 'Turn on Front Door Lights in Dark with Motion'
+    mode: restart
+
+    description: >-
+      Turn on Front Door Lights in Dark with Motion
+      Could check for light already being on, then leave it alone ?
+      What if Hall is on, but drive is not ?
+      
+    trigger: 
+      - platform: state
+        id: "front door"
+        entity_id: 
+          - binary_sensor.front_door
+          - binary_sensor.front_door_ding
+        to: 'on'          
+      - platform: state
+        id: "motion"
+        entity_id: 
+          - binary_sensor.drive_motion
+          - binary_sensor.front_door_motion
+          - binary_sensor.drive_sensor_motion
+
+
+    condition:
+      - condition: state
+        entity_id: binary_sensor.light_outside
+        state: 'off'
+
+    action:
+      - choose:
+      # Door bell rang / Door Opened
+          - conditions:
+              - condition: trigger
+                id: "front door"
+            sequence:
+              - alias: "turn on light"
+                service: light.turn_on
+                target:
+                  entity_id: light.front_door_and_drive
+                  
+              - alias: "Wait for door open for 8 seconds"                     
+                wait_template: "{{ is_state('binary_sensor.front_door', 'off') }}"
+                timeout: '00:08:00'
+                
+              - delay: '00:02:00'
+
+              - alias: "turn off light"
+                service: light.turn_off
+                target:
+                  entity_id: light.front_door_and_drive 
+
+        default:
+          - alias: "turn on light"        
+            service: light.turn_on
+            target:
+              entity_id: light.front_door_and_drive
+              
+          - delay: 00:02:00
+          
+          - alias: "turn off light"          
+            service: light.turn_off
+            target:
+              entity_id: light.front_door_and_drive

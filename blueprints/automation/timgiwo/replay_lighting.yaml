@@ -1,0 +1,263 @@
+# https://community.home-assistant.io/t/vacation-lighting-replay-historical-lighting/282435
+
+
+###########
+## Sensors
+###########
+#sensors:
+#  # Replay Sensor - Make a new one for each light to monitor
+#  # All sensors will have naming convention "sensor.replay_xxxxx"
+#  - platform: history_stats
+#    name: "replay_office_lamp"
+#    entity_id: light.office_lamp
+#    state: "on"
+#    type: count
+#    start: >
+#      {{ as_timestamp(now()) - (7*86400) }}
+#    duration: 00:00:30
+    
+###########
+## Input Boolean
+###########
+#input_boolean:
+#  # Vacation Mode Toggle: Used as the condition for vacation lighting blueprint
+#  vacation_mode:
+#    name: Vacation Mode
+#    icon: mdi:beach
+    
+blueprint:
+  name: Blueprint - Vacation Lighting 
+  description: Vacation Lighting - Replay Sensors to Light Behavior
+  domain: automation
+  input:
+    vacation_mode_toggle:
+      name: Vacation Mode - Input Boolean
+      selector:
+        entity:
+          domain: input_boolean
+    default_brightness:
+      name: Default Brightness
+      default: 50
+      selector:
+        number:
+          min: 1
+          max: 100
+          unit_of_measurement: "%"
+          mode: slider
+    replay_sensor_1:
+      name: Replay Sensor (1)
+      selector:
+        entity:
+          domain: sensor
+    light_target_1:
+      name: Light Target (1)
+      selector:
+        entity:
+    replay_sensor_2:
+      name: Replay Sensor (2)
+      selector:
+        entity:
+          domain: sensor
+    light_target_2:
+      name: Light Target (2)
+      selector:
+        entity:
+    replay_sensor_3:
+      name: Replay Sensor (3)
+      selector:
+        entity:
+          domain: sensor
+    light_target_3:
+      name: Light Target (3)
+      selector:
+        entity:
+    replay_sensor_4:
+      name: Replay Sensor (4)
+      selector:
+        entity:
+          domain: sensor
+    light_target_4:
+      name: Light Target (4)
+      selector:
+        entity:
+    replay_sensor_5:
+      name: Replay Sensor (5)
+      selector:
+        entity:
+          domain: sensor
+    light_target_5:
+      name: Light Target (5)
+      selector:
+        entity:
+    replay_sensor_6:
+      name: Replay Sensor (6)
+      selector:
+        entity:
+          domain: sensor
+    light_target_6:
+      name: Light Target (6)
+      selector:
+        entity:
+    replay_sensor_7:
+      name: Replay Sensor (7)
+      selector:
+        entity:
+          domain: sensor
+    light_target_7:
+      name: Light Target (7)
+      selector:
+        entity:
+    replay_sensor_8:
+      name: Replay Sensor (8)
+      selector:
+        entity:
+          domain: sensor
+    light_target_8:
+      name: Light Target (8)
+      selector:
+        entity:
+    replay_sensor_9:
+      name: Replay Sensor (9)
+      selector:
+        entity:
+          domain: sensor
+    light_target_9:
+      name: Light Target (9)
+      selector:
+        entity:
+    replay_sensor_10:
+      name: Replay Sensor (10)
+      selector:
+        entity:
+          domain: sensor
+    light_target_10:
+      name: Light Target (10)
+      selector:
+        entity:
+# Declare blueprint inputs as variables for use in {{templates}}        
+variables:
+  replay_sensor_1: !input replay_sensor_1
+  light_target_1: !input light_target_1
+  replay_sensor_2: !input replay_sensor_2
+  light_target_2: !input light_target_2
+  replay_sensor_3: !input replay_sensor_3
+  light_target_3: !input light_target_3
+  replay_sensor_4: !input replay_sensor_4
+  light_target_4: !input light_target_4
+  replay_sensor_5: !input replay_sensor_5
+  light_target_5: !input light_target_5
+  replay_sensor_6: !input replay_sensor_6
+  light_target_6: !input light_target_6
+  replay_sensor_7: !input replay_sensor_7
+  light_target_7: !input light_target_7
+  replay_sensor_8: !input replay_sensor_8
+  light_target_8: !input light_target_8
+  replay_sensor_9: !input replay_sensor_9
+  light_target_9: !input light_target_9
+  replay_sensor_10: !input replay_sensor_10
+  light_target_10: !input light_target_10
+  
+# Trigger when replay sensor changes state
+trigger:
+  - platform: state
+    entity_id: !input replay_sensor_1
+  - platform: state
+    entity_id: !input replay_sensor_2
+  - platform: state
+    entity_id: !input replay_sensor_3
+  - platform: state
+    entity_id: !input replay_sensor_4
+  - platform: state
+    entity_id: !input replay_sensor_5
+  - platform: state
+    entity_id: !input replay_sensor_6
+  - platform: state
+    entity_id: !input replay_sensor_7
+  - platform: state
+    entity_id: !input replay_sensor_8
+  - platform: state
+    entity_id: !input replay_sensor_9
+  - platform: state
+    entity_id: !input replay_sensor_10
+
+# As long as Vacation Mode is on
+condition:
+  - condition: state
+    entity_id: !input vacation_mode_toggle
+    state: 'on'
+
+
+action:
+  - variables:
+      corresponding_light: >
+        {% if trigger.entity_id == replay_sensor_1 %}
+          {{ light_target_1 }}
+        {% elif trigger.entity_id == replay_sensor_2 %}
+          {{ light_target_2 }}
+        {% elif trigger.entity_id == replay_sensor_3 %}
+          {{ light_target_3 }}
+        {% elif trigger.entity_id == replay_sensor_4 %}
+          {{ light_target_4 }}
+        {% elif trigger.entity_id == replay_sensor_5 %}
+          {{ light_target_5 }}
+        {% elif trigger.entity_id == replay_sensor_6 %}
+          {{ light_target_6 }}
+        {% elif trigger.entity_id == replay_sensor_7 %}
+          {{ light_target_7 }}
+        {% elif trigger.entity_id == replay_sensor_8 %}
+          {{ light_target_8 }}
+        {% elif trigger.entity_id == replay_sensor_9 %}
+          {{ light_target_9 }}
+        {% elif trigger.entity_id == replay_sensor_10 %}
+          {{ light_target_10 }}
+        {% endif %}
+  - choose:
+      # Replay turned on && entity_id is "LIGHT"
+      - conditions:
+          condition: and
+          conditions: 
+            - condition: template
+              value_template: '{{ trigger.to_state.state  == "1" }}'
+            - condition: template
+              value_template: '{{ corresponding_light.split(".")[0] == "light" }}'
+        sequence:
+          - service: light.turn_on
+            data:
+              entity_id: '{{ corresponding_light }}'
+              brightness_pct: !input default_brightness
+          - service: system_log.write
+            data:
+              message: 'Vacation - Replay Lighting (Blueprint): {{trigger.to_state.entity_id}}: turning on: {{ corresponding_light }}'
+              level: info
+
+      # Replay turned on && entity_id is "SWITCH"
+      - conditions:
+          condition: and
+          conditions: 
+            - condition: template
+              value_template: '{{ trigger.to_state.state == "1" }}'
+            - condition: template
+              value_template: '{{ corresponding_light.split(".")[0] == "switch" }}'
+        sequence:
+          - service: switch.turn_on
+            data:
+              entity_id: '{{ corresponding_light }}'
+          - service: system_log.write
+            data:
+              message: 'Vacation - Replay Lighting (Blueprint): {{trigger.to_state.entity_id}}: turning on:{{ corresponding_light }}'
+              level: info
+
+      # Replay turned off
+      - conditions:
+          condition: and
+          conditions: 
+            - condition: template
+              value_template: '{{ trigger.to_state.state == "0" }}'
+        sequence:
+          - service: homeassistant.turn_off
+            data:
+              entity_id: '{{ corresponding_light }}'
+          - service: system_log.write
+            data:
+              message: 'Vacation - Replay Lighting (Blueprint): {{trigger.to_state.entity_id}}: turning off:{{ corresponding_light }}'
+              level: info

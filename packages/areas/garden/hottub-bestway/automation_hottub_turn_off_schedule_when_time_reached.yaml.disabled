@@ -1,0 +1,9 @@
+automation:
+  - id: hottub_turn_off_scheduled_when_time_reached
+    alias: HotTub Turn off scheduled when time reached
+    trigger:
+      platform: time
+      at: input_datetime.hottub_ready_by
+    action:
+      service: input_boolean.turn_off
+      entity_id: input_boolean.hottub_scheduled

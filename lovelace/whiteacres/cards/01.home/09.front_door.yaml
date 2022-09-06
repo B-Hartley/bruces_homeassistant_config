@@ -1,0 +1,12 @@
+aspect_ratio: 0%
+camera_image: camera.doorbell_medium
+entities:
+  - entity: binary_sensor.doorbell_doorbell
+  - entity: binary_sensor.doorbell_motion
+  - entity: binary_sensor.doorbell_person_detected  
+  - entity: binary_sensor.doorbell_vehicle_detected    
+tap_action:
+  action: navigate
+  navigation_path: /lovelace-cctvcameras/doorbell
+title: Front Door
+type: picture-glance

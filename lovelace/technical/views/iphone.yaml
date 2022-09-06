@@ -1,0 +1,7 @@
+title: iPhone
+path: iphone
+icon: 'mdi:cellphone'
+badges: []
+cards:
+  - entity: sensor.icloud3_event_log
+    type: 'custom:icloud3-event-log-card'

@@ -1,0 +1,7 @@
+template:
+  - binary_sensor:
+      - name: "Water Running"
+        unique_id: water_running
+        availability: "{{states('sensor.water_flow_rate')|is_number}}"
+        state: "{{ 'on' if states('sensor.water_flow_rate')|float(0)>0 else 'off' }}"
+        icon: "{{ 'mdi:water-pump' if states('sensor.water_flow_rate')|float(0)>0 else 'mdi:water-pump-off' }}"

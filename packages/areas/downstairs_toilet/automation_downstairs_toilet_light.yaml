@@ -1,0 +1,238 @@
+automation:
+  - id: downstairs_toilet_light
+    alias: 'Downstairs Loo Light from Door and occupancy'
+    
+    description:  >-
+      Downstairs Loo Door controlled by door and occupancy sensor
+
+    mode: restart
+    trigger: 
+      - platform: homeassistant
+        id: "start"
+        event: start
+      - platform: event
+        id: "reload"
+        event_type: automation_reloaded    
+      - platform: state
+        id: "open"      
+        entity_id: binary_sensor.downstairs_toilet_door
+        to: 'on'
+      - platform: state
+        id: "closed"      
+        entity_id: binary_sensor.downstairs_toilet_door
+        to: 'off'        
+      - platform: event
+        id: "timer"       
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.downstairs_loo
+      - platform: state
+        id: "motion" 
+        entity_id: binary_sensor.downstairs_toilet_sensor_motion
+        to: 'on'
+
+    action:
+      - choose:
+            # Restart or automation Reload
+          - alias: "Restart or Automation Reload"
+            conditions: 
+              - or:
+                  - condition: trigger
+                    id: "start"
+                  - condition: trigger
+                    id: "reload"
+                    
+            sequence:
+              - alias: "Set occupied off"            
+                service: input_boolean.turn_off
+                target:
+                  entity_id: input_boolean.room_occupied_downstairs_loo  
+
+              - alias: "start timer"                    
+                service: timer.start
+                target:
+                  entity_id: timer.downstairs_loo                   
+                
+            # Closed
+          - alias: "Closed"            
+            conditions: 
+              - condition: trigger
+                id: "closed"
+            sequence:
+              - if:
+                  - alias: "if it is light outside"
+                    condition: state
+                    entity_id: binary_sensor.light_outside
+                    state: 'on'
+                then:
+                  - alias: "Light on"              
+                    service: hue.activate_scene
+                    target:
+                     entity_id: scene.downstairs_toilet_daytime
+                else:
+                  - alias: "Light on"              
+                    service: hue.activate_scene
+                    target:
+                     entity_id: scene.downstairs_toilet_evening
+                     
+              - alias: "start timer"                   
+                service: timer.start
+                target:
+                  entity_id: timer.downstairs_loo
+
+              - alias: "Wait for motion for 10 seconds"                                     
+                wait_template: "{{ is_state('binary_sensor.downstairs_toilet_sensor_motion', 'on') }}"
+                timeout: '00:00:10'
+                continue_on_timeout: false
+
+              - alias: "Set Occuped on"                  
+                service: input_boolean.turn_on
+                target:
+                  entity_id: input_boolean.room_occupied_downstairs_loo    
+              
+            # Else opened and dark
+          - alias: "Opened and Dark"            
+            conditions: 
+              - condition: trigger
+                id: "open"
+              - condition: numeric_state
+                entity_id: sensor.downstairs_toilet_sensor_light_level
+                below: 50.0
+                
+            sequence:
+              - alias: "start timer"             
+                service: timer.start
+                target:
+                  entity_id: timer.downstairs_loo
+
+              - alias: "Set Occupied off"                                     
+                service: input_boolean.turn_off
+                target:
+                  entity_id: input_boolean.room_occupied_downstairs_loo
+                  
+              - if:
+                  - alias: "if it is light outside"
+                    condition: state
+                    entity_id: binary_sensor.light_outside
+                    state: 'on'
+                then:
+                  - alias: "Light on"              
+                    service: hue.activate_scene
+                    target:
+                     entity_id: scene.downstairs_toilet_daytime
+                else:
+                  - alias: "Light on"              
+                    service: hue.activate_scene
+                    target:
+                     entity_id: scene.downstairs_toilet_evening
+              
+            # Timer finished and door opened
+          - alias: "Timer finished and door opened"            
+            conditions: 
+              - condition: trigger
+                id: "timer"
+              - condition: state
+                entity_id: binary_sensor.downstairs_toilet_door
+                state: 'on'
+            sequence:
+            
+              - alias: "Light Off"                
+                service: light.turn_off
+                target:
+                  entity_id: light.downstairs_toilet_light   
+                data:
+                  transition: 10
+                
+            # Movement - alarm not set - door closed
+          - alias: "Alarm not set - door closed - dark"              
+            conditions: 
+              - condition: trigger
+                id: "motion"
+              - condition: state
+                entity_id: binary_sensor.downstairs_toilet_door
+                state: 'off'
+              - condition: numeric_state
+                entity_id: sensor.downstairs_toilet_sensor_light_level
+                below: 50.0
+              - condition: not
+                conditions:
+                  - condition: state
+                    entity_id: alarm_control_panel.texecom
+                    state: 'armed_away'
+            sequence:   
+            
+              - if:
+                  - alias: "if it is light outside"
+                    condition: state
+                    entity_id: binary_sensor.light_outside
+                    state: 'on'
+                then:
+                  - alias: "Light on"              
+                    service: hue.activate_scene
+                    target:
+                     entity_id: scene.downstairs_toilet_daytime
+                else:
+                  - alias: "Light on"              
+                    service: hue.activate_scene
+                    target:
+                     entity_id: scene.downstairs_toilet_evening
+
+              - alias: "Set Occupied on"                   
+                service: input_boolean.turn_on
+                target:
+                  entity_id: input_boolean.room_occupied_downstairs_loo   
+
+              - alias: "Timer Start"                   
+                service: timer.start
+                target:
+                  entity_id: timer.downstairs_loo       
+              
+            # Movement - alarm not set - and dark
+          - alias: "Movement - alarm not set- and dark"              
+            conditions: 
+              - condition: trigger
+                id: "motion"
+              - condition: numeric_state
+                entity_id: sensor.downstairs_toilet_sensor_light_level
+                below: 50.0
+              - condition: not
+                conditions:
+                  - condition: state
+                    entity_id: alarm_control_panel.texecom
+                    state: 'armed_away'
+            
+            sequence:  
+            
+              - if:
+                  - alias: "if it is light outside"
+                    condition: state
+                    entity_id: binary_sensor.light_outside
+                    state: 'on'
+                then:
+                  - alias: "Light on"              
+                    service: hue.activate_scene
+                    target:
+                     entity_id: scene.downstairs_toilet_daytime
+                else:
+                  - alias: "Light on"              
+                    service: hue.activate_scene
+                    target:
+                     entity_id: scene.downstairs_toilet_evening
+
+              - alias: "Timer Start"                  
+                service: timer.start
+                target:
+                  entity_id: timer.downstairs_loo      
+        
+        # unknown
+        default:
+        
+          - alias: "unknown situation occurred - turn off occupied"
+            service: input_boolean.turn_off
+            target:
+              entity_id: input_boolean.room_occupied_downstairs_loo
+              
+          - alias: "unknown situation occurred - Start Timer"              
+            service: timer.start
+            target:
+              entity_id: timer.downstairs_loo        

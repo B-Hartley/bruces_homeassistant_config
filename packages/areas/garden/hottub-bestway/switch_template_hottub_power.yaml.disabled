@@ -1,0 +1,25 @@
+switch:
+  - platform: template
+    switches:
+      hottub_power:
+        availability_template: "{{ states('binary_sensor.hottub_online') }}"
+        friendly_name: Power
+        unique_id: hottub_power
+        value_template: "{% if state_attr('sensor.hottub_status', 'power') == 1 %}on{% else %}off{% endif %}"
+        turn_on:
+          - service: rest_command.hottub_command
+            data_template: 
+              hottub_command: >
+                {"attrs": {"power": 1} }   
+          - delay: 00:00:05
+          - service: homeassistant.update_entity
+            entity_id: sensor.hottub_status
+        turn_off:
+          - service: rest_command.hottub_command
+            data_template: 
+              hottub_command: >
+                {"attrs": {"power": 0} }  
+          - delay: 00:00:05
+          - service: homeassistant.update_entity
+            entity_id: sensor.hottub_status
+

@@ -1,0 +1,18 @@
+title: SONOS
+icon: 'mdi:music'
+path: sonos
+badges: []
+cards:
+  - entity: media_player.lounge_sonos
+    type: media-control
+  - entities:
+    - entity: light.lounge
+      name: Lounge
+      hide_state: true
+      type: 'custom:slider-entity-row'
+    - entity: light.hall
+      name: Hall
+      hide_state: true
+      type: 'custom:slider-entity-row'
+    show_header_toggle: false
+    type: entities

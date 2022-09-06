@@ -1,0 +1,5 @@
+badnest:
+  login_type: google
+  issue_token: !secret badnest_token
+  cookie: !secret badnest_cookie
+  #api_key : "#YOURAPIKEYHERE#"

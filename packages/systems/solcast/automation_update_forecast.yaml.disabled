@@ -1,0 +1,19 @@
+automation:
+  - id: solcast_update_forecast
+    alias: 'Solcast Update Forecast'
+    
+    description: >
+      Update forecast each half hour
+      
+    trigger:
+      - platform: time_pattern
+        minutes: "/30"
+
+    condition:
+      condition: time
+      after: '01:15:00'
+      before: '23:45:00'
+          
+    action:
+      - service: solcast.update_forecast
+#      - service: solcastx.update_forecast      

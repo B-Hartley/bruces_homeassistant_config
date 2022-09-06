@@ -1,0 +1,13 @@
+template:
+  - trigger:
+      - platform: webhook
+        webhook_id: !secret flic_battery_bedside_guest
+
+    sensor:
+      - name: "Flic Battery Bedside Guest"
+        state: "{{ trigger.json.battery_status }}"
+        unit_of_measurement: "%"
+        device_class: battery
+        attributes:
+          last_pressed: "{{ now() }}"
+          last_press_type: "{{ trigger.json.click_type }}"

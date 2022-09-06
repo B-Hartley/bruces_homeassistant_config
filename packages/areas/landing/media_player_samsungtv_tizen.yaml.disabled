@@ -1,0 +1,6 @@
+media_player:
+  - platform: samsungtv_tizen
+    host: !secret landingtv_ip
+    port: 8002
+    name: Landing TV
+    mac: !secret landingtv_mac

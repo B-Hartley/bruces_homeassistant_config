@@ -1,0 +1,41 @@
+title: PC
+path: pc
+icon: 'mdi:desktop-classic'
+badges: []
+cards:
+  - entities:
+      - color: green
+        entity: sensor.speedtest_download
+        name: Download
+      - color: red
+        entity: sensor.speedtest_upload
+        name: Upload
+      - color: yellow
+        entity: sensor.speedtest_ping
+        name: Ping
+    font_size: 75
+    font_size_header: 22
+    hour24: true
+    line_width: 3
+    name: ' '
+    points_per_hour: 2
+    show:
+      extrema: true
+      icon: false
+      labels: true
+      points: true
+    type: 'custom:mini-graph-card'
+  - entities:
+      - entity: sensor.last_boot
+      - entity: sensor.disk_use_percent
+      - entity: sensor.load_1m
+      - entity: sensor.load_5m
+      - entity: sensor.load_15m
+      - entity: sensor.nuc_cpu_temperature
+        name: CPU Temperature
+      - entity: sensor.loft_cabinet_temperature        
+        name: Cabinet Temperature
+      - entity: input_number.loft_fan_thermostat         
+      - entity: fan.loft_fan
+    type: entities
+

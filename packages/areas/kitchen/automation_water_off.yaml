@@ -1,0 +1,57 @@
+automation:
+  - id: water_supply_turned_off
+    alias: 'Water Supply Turned Off'
+    mode: single
+    
+    description: >
+      Water Turned Off
+
+    trigger:
+      - platform: state
+        id: "Water"
+        entity_id: switch.shutoff_valve
+        to: 'off'
+      - platform: homeassistant
+        id: "start"
+        event: start
+      - platform: event
+        id: "reload"
+        event_type: automation_reloaded    
+        
+    condition:
+      - condition: state
+        entity_id: switch.shutoff_valve
+        state: 'off'   
+                
+    action:
+# Wait 10 minutes if around nightly test time
+# Test is 02:15 in summer
+      - choose:
+          - conditions:
+              - condition: time
+                after: "02:00:00"
+                before: "03:10:00"
+            sequence:
+              - delay: "00:10:00"
+
+            # Check that still open
+              - condition: state
+                entity_id: switch.shutoff_valve
+                state: 'off'      
+
+              - service: telegram_bot.send_message
+                data:
+                  target: !secret telegram_chat_id_bruce_and_sarah
+                  message: "Water supply has been turned off!"
+                  inline_keyboard:
+                    - 'Water On:/water_on'
+                    - 'OK:/remove_keyboard'        
+                
+        default:
+          - service: telegram_bot.send_message
+            data:
+              target: !secret telegram_chat_id_bruce_and_sarah
+              message: "Water supply has been turned off!"
+              inline_keyboard:
+                - 'Water On:/water_on'
+                - 'OK:/remove_keyboard'           

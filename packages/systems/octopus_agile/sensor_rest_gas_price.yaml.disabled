@@ -1,0 +1,7 @@
+rest:
+  resource_template: "https://api.octopus.energy/v1/products/GAS/gas-tariffs/E-1R-AGILE-18-02-21-L/standard-unit-rates/?period_from={{ now().year }}-{{ now().month }}-{{ now().day }}T{{ now().hour }}:{% if now().minute <30 %}00{% else %}30{% endif %}&period_to={{ now().year }}-{{ now().month }}-{% if (now().hour == 23) and (now().minute >=30) %}{{ now().day+1 }}{% else %}{{ now().day }}{% endif %}T{% if (now().hour == 23) and (now().minute >=30) %}00{% elif now().minute >=30 %}{{ now().hour+1}}{% else %}{{ now().hour}}{% endif %}:{% if now().minute >=30 %}00{% else %}30{% endif %}"
+  sensor:
+    - name: "Import Price"
+      value_template: "{{ value_json.results[0].value_inc_vat | round(2) }}"
+      unit_of_measurement: "p/kWh"
+    

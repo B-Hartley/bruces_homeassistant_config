@@ -1,0 +1,15 @@
+rest:
+  # Export SEG increased to 4.1p from 1-Feb-22
+  resource_template: "https://api.octopus.energy/v1/products/AGILE-OUTGOING-19-05-13/electricity-tariffs/E-1R-AGILE-OUTGOING-19-05-13-L/standard-unit-rates/?period_from={{ now().year }}-{{ now().month }}-{{ now().day }}T{{ now().hour }}:{% if now().minute <30 %}00{% else %}30{% endif %}&period_to={{ now().year }}-{{ now().month }}-{% if (now().hour == 23) and (now().minute >=30) %}{{ now().day+1 }}{% else %}{{ now().day }}{% endif %}T{% if (now().hour == 23) and (now().minute >=30) %}00{% elif now().minute >=30 %}{{ now().hour+1}}{% else %}{{ now().hour}}{% endif %}:{% if now().minute >=30 %}00{% else %}30{% endif %}"
+  scan_interval: 1800    
+  sensor:
+    - name: "Export Price"
+#      value_template: "{% if is_state('input_boolean.go_tariff','on') %}3{% else %}{{ value_json.results[0].value_inc_vat|round(2) }}{% endif %}"
+      value_template: "{% if is_state('input_boolean.go_tariff','on') %}4.1{% else %}{{ value_json.results[0].value_inc_vat|round(2) }}{% endif %}"          
+      unit_of_measurement: "p/kWh"
+
+    - name: "Export Price Pounds"
+#      value_template: "{% if is_state('input_boolean.go_tariff','on') %}0.03{% else %}{{ value_json.results[0].value_inc_vat / 100 }}{% endif %}"    
+      value_template: "{% if is_state('input_boolean.go_tariff','on') %}0.041{% else %}{{ value_json.results[0].value_inc_vat / 100 }}{% endif %}"        
+      unit_of_measurement: "£/kWh"      
+    

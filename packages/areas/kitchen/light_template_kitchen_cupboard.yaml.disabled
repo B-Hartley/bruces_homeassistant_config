@@ -1,0 +1,17 @@
+light:
+  - platform: template
+    lights:
+      kitchen_cupboard:
+        unique_id: kitchen_cupboard
+        friendly_name: "Kitchen Cupboard"
+        availability_template: "{{ states('switch.kitchen_cupboard') in ('on','off') }}"
+        value_template: "{{ states('switch.kitchen_cupboard') }}"
+        turn_on:
+          service: switch.turn_on
+          entity_id: switch.kitchen_cupboard
+        turn_off:
+          service: switch.turn_off
+          entity_id: switch.kitchen_cupboard
+        set_level:
+          service: switch.turn_'{{ "off" if brightness == 0 else "on" }}'
+          entity_id: switch.kitchen_cupboard

@@ -1,0 +1,21 @@
+alert:
+  jyggy_charger_no_power:
+    name: Jyggy Charger is Off
+    done_message: Jyggy Charger is On
+    entity_id: sensor.jyggy_charging_state
+    state: 'NoPower'
+    repeat:
+      - 1
+      - 5
+      - 10
+      - 20
+      - 30
+      - 60
+      - 120
+      - 240
+      - 480
+      - 960
+    can_acknowledge: true
+    skip_first: true
+    notifiers:
+      - bruce_and_sarah_phones

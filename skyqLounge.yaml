@@ -1,0 +1,176 @@
+    skyq_pauselounge:
+      value_template: '{{"off"}}'
+      friendly_name: 'pause in the Lounge'
+      turn_on:
+        service: media_player.media_pause
+        data:
+          entity_id: media_player.lounge_skyq
+      turn_off:
+        service: script.placeholder
+    skyq_playlounge:
+      value_template: '{{"off"}}'
+      friendly_name: 'play in the Lounge'
+      turn_on:
+        service: media_player.media_play
+        data:
+          entity_id: media_player.lounge_skyq
+      turn_off:
+        service: script.placeholder
+    skyq_fflounge:
+      value_template: '{{"off"}}'
+      friendly_name: 'fastforward in the Lounge'
+      turn_on:
+        service: media_player.media_next_track
+        data:
+          entity_id: media_player.lounge_skyq
+      turn_off:
+        service: script.placeholder
+    skyq_rwlounge:
+      value_template: '{{"off"}}'
+      friendly_name: 'rewind in the Lounge'
+      turn_on:
+        service: media_player.media_previous_track
+        data:
+          entity_id: media_player.lounge_skyq
+      turn_off:
+        service: script.placeholder
+    skyq_netflixlounge:
+      value_template: '{{"off"}}'
+      friendly_name: 'Netflix in the Lounge'
+      turn_on:
+        service: media_player.select_source
+        data:
+          entity_id: media_player.lounge_skyq
+          source: 'Netflix'
+      turn_off:
+        service: script.placeholder
+    skyq_bbconehdlounge:
+      value_template: '{{"off"}}'
+      friendly_name: 'BBC One HD in the Lounge'
+      turn_on:
+        service: media_player.select_source
+        data:
+          entity_id: media_player.lounge_skyq
+          source: 'BBC One HD'
+      turn_off:
+        service: script.placeholder
+    skyq_bbctwohdlounge:
+      value_template: '{{"off"}}'
+      friendly_name: 'BBC Two HD in the Lounge'
+      turn_on:
+        service: media_player.select_source
+        data:
+          entity_id: media_player.lounge_skyq
+          source: 'BBC Two HD'
+      turn_off:
+        service: script.placeholder
+    skyq_itvhdlounge:
+      value_template: '{{"off"}}'
+      friendly_name: 'ITV HD in the Lounge'
+      turn_on:
+        service: media_player.select_source
+        data:
+          entity_id: media_player.lounge_skyq
+          source: 'ITV HD'
+      turn_off:
+        service: script.placeholder
+    skyq_channel4hdlounge:
+      value_template: '{{"off"}}'
+      friendly_name: 'Channel 4 HD in the Lounge'
+      turn_on:
+        service: media_player.select_source
+        data:
+          entity_id: media_player.lounge_skyq
+          source: 'Channel 4 HD'
+      turn_off:
+        service: script.placeholder
+    skyq_channel5hdlounge:
+      value_template: '{{"off"}}'
+      friendly_name: 'Channel 5 HD in the Lounge'
+      turn_on:
+        service: media_player.select_source
+        data:
+          entity_id: media_player.lounge_skyq
+          source: 'Channel 5 HD'
+      turn_off:
+        service: script.placeholder
+    skyq_skyonehdlounge:
+      value_template: '{{"off"}}'
+      friendly_name: 'Sky One HD in the Lounge'
+      turn_on:
+        service: media_player.select_source
+        data:
+          entity_id: media_player.lounge_skyq
+          source: 'Sky One HD'
+      turn_off:
+        service: script.placeholder
+    skyq_4sevenlounge:
+      value_template: '{{"off"}}'
+      friendly_name: '4Seven in the Lounge'
+      turn_on:
+        service: media_player.select_source
+        data:
+          entity_id: media_player.lounge_skyq
+          source: '4Seven'
+      turn_off:
+        service: script.placeholder
+    skyq_foxhdlounge:
+      value_template: '{{"off"}}'
+      friendly_name: 'FOX HD in the Lounge'
+      turn_on:
+        service: media_player.select_source
+        data:
+          entity_id: media_player.lounge_skyq
+          source: 'FOX HD'
+      turn_off:
+        service: script.placeholder
+    skyq_davehdlounge:
+      value_template: '{{"off"}}'
+      friendly_name: 'Dave HD in the Lounge'
+      turn_on:
+        service: media_player.select_source
+        data:
+          entity_id: media_player.lounge_skyq
+          source: 'Dave HD'
+      turn_off:
+        service: script.placeholder
+    skyq_whdlounge:
+      value_template: '{{"off"}}'
+      friendly_name: 'W HD in the Lounge'
+      turn_on:
+        service: media_player.select_source
+        data:
+          entity_id: media_player.lounge_skyq
+          source: 'W HD'
+      turn_off:
+        service: script.placeholder
+    skyq_skyatlantichdlounge:
+      value_template: '{{"off"}}'
+      friendly_name: 'Sky Atlantic HD in the Lounge'
+      turn_on:
+        service: media_player.select_source
+        data:
+          entity_id: media_player.lounge_skyq
+          source: 'Sky Atlantic HD'
+      turn_off:
+        service: script.placeholder
+    skyq_goldhdlounge:
+      value_template: '{{"off"}}'
+      friendly_name: 'GOLD HD in the Lounge'
+      turn_on:
+        service: media_player.select_source
+        data:
+          entity_id: media_player.lounge_skyq
+          source: 'GOLD HD'
+      turn_off:
+        service: script.placeholder
+    skyq_natgeohdlounge:
+      value_template: '{{"off"}}'
+      friendly_name: 'Nat Geo HD in the Lounge'
+      turn_on:
+        service: media_player.select_source
+        data:
+          entity_id: media_player.lounge_skyq
+          source: 'Nat Geo HD'
+      turn_off:
+        service: script.placeholder

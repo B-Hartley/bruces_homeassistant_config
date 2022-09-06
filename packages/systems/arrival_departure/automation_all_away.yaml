@@ -1,0 +1,125 @@
+automation:
+  - id: all_away_is_everything_off
+    alias: 'Check everything off when noone at home'
+    
+    description: >
+      Check everything off when noone at home
+
+    trigger:
+      - platform: state
+        id: "not home"
+        entity_id: group.someone_home
+        from: home
+        to: not_home
+        
+    condition:
+      or:
+        - condition: state
+          entity_id: alarm_control_panel.texecom
+          state: disarmed
+        - condition: state
+          entity_id: 
+            - fan.bedroom_fan
+            - fan.conservatory_fan
+            - light.home
+            - input_boolean.watching_skytv 
+        # Doors open that should be closed
+            - binary_sensor.conservatory_door 
+            - binary_sensor.front_door
+            - binary_sensor.back_gate_door
+            - binary_sensor.back_door
+            - binary_sensor.under_stairs_door
+            - binary_sensor.kates_bedroom_door
+            - binary_sensor.sophies_bedroom_door
+            - binary_sensor.lounge_door
+            - binary_sensor.garage_back_door
+            - binary_sensor.shed_door
+          state: 'on'
+        - condition: state
+          entity_id: 
+            - media_player.kitchen_sonos
+            - media_player.sophies_sonos
+            - media_player.kates_sonos
+            - media_player.master_bed_sonos
+            - media_player.bar_sonos
+            - media_player.lounge_sonos
+          state: playing
+        # Doors closed that should be open
+        - condition: state
+          entity_id: 
+            - binary_sensor.bar_door
+            - binary_sensor.master_bedroom_door
+            - binary_sensor.main_bathroom_door
+            - binary_sensor.drum_room_door            
+            - binary_sensor.downstairs_toilet_door
+          state: 'off'
+          
+    action:
+      - service: telegram_bot.send_message
+        data:
+          target: !secret telegram_chat_id_bruce_and_sarah
+          message_tag: all_away
+          title: "Everyone is Out"
+          message: >
+            {{ iif(is_state('alarm_control_panel.texecom','disarmed'),'Alarm is not set
+            ','') }}
+            {{ iif(is_state('fan.bedroom_fan','on'),'Bedroom Fan is on
+            ','') }}
+            {{ iif(is_state('fan.conservatory_fan','on'),'Conservatory Fan is on
+            ','') }}
+            {{ iif(is_state('light.downstairs','on'),'Lights are on downstairs
+            ','') }}
+            {{ iif(is_state('light.outside','on'),'Lights are on Outside
+            ','') }}
+            {{ iif(is_state('light.upstairs','on'),'Lights are on upstairs
+            ','') }}
+            {{ iif(is_state('input_boolean.watching_skytv','on'),'TV on in lounge
+            ','') }}
+            {{ iif(is_state('media_player.kitchen_sonos','playing'),'SONOS playing in the kitchen
+            ','') }}
+            {{ iif(is_state('media_player.sophies_sonos','playing'),'SONOS playing in Sophie bedroom
+            ','') }}
+            {{ iif(is_state('media_player.kates_sonos','playing'),'SONOS playing in Kate bedroom
+            ','') }}
+            {{ iif(is_state('media_player.lounge_sonos','playing'),'SONOS playing in the Lounge
+            ','') }}
+            {{ iif(is_state('media_player.bar_sonos','playing'),'SONOS playing in the Bar
+            ','') }}
+            {{ iif(is_state('binary_sensor.front_door','on'),'conservatory door is open
+            ','') }}
+            {{ iif(is_state('binary_sensor.front_door','on'),'front door is open
+            ','') }}
+            {{ iif(is_state('binary_sensor.back_gate_door','on'),'back gate is open
+            ','') }}
+            {{ iif(is_state('binary_sensor.back_door','on'),'back door is open
+            ','') }}
+            {{ iif(is_state('binary_sensor.shed_door','on'),'shed door is open
+            ','') }}
+            {{ iif(is_state('binary_sensor.garage_back_door','on'),'garage back door is open
+            ','') }}
+            {{ iif(is_state('binary_sensor.under_stairs_door','on'),'under stairs door is open
+            ','') }}
+            {{ iif(is_state('binary_sensor.master_bedroom_door','off'),'master bedroom door is closed
+            ','') }}
+            {{ iif(is_state('binary_sensor.lounge_door','on'),'lounge door is open
+            ','') }}
+            {{ iif(is_state('binary_sensor.bar_door','off'),'bar door is closed
+            ','') }}
+            {{ iif(is_state('binary_sensor.sophies_bedroom_door','on'),"Sophie's door is open
+            ",'') }}
+            {{ iif(is_state('binary_sensor.kates_bedroom_door','on'),"Kate's door is open
+            ",'') }}
+            {{ iif(is_state('binary_sensor.guest_bedroom_door','on'),"Guest's door is open
+            ",'') }}
+            {{ iif(is_state('binary_sensor.drum_room_door','off'),'Drum Room door is closed
+            ','') }}            
+            {{ iif(is_state('binary_sensor.downstairs_toilet_door','off'),'Downstairs Loo door is closed
+            ','') }}
+            {{ iif(is_state('binary_sensor.main_bathroom_door','off'),'Bathroom door is closed
+            ','') }}
+
+          inline_keyboard: >
+            [{{iif(is_state('alarm_control_panel.texecom','disarmed'),"[['Arm Alarm', '/empty_house_arm_away']],","")}}
+            {{iif(is_state('fan.bedroom_fan','on') or is_state('fan.conservatory_fan','on'),"[['Fans Off', '/fans_off']],","")}}
+            {{iif(is_state('light.downstairs','on') or is_state('light.outside','on') or is_state('light.upstairs','on'),"[['Lights Off', '/lights_off']],","")}}
+            [['OK', '/remove_keyboard']]]

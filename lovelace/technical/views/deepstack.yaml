@@ -1,0 +1,258 @@
+title: Deepstack
+path: Deepstack
+icon: 'mdi:cctv'
+badges: []
+cards:
+  - type: grid
+    columns: 2
+    cards:
+    
+      - entity: camera.landing_medium
+        icon: 'mdi:face-man'
+        show_icon: true
+        show_name: true
+        tap_action:
+          action: call-service
+          haptic: success
+          service: image_processing.scan 
+          service_data:
+            entity_id: image_processing.landing_face
+        type: 'custom:button-card'
+      - entity: camera.landing_medium
+        icon: 'mdi:dog'
+        show_icon: true
+        show_name: true
+        tap_action:
+          action: call-service
+          haptic: success
+          service: image_processing.scan 
+          service_data:
+            entity_id: image_processing.deepstack_object_landing
+        type: 'custom:button-card'        
+
+
+    
+      - entity: camera.lounge_medium
+        icon: 'mdi:face-man'
+        show_icon: true
+        show_name: true
+        tap_action:
+          action: call-service
+          haptic: success
+          service: image_processing.scan 
+          service_data:
+            entity_id: image_processing.lounge_face
+        type: 'custom:button-card'
+      - entity: camera.lounge_medium
+        icon: 'mdi:dog'
+        show_icon: true
+        show_name: true
+        tap_action:
+          action: call-service
+          haptic: success
+          service: image_processing.scan 
+          service_data:
+            entity_id: image_processing.deepstack_object_lounge
+        type: 'custom:button-card'        
+
+
+      - entity: camera.kitchen_medium
+        icon: 'mdi:face-man'
+        show_icon: true
+        show_name: true
+        tap_action:
+          action: call-service
+          haptic: success
+          service: image_processing.scan 
+          service_data:
+            entity_id: image_processing.kitchen_face
+        type: 'custom:button-card'
+      - entity: camera.kitchen_medium
+        icon: 'mdi:dog'
+        show_icon: true
+        show_name: true
+        tap_action:
+          action: call-service
+          haptic: success
+          service: image_processing.scan 
+          service_data:
+            entity_id: image_processing.deepstack_object_kitchen
+        type: 'custom:button-card'            
+
+
+
+      - entity: camera.kitchen_2_medium
+        icon: 'mdi:face-man'
+        show_icon: true
+        show_name: true
+        tap_action:
+          action: call-service
+          haptic: success
+          service: image_processing.scan 
+          service_data:
+            entity_id: image_processing.kitchen_2_face
+        type: 'custom:button-card'
+      - entity: camera.kitchen_2_medium
+        icon: 'mdi:dog'
+        show_icon: true
+        show_name: true
+        tap_action:
+          action: call-service
+          haptic: success
+          service: image_processing.scan 
+          service_data:
+            entity_id: image_processing.deepstack_object_kitchen_2
+        type: 'custom:button-card'            
+
+
+
+
+      - entity: camera.hall_medium
+        icon: 'mdi:face-man'
+        show_icon: true
+        show_name: true
+        tap_action:
+          action: call-service
+          haptic: success
+          service: image_processing.scan 
+          service_data:
+            entity_id: image_processing.hall_face
+        type: 'custom:button-card'
+      - entity: camera.hall_medium
+        icon: 'mdi:dog'
+        show_icon: true
+        show_name: true
+        tap_action:
+          action: call-service
+          haptic: success
+          service: image_processing.scan 
+          service_data:
+            entity_id: image_processing.deepstack_object_hall
+        type: 'custom:button-card'            
+
+
+
+
+
+      - entity: camera.bar_medium
+        icon: 'mdi:face-man'
+        show_icon: true
+        show_name: true
+        tap_action:
+          action: call-service
+          haptic: success
+          service: image_processing.scan 
+          service_data:
+            entity_id: image_processing.bar_face
+        type: 'custom:button-card'
+      - entity: camera.bar_medium
+        icon: 'mdi:dog'
+        show_icon: true
+        show_name: true
+        tap_action:
+          action: call-service
+          haptic: success
+          service: image_processing.scan 
+          service_data:
+            entity_id: image_processing.deepstack_object_bar
+        type: 'custom:button-card'            
+
+
+      - entity: camera.bins_medium
+        icon: 'mdi:face-man'
+        show_icon: true
+        show_name: true
+        tap_action:
+          action: call-service
+          haptic: success
+          service: image_processing.scan 
+          service_data:
+            entity_id: image_processing.bins_face
+        type: 'custom:button-card'
+      - entity: camera.bins_medium
+        icon: 'mdi:dog'
+        show_icon: true
+        show_name: true
+        tap_action:
+          action: call-service
+          haptic: success
+          service: image_processing.scan 
+          service_data:
+            entity_id: image_processing.deepstack_object_bins
+        type: 'custom:button-card'        
+
+
+
+      - entity: camera.drive_medium
+        icon: 'mdi:face-man'
+        show_icon: true
+        show_name: true
+        tap_action:
+          action: call-service
+          haptic: success
+          service: image_processing.scan 
+          service_data:
+            entity_id: image_processing.drive_face
+        type: 'custom:button-card'
+      - entity: camera.drive_medium
+        icon: 'mdi:dog'
+        show_icon: true
+        show_name: true
+        tap_action:
+          action: call-service
+          haptic: success
+          service: image_processing.scan 
+          service_data:
+            entity_id: image_processing.deepstack_object_drive
+        type: 'custom:button-card'        
+
+
+
+      - entity: camera.gazebo_medium
+        icon: 'mdi:face-man'
+        show_icon: true
+        show_name: true
+        tap_action:
+          action: call-service
+          haptic: success
+          service: image_processing.scan 
+          service_data:
+            entity_id: image_processing.gazebo_face
+        type: 'custom:button-card'
+      - entity: camera.gazebo_medium
+        icon: 'mdi:dog'
+        show_icon: true
+        show_name: true
+        tap_action:
+          action: call-service
+          haptic: success
+          service: image_processing.scan 
+          service_data:
+            entity_id: image_processing.deepstack_object_gazebo
+        type: 'custom:button-card'        
+
+
+
+
+      - entity: camera.patio_medium
+        icon: 'mdi:face-man'
+        show_icon: true
+        show_name: true
+        tap_action:
+          action: call-service
+          haptic: success
+          service: image_processing.scan 
+          service_data:
+            entity_id: image_processing.patio_face
+        type: 'custom:button-card'
+      - entity: camera.patio_medium
+        icon: 'mdi:dog'
+        show_icon: true
+        show_name: true
+        tap_action:
+          action: call-service
+          haptic: success
+          service: image_processing.scan 
+          service_data:
+            entity_id: image_processing.deepstack_object_patio
+        type: 'custom:button-card'        

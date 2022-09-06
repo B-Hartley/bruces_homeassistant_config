@@ -1,0 +1,3 @@
+recorder:
+  purge_keep_days: 10
+  db_url: !secret maria_db_string

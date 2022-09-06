@@ -1,0 +1,38 @@
+automation:
+  - id: link_jyggy_charge_current
+    alias: Link Jyggy Charge Current
+    
+    description: >
+      Link Jyggy Charge Current to Input Number
+      
+    trigger:
+      - platform: homeassistant
+        id: "start"
+        event: start
+      - platform: event
+        id: "reload"
+        event_type: automation_reloaded             
+      - platform: state
+        id: "dropdown"
+        entity_id: input_number.jyggy_charge_current
+        for: 2        
+      - platform: state
+        id: "car"
+        entity_id: sensor.jyggy_charge_current_request         
+          
+    action:
+      - choose:
+          - conditions: 
+              - condition: trigger
+                id: 'dropdown'
+            sequence:
+              - service: rest_command.jyggy_api
+                data:
+                  teslafi_token: !secret teslafi_token                 
+                  jyggy_command: "set_charging_amps&charging_amps={{ states('input_number.jyggy_charge_current')|int(0) }}"
+        default:
+          - service: input_number.set_value
+            target: 
+              entity_id: input_number.jyggy_charge_current
+            data:
+              value: "{{ states('sensor.jyggy_charge_current_request')|int(0) }}"

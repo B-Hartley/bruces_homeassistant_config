@@ -1,0 +1,29 @@
+automation:
+  - id: kitchen_ceiling_3_low_when_alone
+    alias: 'turn on light at low brightness when a light comes on'
+    mode: single
+
+    description: >
+      if only kitchen 3 - set to low brightness
+    
+    trigger:
+      - platform: state
+        id: "ceiling3"
+        entity_id: light.kitchen_ceiling_3
+        to: 'on'
+        for: 00:00:03
+        
+    condition:
+      - condition: state
+        entity_id: 
+          - light.kitchen_ceiling_1
+          - light.kitchen_ceiling_2
+          - light.kitchen_ceiling_4
+        state: 'off'
+        
+    action:
+      - service: light.turn_on
+        target:
+          entity_id: light.kitchen_ceiling_3
+        data:
+          brightness: 50

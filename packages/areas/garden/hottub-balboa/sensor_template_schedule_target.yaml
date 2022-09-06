@@ -1,0 +1,15 @@
+template:
+  sensor:
+    - name: "HotTub Schedule Target Temp"
+      unique_id: hottub_scheduled_target_temp
+      device_class: temperature
+      availability: "{{ states('input_number.hottub_standard_temp')|is_number and states('input_number.hottub_temp_rise_per_hour')|is_number and as_timestamp(states('input_datetime.hottub_ready_by'))|is_number }}"
+      unit_of_measurement: '°C'
+      state: "{{ [(states('input_number.hottub_standard_temp')|float(28) - (([0,(as_timestamp(states('input_datetime.hottub_ready_by')) - as_timestamp(now())) / 3600 - 0.25]|max) * states('input_number.hottub_temp_rise_per_hour')|float(2.5)))|round(1,'half'),28]|max }}"
+
+#          {% set HoursLeft =  [0,(as_timestamp(states('input_datetime.hottub_ready_by')) - as_timestamp(now())) / 3600]|max %}
+#          {% set TempRisePerHour = states('input_number.hottub_temp_rise_per_hour')|float(2.5) %}
+#          {% set HotTubTarget = states('input_number.hottub_standard_temp')|float(0) %}
+#          {{ [(HotTubTarget - (HoursLeft * TempRisePerHour))|round(1,'half'),28]|max }}
+
+          

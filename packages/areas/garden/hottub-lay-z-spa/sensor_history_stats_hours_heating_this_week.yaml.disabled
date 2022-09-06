@@ -1,0 +1,9 @@
+sensor:
+  - platform: history_stats
+    name: HotTub Heating This Week
+    entity_id: sensor.hottub_summary
+    state: "heating"
+    type: time
+    end: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    duration:
+      days: 7

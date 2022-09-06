@@ -1,0 +1,68 @@
+automation:
+  - id: unifi_protect_person_detected_bins
+    alias: Send message when person detected bins
+    mode: single
+    
+    description: >
+      record and send a video when person seen
+      
+    trigger:    
+      - platform: state
+        id: 'person'
+        entity_id:  sensor.bins_detected_object
+        to: person
+        
+    variables:
+      pic_file: "{{ 'bins_' + now().strftime('%d%m%H%M') }}"    
+      pic_folder: "/config/www/cam_snaps/"      
+      base_url: !secret base_url
+      
+    action:
+      - alias: "send photo by telegram"      
+        service: telegram_bot.send_photo
+        data:
+          caption: "I have seen a person on the bins camera."
+          url: "{{ base_url + state_attr('sensor.bins_detected_object','event_thumbnail') }}"
+          message_tag: object_detected_bins                  
+          target: !secret telegram_chat_id_bruce
+      
+      - alias: "record camera to mp4"            
+        service: camera.record
+        target:
+          entity_id: camera.bins_medium       
+        data:
+          duration: 10
+          filename: "{{ pic_folder + pic_file }}.mp4"    
+          
+      - alias: "Wait for Event to End"
+        wait_for_trigger:
+          - platform: state
+            entity_id: sensor.bins_detected_object
+            to: "none"
+
+      - alias: "delete Telegram message"               
+        service: telegram_bot.delete_message
+        data:
+          message_id: "{{ states('input_text.object_detected_bins_message_id') }}"
+          chat_id: !secret telegram_chat_id_bruce   
+
+      - alias: "send photo by telegram"             
+        service: telegram_bot.send_photo
+        data:
+          caption: "I have seen a person on the bins camera."
+          url: "{{ base_url + wait.trigger.from_state.attributes.event_thumbnail }}"
+          message_tag: object_detected_bins                  
+          target: !secret telegram_chat_id_bruce  
+
+      - alias: "wait for video file to be written"                
+        wait_template: "{{ pic_file in states.sensor.cam_snaps.attributes.file_list }}"
+        timeout: '00:00:20'
+
+      - alias: "Edit telegram message to add keyboard"              
+        service: telegram_bot.edit_caption
+        data:
+          message_id: "{{ states('input_text.object_detected_bins_message_id') }}"
+          chat_id: !secret telegram_chat_id_bruce   
+          caption: "I have seen a person on the bins camera."
+          inline_keyboard:
+            - "Video:/vdd {{pic_file}}, OK:/remove_keyboard"                   

@@ -1,0 +1,6 @@
+template:
+  sensor:
+    - name: "Solar Direction"
+      unique_id: solar_direction
+      state: "{% set mapper = {'1':'off','2':'off','3':'off','4':'import','5':'import','6':'off','7':'F','8':'F'} %}{{mapper[states('sensor.solaredge_mb_status')]}}"
+        

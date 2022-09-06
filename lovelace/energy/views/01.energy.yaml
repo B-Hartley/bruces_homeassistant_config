@@ -1,0 +1,94 @@
+title: Energy
+badges: []
+icon: 'mdi:flash'
+type: sidebar
+path: energy
+cards: 
+  - type: energy-date-selection
+  - type: energy-usage-graph
+  - type: energy-solar-graph
+  - type: energy-gas-graph  
+  - type: energy-devices-graph
+  - type: energy-sources-table
+  - type: energy-distribution
+#    link_dashboard: true  
+    view_layout:
+      position: sidebar
+  - type: custom:button-card
+    entity: sensor.powerwall_charge_corrected  
+    name: Powerwall
+    view_layout:
+      position: sidebar
+      
+
+    styles:
+      grid:
+        - position: relative
+      custom_fields:
+        direction:
+          - position: absolute
+          - left: 8%
+          - top: 20%
+        impexpnet:
+          - position: absolute
+          - left: 8%
+          - top: 50%             
+        chargelevel:
+#              - background-color: >
+#                  [[[
+#                    if (states['sensor.powerwall_charge_corrected'].state < 10)
+#                      return "red";
+#                    return "blue";
+#                  ]]]
+          - border-radius: 50%
+          - position: absolute
+          - left: 65%
+          - top: 0%
+          - height: 100px
+          - width: 100px
+          - font-size: 28px
+          - line-height: 80px
+    custom_fields:
+          
+      direction: >
+        [[[ if (states['sensor.powerwall_total_daily_net'].state > 0) return `<ha-icon
+        icon="mdi:arrow-right-bold"
+        style="width: 50px; height: 50px; color: blue;">
+        </ha-icon>`; else return `<ha-icon
+        icon="mdi:arrow-right-bold"
+        style="width: 50px; height: 50px; color: blue;">
+        </ha-icon>` ]]]      
+      impexpnet: >
+        [[[ return states['sensor.powerwall_total_daily_net'].state + 'kWh']]]    
+      chargelevel: >
+        [[[ return states['sensor.powerwall_charge_corrected'].state + '%']]]          
+    state:
+      - operator: '<'
+        value: 10
+        color: red
+      - operator: '<'
+        value: 25
+        color: orange          
+      - operator: '<'
+        value: 35
+        color: yellow
+      - operator: '<'
+        value: 50
+        color: green    
+      - operator: '>'
+        value: 50
+        color: blue
+              
+      
+      
+      
+      
+  - type: energy-grid-neutrality-gauge
+    view_layout:
+      position: sidebar
+  - type: energy-solar-consumed-gauge
+    view_layout:
+      position: sidebar
+  - type: energy-carbon-consumed-gauge
+    view_layout:
+      position: sidebar

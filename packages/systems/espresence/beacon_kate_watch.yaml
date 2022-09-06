@@ -1,0 +1,8 @@
+sensor:
+  - platform: mqtt_room
+    #unique_id: espresence_kate_watch
+    device_id: !secret kate_watch
+    name: 'EsPresence Kate Watch'
+    state_topic: 'espresense/rooms'
+    timeout: 60
+    away_timeout: 120

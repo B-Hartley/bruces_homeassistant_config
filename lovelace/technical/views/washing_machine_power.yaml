@@ -1,0 +1,24 @@
+title: Washing Machine Power
+path: washing-machine-power
+icon: 'mdi:washing-machine'
+panel: false
+badges: []
+cards:
+  - entities:
+      - color: green
+        entity: sensor.washing_machine_current_consumption
+        name: Power
+    font_size: 75
+    font_size_header: 22
+    hour24: true
+    hours_to_show: 1.5
+    line_width: 1
+    name: Washing Machine Power
+    points_per_hour: 240
+    upper_bound: 500
+    show:
+      extrema: false
+      icon: false
+      labels: true
+      points: true
+    type: 'custom:mini-graph-card'

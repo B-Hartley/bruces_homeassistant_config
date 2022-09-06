@@ -1,0 +1,71 @@
+automation:
+  - id: eddi_boost_on_go_cheap
+    alias: 'Hot Water: Turn on when Go Cheap'
+    
+    description: >
+      When Go Cheap and under target temperature
+      Boost Eddi
+      
+    trigger:
+      - id: restart
+        platform: homeassistant
+        event: start
+      - id: reload
+        platform: event
+        event_type: automation_reloaded 
+      - id: reached_temp
+        platform: numeric_state
+        entity_id: sensor.eddi_water_temp
+        above: input_number.eddi_go_cheap_target_temp
+      - id: states
+        platform: state
+        entity_id: 
+          - binary_sensor.go_cheap 
+          - binary_sensor.power_hour         
+          - binary_sensor.agile_plunge
+        # Boost for an hour at a time, re-boost if still needed when ends
+      - id: eddi_off
+        platform: state
+        entity_id: sensor.eddi_status      
+        to: 'off'
+
+    condition:
+      - condition: state
+        entity_id: input_boolean.go_tariff
+        state: 'on'
+        
+    action:
+      - choose:
+          - alias: "boost for power hour or plunge"
+            conditions:
+              - condition: state
+                entity_id: 
+                  - binary_sensor.agile_plunge
+                  - binary_sensor.power_hour
+                match: any
+                state: 'on'              
+            sequence:                
+              - service: myenergi.myenergi_eddi_boost
+                data:
+                  target: Heater 1
+                  time: 30
+
+          - alias: "boost for go cheap"
+            conditions:
+              - condition: state
+                entity_id: binary_sensor.go_cheap
+                state: 'on'
+              - condition: numeric_state
+                entity_id: sensor.eddi_water_temp
+                below: input_number.eddi_go_cheap_target_temp     
+            sequence:                
+              - service: myenergi.myenergi_eddi_boost
+                data:
+                  target: Heater 1
+                  time: 30
+
+        default:
+          - service: myenergi.myenergi_eddi_boost
+            data:
+              target: Heater 1
+              time: 0

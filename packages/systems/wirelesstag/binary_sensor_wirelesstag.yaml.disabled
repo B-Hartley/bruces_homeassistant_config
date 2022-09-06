@@ -1,0 +1,6 @@
+binary_sensor:
+  - platform: wirelesstag
+    monitored_conditions:
+#      - presence
+      - door
+      - battery

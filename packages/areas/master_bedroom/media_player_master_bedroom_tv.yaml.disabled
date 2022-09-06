@@ -1,0 +1,7 @@
+media_player:
+  - platform: samsungtv_tizen
+    name: "Master Bedroom TV"
+    host: !secret master_bedroom_tv_ip
+    mac: !secret master_bedroom_tv_mac
+    api_key: !secret master_bedroom_tv_apikey
+    device_id: !secret master_bedroom_tv_deviceid

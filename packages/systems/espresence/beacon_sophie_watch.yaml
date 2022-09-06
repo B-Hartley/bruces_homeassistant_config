@@ -1,0 +1,8 @@
+sensor:
+  - platform: mqtt_room
+    #unique_id: espresence_sophie_watch
+    device_id: !secret sophie_watch
+    name: 'EsPresence Sophie Watch'
+    state_topic: 'espresense/rooms'
+    timeout: 60
+    away_timeout: 120

@@ -1,0 +1,2 @@
+shell_command:
+  zappi_set_mode: "curl --digest -u {{myenergi_serial}}:{{myenergi_password}} -H 'accept: application/json' -H 'content-type: application/json' --compressed 'https://s18.myenergi.net/cgi-zappi-mode-Z{{zappi_serial}}-{{zappi_mode}}-0-0-0000'"

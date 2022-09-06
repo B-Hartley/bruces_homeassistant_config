@@ -1,0 +1,7 @@
+template:
+  sensor:
+    - name: "Grid To Battery"
+      unique_id: grid_to_battery
+      unit_of_measurement: 'kWh'
+      state: "{{ (states('sensor.zappi_jyggy_grid_import')|float(0) - states('sensor.harvi_home')|float(0) - states('sensor.solaredge_ac_power_kw_output')|float(0)) if (states('sensor.harvi_powerwall_charge')|float(0) > 0.0)  and  (states('sensor.zappi_jyggy_grid_import')|float(0) > 0.0) else 0.0 }}"
+      device_class: energy

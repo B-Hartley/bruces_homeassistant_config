@@ -1,0 +1,3 @@
+entity: weather.home
+type: weather-forecast
+secondary_info_attribute: temperature

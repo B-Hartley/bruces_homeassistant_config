@@ -1,0 +1,27 @@
+icon: 'mdi:silverware-fork-knife'
+panel: true
+path: kitchen
+title: Kitchen
+badges: []
+visible:
+  - user: 86df00251766415c9acf21b3b3e51496
+  - user: 1de5d8e2c14c47939a8174d6e4147f31
+cards:
+  - cards:
+      - aspect_ratio: 56%
+        camera_image: camera.kitchen_medium
+        camera_view: live
+        entities:
+          - entity: binary_sensor.kitchen_motion
+          - entity: sensor.kitchen_last_motion
+        title: Kitchen
+        type: picture-glance
+      - aspect_ratio: 56%
+        camera_image: camera.kitchen_2_medium
+        camera_view: live
+        entities:
+          - entity: binary_sensor.kitchen_2_motion
+          - entity: sensor.kitchen_2_last_motion
+        title: Kitchen 2
+        type: picture-glance
+    type: vertical-stack

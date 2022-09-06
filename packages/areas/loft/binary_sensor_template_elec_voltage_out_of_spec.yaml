@@ -1,0 +1,8 @@
+template:
+  binary_sensor:  
+    - name: "Elec Voltage Out of Spec"
+      unique_id: elec_voltage_out_of_spec
+      availability: "{{ states('sensor.apc_ups_input_voltage')|is_number }}"
+      state: "{{ (states('sensor.apc_ups_input_voltage')|float(240) > 253.0) or (states('sensor.apc_ups_input_voltage')|float(240) < 216.2) }}"
+      device_class: problem
+          

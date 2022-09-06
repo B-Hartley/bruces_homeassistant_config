@@ -1,0 +1,206 @@
+icon: 'mdi:cat'
+path: landing
+title: Landing
+badges:
+  - entity: sensor.landing_1_rad_current_temperature
+    name: Landing
+  - entity: sensor.landing_2_rad_current_temperature
+    name: o/s Bedroom
+  - entity: sensor.drum_room_rad_current_temperature
+    name: Drum Room
+  - entity: sensor.guest_bedroom_rad_current_temperature
+    name: Guest Bedroom
+cards:
+  - cards:
+      - cards:
+          - entity: light.landing_light_1
+            hold_action:
+              action: more-info
+            name: Light 1
+            show_icon: true
+            show_name: true
+            tap_action:
+              action: toggle
+              haptic: success
+            state:
+              - value: 'on'              
+                styles:
+                  card:
+                    - -webkit-box-shadow: 0px 0px 9px 3px var(--button-card-light-color)
+                    - box-shadow: 0px 0px 9px 3px var(--button-card-light-color)               
+            type: 'custom:button-card'         
+          - entity: light.landing_light_2
+            hold_action:
+              action: more-info
+            name: Light 2
+            show_icon: true
+            show_name: true
+            tap_action:
+              action: toggle
+              haptic: success
+            state:
+              - value: 'on'              
+                styles:
+                  card:
+                    - -webkit-box-shadow: 0px 0px 9px 3px var(--button-card-light-color)
+                    - box-shadow: 0px 0px 9px 3px var(--button-card-light-color)                 
+            type: 'custom:button-card'
+          - entity: light.landing_light_3
+            hold_action:
+              action: more-info
+            name: Light 3
+            show_icon: true
+            show_name: true
+            tap_action:
+              action: toggle
+              haptic: success
+            state:
+              - value: 'on'              
+                styles:
+                  card:
+                    - -webkit-box-shadow: 0px 0px 9px 3px var(--button-card-light-color)
+                    - box-shadow: 0px 0px 9px 3px var(--button-card-light-color)                  
+            type: 'custom:button-card'
+        title: Landing
+        type: horizontal-stack
+      - cards:
+          - entity: light.guest_bedroom_bedside
+            hold_action:
+              action: more-info
+            name: Bedside
+            show_icon: true
+            show_name: true
+            tap_action:
+              action: toggle
+              haptic: success
+            state:
+              - value: 'on'              
+                styles:
+                  card:
+                    - -webkit-box-shadow: 0px 0px 9px 3px var(--button-card-light-color)
+                    - box-shadow: 0px 0px 9px 3px var(--button-card-light-color)                  
+            type: 'custom:button-card'
+          - entity: light.guest_bedroom_light
+            hold_action:
+              action: more-info
+            name: Light
+            show_icon: true
+            show_name: true
+            tap_action:
+              action: toggle
+              haptic: success
+            state:
+              - value: 'on'              
+                styles:
+                  card:
+                    - -webkit-box-shadow: 0px 0px 9px 3px var(--button-card-light-color)
+                    - box-shadow: 0px 0px 9px 3px var(--button-card-light-color)                 
+            type: 'custom:button-card'
+          - color_type: blank-card
+            type: 'custom:button-card'
+        title: Guest Bedroom
+        type: horizontal-stack
+      - cards:
+          - entity: light.drum_room_light
+            hold_action:
+              action: more-info
+            name: Light
+            show_icon: true
+            show_name: true
+            tap_action:
+              action: toggle
+              haptic: success
+            state:
+              - value: 'on'              
+                styles:
+                  card:
+                    - -webkit-box-shadow: 0px 0px 9px 3px var(--button-card-light-color)
+                    - box-shadow: 0px 0px 9px 3px var(--button-card-light-color)              
+            type: 'custom:button-card'
+          - color_type: blank-card
+            type: 'custom:button-card'
+          - color_type: blank-card
+            type: 'custom:button-card'
+        title: Drum Room
+        type: horizontal-stack
+    type: vertical-stack
+  - artwork: full-cover
+    entity: media_player.landing_sonos
+    hide:
+      power: true
+    speaker_group:
+      entities:
+        - entity_id: media_player.kitchen_sonos
+          name: Sonos Kitchen
+        - entity_id: media_player.lounge_sonos
+          name: Sonos Kate
+        - entity_id: media_player.kates_sonos
+          name: Sonos Landing
+        - entity_id: media_player.sophies_sonos
+          name: Sonos Sophie
+        - entity_id: media_player.master_bed_sonos
+          name: Sonos Master Bedroom
+      platform: sonos
+      show_group_count: true
+    type: 'custom:mini-media-player'
+  - type: markdown
+    title: Litter Trays
+    content: >
+      {% if  states("sensor.littertray_shower_usage") | int < 10 %}0{%endif%}{{
+      states("sensor.littertray_shower_usage")}}% - {{
+      states("counter.littertray_shower_wee") }}<ha-icon
+      icon="mdi:water"></ha-icon>{{ states("counter.littertray_shower_poo")
+      }}<ha-icon icon="mdi:emoticon-poop"></ha-icon> : **Shower** ({{ (now() |
+      as_timestamp - states("input_button.littertray_shower") | as_timestamp) |
+      int  // 86400 }} days ago)
+
+      {% if  states("sensor.littertray_drum_usage") | int  < 10%}0{%endif%}{{
+      states("sensor.littertray_drum_usage")}}% - {{
+      states("counter.littertray_drum_wee") }}<ha-icon icon="mdi:water"></ha-icon>{{
+      states("counter.littertray_drum_poo") }}<ha-icon
+      icon="mdi:emoticon-poop"></ha-icon> : **Drum Room** ({{ (now() | as_timestamp
+      - states("input_button.littertray_drum") | as_timestamp) | int  // 86400 }}
+      days ago)
+
+      {% if  states("sensor.littertray_utility_usage") | int  < 10%}0{%endif%}{{
+      states("sensor.littertray_utility_usage")}}% - {{
+      states("counter.littertray_utility_wee") }}<ha-icon
+      icon="mdi:water"></ha-icon>{{
+      states("counter.littertray_utility_poo")}}<ha-icon
+      icon="mdi:emoticon-poop"></ha-icon> : **Utility** ({{ (now() | as_timestamp -
+      states("input_button.littertray_utility") | as_timestamp) | int  // 86400 }}
+      days ago)
+
+      {% if  states("sensor.littertray_downstairs_usage") | int  < 10%}0{%endif%}{{
+      states("sensor.littertray_downstairs_usage")}}% - {{
+      states("counter.littertray_downstairs_wee") }}<ha-icon
+      icon="mdi:water"></ha-icon>{{
+      states("counter.littertray_downstairs_poo")}}<ha-icon
+      icon="mdi:emoticon-poop"></ha-icon> : **Downstairs Loo** ({{ (now()|
+      as_timestamp - states("input_button.littertray_downstairs") |as_timestamp) |
+      int  // 86400 }} days ago)
+    
+  - entity: media_player.landing_appletv
+    type: media-control
+    
+  - entity: media_player.sonos_move
+    type: media-control    
+
+  - type: entities    
+    entities:
+      - entity: sensor.sonos_move_battery
+        name: Battery
+      - entity: binary_sensor.sonos_move_power
+        name: Power
+    title: Sonos Move
+
+  - type: entities
+    entities:
+      - entity: sensor.feeder_grey
+      - entity: binary_sensor.grey_connectivity
+      - entity: sensor.grey_battery_level
+  - type: entities
+    entities:
+      - entity: sensor.feeder_pink
+      - entity: binary_sensor.pink_connectivity
+      - entity: sensor.pink_battery_level

@@ -1,0 +1,7 @@
+group:
+  sophies_bedroom_lights_group:
+    name: Sophies Bedroom Lights
+    entities:
+    - light.sophies_bedroom_light
+    - light.sophies_bedroom_bedhead
+

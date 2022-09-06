@@ -1,0 +1,65 @@
+automation:
+  - id: disarm_alarm_when_arriving_home
+    alias: Disarm alarm when someone arrives home
+    mode: single
+    
+    description: >
+      disarm alarm if somone home home  
+
+    trigger:
+      - platform: state
+        id: 'door'
+        entity_id: 
+          - binary_sensor.front_door
+          - binary_sensor.back_door    
+          - binary_sensor.conservatory_door
+        from: 'off'        
+        to: 'on'
+        
+    condition:
+      - condition: state
+        entity_id: input_boolean.was_alarm_armed
+        state: 'on'
+        
+    action:
+      - service: input_text.set_value
+        target:
+          entity_id: input_value.alarm_user
+        data:          
+          value: "{{ states('input_text.last_person_to_arrive') }}"
+      - service: light.turn_on
+        target:
+          entity_id: light.hall_stairs_lightstrip
+        data:
+          brightness: 42
+          color_temp: 396
+      - delay: 2
+      - service: telegram_bot.send_message
+        data:
+          target: !secret telegram_chat_id_bruce_and_sarah
+          title: "{{ states('input_text.last_person_to_arrive') }} is arriving."
+          message: "Alarm is armed"
+          message_tag: alarm_disarming                  
+      
+      - wait_template: "{{ is_state('group.someone_home','home') }}"
+        timeout: '00:05:00'
+        continue_on_timeout: false
+      - service: telegram_bot.edit_message
+        data:
+          chat_id: !secret telegram_chat_id_bruce_and_sarah
+          message_id: "{{ states('input_text.alarm_disarming_message_id') }}"            
+          title: "{{ states('input_text.last_person_to_arrive') }} arriving."
+          message: "Alarm disarming......"
+      - service: alarm_control_panel.alarm_disarm 
+        target:
+          entity_id: alarm_control_panel.texecom
+        data:
+          code: !secret alarm_code
+      - wait_template: "{{ is_state('alarm_control_panel.texecom','disarmed') }}"
+        timeout: 00:00:10
+      - service: telegram_bot.edit_message
+        data:
+          chat_id: !secret telegram_chat_id_bruce_and_sarah
+          message_id: "{{ states('input_text.alarm_disarming_message_id') }}"  
+          title: "Alarm is now {{states('alarm_control_panel.texecom').replace('_',' ')}}"
+          message: "{{ states('input_text.last_person_to_arrive') }} has arrived."    

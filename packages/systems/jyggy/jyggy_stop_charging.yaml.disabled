@@ -1,0 +1,30 @@
+script:
+  stop_charging:
+    sequence:
+      - service: rest_command.jyggy_api
+        data:
+          jyggy_command: charge_stop
+      - service: logbook.log
+        data:
+          name: Charging
+          message: Stopping attempt 1
+          entity_id: switch.jyggy_charging
+      - delay: '00:00:30'
+      - service: homeassistant.update_entity
+        entity_id: sensor.jyggy_sensor
+      - delay: '00:00:15'
+      - condition: state
+        entity_id: 'sensor.jyggy_carstate'
+        state: 'Charging'
+      - service: rest_command.jyggy_api
+        data:
+          jyggy_command: wake_up
+      - delay: '00:00:30'
+      - service: rest_command.jyggy_api
+        data:
+          jyggy_command: charge_stop
+      - service: logbook.log
+        data:
+          name: Charging
+          message: Stopping attempt 2
+          entity_id: switch.jyggy_charging

@@ -1,0 +1,7 @@
+sensor:
+  - platform: mqtt_room
+    device_id: !secret bruce_wallet
+    name: 'EsPresence Bruce Wallet'
+    state_topic: 'espresense/rooms'
+    timeout: 90
+    away_timeout: 180

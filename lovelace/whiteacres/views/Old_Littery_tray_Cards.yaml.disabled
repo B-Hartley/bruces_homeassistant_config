@@ -1,0 +1,50 @@
+- cards:
+      - cards:
+          - entity: input_datetime.littertray_utility
+            name: Utility
+            show_icon: false
+            show_state: true
+            type: 'custom:button-card'
+          - entities:
+              - entity: counter.littertray_utility_wee
+              - entity: counter.littertray_utility_poo
+            show_name: false
+            type: glance
+        type: horizontal-stack
+      - cards:
+          - entity: input_datetime.littertray_shower
+            name: Shower
+            show_icon: false
+            show_state: true
+            type: 'custom:button-card'
+          - entities:
+              - entity: counter.littertray_shower_wee
+              - entity: counter.littertray_shower_poo
+            show_name: false
+            type: glance
+        type: horizontal-stack
+      - cards:
+          - entity: input_datetime.littertray_drum
+            name: Drum Room
+            show_icon: false
+            show_state: true
+            type: 'custom:button-card'
+          - entities:
+              - entity: counter.littertray_drum_wee
+              - entity: counter.littertray_drum_poo
+            show_name: false
+            type: glance
+        type: horizontal-stack
+      - cards:
+          - entity: input_datetime.littertray_downstairs
+            name: Downstairs
+            show_icon: false
+            show_state: true
+            type: 'custom:button-card'
+          - entities:
+              - entity: counter.littertray_downstairs_wee
+              - entity: counter.littertray_downstairs_poo
+            show_name: false
+            type: glance
+        type: horizontal-stack
+    title: Litter Trays

@@ -1,0 +1,8 @@
+template:
+  sensor:
+    - name: "Outside Light Rounded"
+      unique_id: outside_light_rounded
+      availability: "{{ states('sensor.outside_light')|is_number }}"
+      state: "{{ states('sensor.outside_light')|int(0) }}"
+      device_class: "illuminance"
+      unit_of_measurement: "lx"

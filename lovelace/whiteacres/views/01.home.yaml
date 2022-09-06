@@ -1,0 +1,40 @@
+icon: 'mdi:home'
+path: home
+title: Home
+visible:
+  - user: 86df00251766415c9acf21b3b3e51496
+  - user: 990bb6b8fa704d2ab36d42d63b8ad19e
+  - user: 1de5d8e2c14c47939a8174d6e4147f31
+  - user: 5b3b262300294eb5ae1308855791b6a2
+badges:
+  - entity: alarm_control_panel.texecom
+    name: Alarm
+  - entities:
+      - entity: sensor.jyggy_time_to_home
+    state_filter:
+      - operator: '>'
+        value: '0'
+    type: entity-filter
+  - entities:
+      - entity: person.chas
+      - entity: person.mo
+      - entity: person.moira
+      - entity: person.jyggy
+      - entity: person.paddy
+      - entity: person.cat_sitter
+      - entity: person.cleaner
+      - entity: person.guest
+      - entity: person.hannah
+      - entity: person.ella
+      - entity: person.mica
+    state_filter:
+      - home
+    type: entity-filter
+  - entity: person.bruce_hartley
+  - entity: person.sarah_hartley
+  - entity: person.sophie_hartley
+  - entity: person.kate_hartley
+  - entity: person.dog
+cards: !include_dir_list ../cards/01.home
+
+

@@ -1,0 +1,5 @@
+template:
+  binary_sensor:
+    - name: "Go Cheap"
+      unique_id: go_cheap
+      state: "{{ is_state('input_boolean.go_tariff','on') and now()>today_at('00:30') and now()<today_at('04:30') }}"

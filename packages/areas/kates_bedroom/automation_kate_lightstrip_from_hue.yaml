@@ -1,0 +1,35 @@
+automation:
+  - id: kate_lightstrip_control_from_brightness
+    alias: 'Kate Lightstrip On or Off with hue brightness'
+    mode: restart
+    
+    description: >
+      Kate lightstrip on or off with Hue Brightness
+      
+    trigger:
+      - platform: state
+        id: "off"
+        entity_id: light.kates_bedroom
+        to: 'off'
+      - platform: state
+        id: "brightness"
+        entity_id: light.kates_bedroom_light
+        attribute: brightness
+        to: 244
+        
+    action:
+      - choose:
+          - conditions: 
+              - condition: trigger
+                id: "brightness"
+            sequence:
+              - service: light.turn_on
+                target:
+                  entity_id: light.kate_lightstrip          
+          - conditions: 
+              - condition: trigger
+                id: "off"          
+            sequence:
+              - service: light.turn_off
+                target:
+                  entity_id: light.kate_lightstrip

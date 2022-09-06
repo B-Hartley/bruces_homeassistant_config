@@ -1,0 +1,25 @@
+rest:
+  - resource: !secret click_stats_resource
+    verify_ssl: false
+    method: GET
+    authentication: basic
+    headers:
+      User-Agent: Home Assistant
+      Content-Type: application/json
+      Authorization: !secret click_stats_authorization
+    sensor:
+      - name: Click Stats
+        value_template: "{{ value_json.ThisWeeksDespatches_Spares|int(0) }}"
+        json_attributes:
+          - TodaysParcels
+          - PickedOrders
+          - PicklistedOrders
+          - TodaysForcast
+          - WeeksForcast
+          - LastPicklist
+          - ToPicklist
+          - ToBeKeyed
+      - name: Swatches This Week
+        value_template: "{{ value_json.ThisWeeksDespatches_Swatches|int(0) }}"
+        
+      

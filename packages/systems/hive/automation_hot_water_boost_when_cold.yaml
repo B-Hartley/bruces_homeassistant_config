@@ -1,0 +1,41 @@
+automation:
+  - id: boost_hot_water_when_cold
+    alias: 'hot water boost if water cold'
+    mode: single
+    
+    description: >
+      Boost the water if it is cold
+      
+    trigger:
+        # don't know why I have it run at 6am ?
+      - platform: time
+        id: "0601"
+        at: '06:00:01'
+      - platform: numeric_state
+        id: "cold"
+        entity_id: sensor.myenergi_eddi_temp_tank_1
+        below: 45.0
+        for:
+          minutes: 1
+      - platform: homeassistant
+        id: "start"
+        event: start
+      - platform: event
+        id: "reload"
+        event_type: automation_reloaded       
+        
+    condition: 
+      - condition: numeric_state
+        alias: "sensible temperature data received"
+        entity_id: sensor.myenergi_eddi_temp_tank_1
+        below: 46.0
+        above: 10.0    
+      - condition: time
+        alias: "between 6am and 11pm"
+        before: '23:00:00'
+        after: '06:00:00'          
+        
+    action:
+      - service: switch.turn_on
+        target:
+          entity_id: switch.hive_water_boost

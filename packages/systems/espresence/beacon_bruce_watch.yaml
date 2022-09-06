@@ -1,0 +1,8 @@
+sensor:
+  - platform: mqtt_room
+    #unique_id: espresence_bruce_watch    
+    device_id: !secret bruce_watch
+    name: 'EsPresence Bruce Watch'
+    state_topic: 'espresense/rooms'
+    timeout: 60
+    away_timeout: 120

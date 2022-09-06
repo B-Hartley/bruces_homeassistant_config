@@ -1,0 +1,4464 @@
+type: picture-elements
+elements:
+################################################
+##               Water                        ##
+################################################  
+  - type: conditional
+    conditions:
+      - entity: input_boolean.floorplan_water
+        state: 'on'
+    elements:
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.pending_system_alerts
+            state: 'unavailable'
+        elements:
+          - type: icon
+            entity: binary_sensor.pending_system_alerts
+            icon: mdi:water-alert     
+            style:
+              color: red
+              top: 35%
+              left: 16%       
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.pending_system_alerts
+            state: 'on'
+        elements:
+          - type: icon
+            entity: binary_sensor.pending_system_alerts
+            icon: mdi:water-alert     
+            style:
+              color: red
+              top: 35%
+              left: 16%             
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.water_running
+            state: 'on'
+          - entity: input_boolean.water_alert
+            state: 'on'            
+        elements:
+          - type: icon
+            entity: sensor.water_flow_rate
+            icon: mdi:water-alert     
+            style:
+              color: red
+              top: 35%
+              left: 16%   
+            tap_action:
+              action: call-service
+              confirmation:
+                text: Are you sure you want to turn off the water?
+              service: switch.turn_off
+              service_data: 
+                entity_id: switch.shutoff_valve                
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.water_running
+            state: 'on'
+          - entity: input_boolean.water_alert
+            state: 'off'            
+        elements:
+          - type: icon
+            entity: sensor.water_flow_rate
+            icon: mdi:water      
+            style:
+              color: blue
+              top: 35%
+              left: 16%
+            tap_action:
+              action: call-service
+              confirmation:
+                text: Are you sure you want to turn off the water?
+              service: switch.turn_off
+              service_data: 
+                entity_id: switch.shutoff_valve                
+      - type: conditional
+        conditions:
+          - entity: switch.shutoff_valve
+            state: 'off'
+        elements:
+          - type: icon
+            entity: sensor.water_flow_rate
+            icon: mdi:water-off      
+            style:
+              color: red
+              top: 35%
+              left: 16%             
+            tap_action:
+              action: call-service
+              confirmation:
+                text: Are you sure you want to turn on the water?
+              service: switch.turn_on
+              service_data: 
+                entity_id: switch.shutoff_valve  
+       
+################################################
+##            Litter Trays                    ##
+################################################           
+  - type: conditional
+    conditions:
+      - entity: input_boolean.floorplan_litter_trays
+        state: 'on'
+    elements:
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.littertray_utility_dirty
+            state: 'on'
+        elements:
+          - type: icon
+            icon: 'mdi:emoticon-poop'
+            entity: sensor.littertray_utility_usage
+            style:
+              color: brown
+              top: 58%
+              left: 10%
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.littertray_downstairs_dirty
+            state: 'on'    
+        elements:
+          - type: icon
+            icon: 'mdi:emoticon-poop'
+            entity: sensor.littertray_downstairs_usage
+            style:
+              color: brown
+              top: 56%
+              left: 55%
+              
+################################################
+##            Bin Day                         ##
+################################################ 
+  - type: conditional
+    conditions:
+#      - entity: binary_sensor.put_out_rubbish
+#        state: 'on'
+      - entity: input_boolean.floorplan_bins
+        state: 'on'
+    elements:
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.put_out_rubbish
+            state: 'on'
+        elements:
+          - type: icon
+            icon: 'mdi:trash-can'
+            entity: sensor.bin_day_rubbish
+            style:
+              color: black
+              top: 97%
+              left: 6%
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.put_out_garden
+            state: 'on'  
+        elements:          
+          - type: icon
+            icon: 'mdi:trash-can'
+            entity: sensor.bin_day_garden
+            style:
+              color: green
+              top: 97%
+              left: 6%
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.put_out_recycling
+            state: 'on'   
+        elements:
+          - type: icon
+            icon: 'mdi:recycle'
+            entity: sensor.bin_day_recycling
+            style:
+              color: green
+              top: 97%
+              left: 12%  
+      - type: conditional
+        conditions:
+          - entity: sensor.milk_bottles
+            state: 'Full'   
+        elements:
+          - type: state-icon
+            entity: sensor.milk_bottles
+            style:
+              top: 97%
+              left: 3%      
+      - type: conditional
+        conditions:
+          - entity: sensor.milk_bottles
+            state: 'Empty'   
+        elements:
+          - type: state-icon
+            entity: sensor.milk_bottles
+            style:
+              top: 97%
+              left: 3%                
+
+################################################
+##            Jyggy  - Window/Door Open       ##
+################################################    
+  - type: conditional
+    conditions:
+      - entity: lock.jyggy_doors  
+        state: 'unlocked'  
+    elements:  
+      - type: state-icon
+        entity: lock.jyggy_doors
+        style:
+          top: 88.5%
+          left: 66%
+          color: red    
+  - type: conditional
+    conditions:
+      - entity: binary_sensor.jyggy_fd_window
+        state: 'on'  
+    elements:  
+      - type: icon
+        icon: 'mdi:window-open'
+        style:
+          top: 92%
+          left: 72%
+          color: red
+  - type: conditional
+    conditions:
+      - entity: binary_sensor.jyggy_rd_window
+        state: 'on'  
+    elements:  
+      - type: icon
+        icon: 'mdi:window-open'
+        style:
+          top: 98%
+          left: 72%
+          color: red              
+  - type: conditional
+    conditions:
+      - entity: binary_sensor.jyggy_fp_window
+        state: 'on'  
+    elements:  
+      - type: icon
+        icon: 'mdi:window-open'
+        style:
+          top: 92%
+          left: 60%
+          color: red
+  - type: conditional
+    conditions:
+      - entity: binary_sensor.jyggy_rp_window
+        state: 'on'  
+    elements:  
+      - type: icon
+        icon: 'mdi:window-open'
+        style:
+          top: 98%
+          left: 60%
+          color: red    
+      
+      
+################################################
+##            Jyggy                           ##
+################################################ 
+  - type: conditional
+    conditions:
+      - entity: input_boolean.floorplan_cars
+        state: 'on'  
+
+# OR binary_sensor.plate_recognizer_jyggy == 'on' 
+
+      - entity: device_tracker.jyggy
+        state: home        
+    elements:  
+      - type: image
+        entity: device_tracker.jyggy
+        image: '/local/jyggy_plan_5.png'
+        style:
+          top: 94%
+          left: 66%
+        tap_action:          
+          action: navigate
+          navigation_path: /lovelace-whiteacres/cars          
+      - type: state-icon
+        entity: sensor.jyggy_battery_level
+        style:
+          top: 91%
+          left: 61.5%
+          transform: 'scale(1.5,1.5)'
+
+
+    ################################################
+    ##            Jyggy  - Plugged in             ##
+    ################################################           
+      - type: conditional
+        conditions: 
+          - entity: sensor.myenergi_jyggy_plug_status
+            state_not: 'EV Disconnected'  
+          - entity: sensor.myenergi_jyggy_plug_status
+            state_not: 'Charging'                
+        elements:        
+          - type: conditional
+            conditions: 
+              - entity: select.myenergi_jyggy_charge_mode
+                state: 'Stopped'
+            elements:
+              - type: icon
+                icon: 'mdi:flash'
+                style:
+                  top: 72%
+                  left: 66%
+                  color: grey
+              - type: icon
+                icon: 'mdi:flash'
+                style:
+                  top: 76%
+                  left: 66%
+                  color: grey          
+              - type: icon
+                icon: 'mdi:flash'
+                style:
+                  top: 80%
+                  left: 66%
+                  color: grey
+          - type: conditional
+            conditions: 
+              - entity: select.myenergi_jyggy_charge_mode
+                state: 'Eco+'
+            elements:
+              - type: icon
+                icon: 'mdi:flash'
+                style:
+                  top: 72%
+                  left: 66%
+                  color: grey
+              - type: icon
+                icon: 'mdi:leaf'
+                style:
+                  top: 76%
+                  left: 64.5%
+                  color: grey
+              - type: icon
+                icon: 'mdi:plus'
+                style:
+                  top: 76%
+                  left: 67.5%
+                  color: grey
+              - type: icon
+                icon: 'mdi:flash'
+                style:
+                  top: 80%
+                  left: 66%
+                  color: grey
+          - type: conditional
+            conditions: 
+              - entity: select.myenergi_jyggy_charge_mode
+                state: 'Eco'
+            elements:
+              - type: icon
+                icon: 'mdi:flash'
+                style:
+                  top: 72%
+                  left: 66%
+                  color: grey
+              - type: icon
+                icon: 'mdi:leaf'
+                style:
+                  top: 76%
+                  left: 66%
+                  color: grey
+              - type: icon
+                icon: 'mdi:flash'
+                style:
+                  top: 80%
+                  left: 66%
+                  color: grey
+          - type: conditional
+            conditions: 
+              - entity: select.myenergi_jyggy_charge_mode
+                state: 'Fast'
+            elements:
+              - type: icon
+                icon: 'mdi:flash'
+                style:
+                  top: 72%
+                  left: 66%
+                  color: grey
+              - type: icon
+                icon: 'mdi:flash'
+                style:
+                  top: 76%
+                  left: 66%
+                  color: grey
+              - type: icon
+                icon: 'mdi:flash'
+                style:
+                  top: 80%
+                  left: 66%
+                  color: grey
+        ################################################
+        ##            Jyggy  - Charging               ##
+        ################################################           
+      - type: conditional
+        conditions: 
+          - entity: sensor.myenergi_jyggy_plug_status
+            state: 'Charging'
+        elements:   
+          - type: conditional
+            conditions: 
+              - entity: select.myenergi_jyggy_charge_mode
+                state: 'Eco+'
+            elements:
+              - type: icon
+                icon: 'mdi:flash'
+                style:
+                  top: 72%
+                  left: 66%
+                  color: green
+              - type: icon
+                icon: 'mdi:leaf'
+                style:
+                  top: 76%
+                  left: 64.5%
+                  color: green
+              - type: icon
+                icon: 'mdi:plus'
+                style:
+                  top: 76%
+                  left: 67.5%
+                  color: green
+              - type: icon
+                icon: 'mdi:flash'
+                style:
+                  top: 80%
+                  left: 66%
+                  color: green
+              - type: icon
+                icon: 'mdi:arrow-right-bold'
+                entity: sensor.zappi_jyggy_power
+                style:
+                  top: 93%
+                  left: 53%
+                  color: green
+                  transform: 'scale(2,2)'
+              - type: state-label
+                entity: sensor.zappi_jyggy_power
+                style:
+                  color: green
+                  top: 91%
+                  left: 54.5%
+          - type: conditional
+            conditions: 
+              - entity: select.myenergi_jyggy_charge_mode
+                state: 'Eco'
+            elements:
+              - type: icon
+                icon: 'mdi:flash'
+                style:
+                  top: 72%
+                  left: 66%
+                  color: green
+              - type: icon
+                icon: 'mdi:leaf'
+                style:
+                  top: 76%
+                  left: 66%
+                  color: green
+              - type: icon
+                icon: 'mdi:flash'
+                style:
+                  top: 80%
+                  left: 66%
+                  color: green
+              - type: icon
+                icon: 'mdi:arrow-right-bold'
+                entity: sensor.zappi_jyggy_power
+                style:
+                  top: 93%
+                  left: 53%
+                  color: green
+                  transform: 'scale(2,2)'
+              - type: state-label
+                entity: sensor.zappi_jyggy_power
+                style:
+                  color: green
+                  top: 91%  
+                  left: 54.5%      
+          - type: conditional
+            conditions: 
+              - entity: select.myenergi_jyggy_charge_mode
+                state: 'Fast'
+            elements:
+              - type: icon
+                icon: 'mdi:flash'
+                style:
+                  top: 72%
+                  left: 66%
+                  color: red
+              - type: icon
+                icon: 'mdi:flash'
+                style:
+                  top: 76%
+                  left: 66%
+                  color: red
+              - type: icon
+                icon: 'mdi:flash'
+                style:
+                  top: 80%
+                  left: 66%
+                  color: red
+              - type: icon
+                icon: 'mdi:arrow-right-bold'
+                entity: sensor.zappi_jyggy_power
+                style:
+                  top: 93%
+                  left: 53%
+                  color: red
+                  transform: 'scale(2,2)'
+              - type: state-label
+                entity: sensor.zappi_jyggy_power
+                style:
+                  color: red
+                  top: 91%  
+                  left: 54.5%           
+
+
+################################################
+##            Paddy                           ##
+################################################ 
+#  - type: conditional
+#    conditions:
+#      - entity: input_boolean.floorplan_cars
+#        state: 'on'   
+#      - entity: device_tracker.wn70pdy_location
+#        state: unavailable
+#      - entity: binary_sensor.zappi_paddy_plugged_in
+#        state: 'on'
+#    elements:
+#      - type: image
+#        entity: device_tracker.wn70pdy_location
+#        image: '/local/zoe_plan_9.png'
+#        style:
+#          top: 87%
+#          left: 87%
+#        tap_action:          
+#          action: navigate
+#          navigation_path: /lovelace-whiteacres/cars          
+#      - type: state-icon
+#        entity: sensor.wn70pdy_battery_level
+#        style:
+#          top: 87%
+#          left: 82.5%
+#          transform: 'scale(1.5,1.5)'
+  - type: conditional
+    conditions:
+      - entity: input_boolean.floorplan_cars
+        state: 'on'   
+      - entity: device_tracker.wn70pdy_location
+        state: home
+    elements:
+      - type: image
+        entity: device_tracker.wn70pdy_location
+        image: '/local/zoe_plan_9.png'
+        style:
+          top: 87%
+          left: 87%
+        tap_action:          
+          action: navigate
+          navigation_path: /lovelace-whiteacres/cars             
+      - type: state-icon
+        entity: sensor.wn70pdy_battery_level
+        style:
+          top: 87%
+          left: 82.5%
+          transform: 'scale(1.5,1.5)'
+################################################
+##            Paddy  - Plugged in             ##
+################################################            
+      - type: conditional
+        conditions: 
+          - entity: sensor.myenergi_paddy_plug_status
+            state_not: 'EV Disconnected'  
+          - entity: sensor.myenergi_paddy_plug_status
+            state_not: 'Charging'            
+        elements:
+          - type: conditional
+            conditions:
+              - entity: select.myenergi_paddy_charge_mode
+                state: 'Stopped'
+            elements:
+              - type: icon
+                icon: 'mdi:flash'
+                style:
+                  top: 72%
+                  left: 87%
+                  color: grey
+              - type: icon
+                icon: 'mdi:flash'
+                style:
+                  top: 76%
+                  left: 87%
+                  color: grey
+              - type: icon
+                icon: 'mdi:flash'
+                style:
+                  top: 80%
+                  left: 87%
+                  color: grey
+          - type: conditional
+            conditions:
+              - entity: select.myenergi_paddy_charge_mode
+                state: 'Eco+'
+            elements:
+              - type: icon
+                icon: 'mdi:flash'
+                style:
+                  top: 72%
+                  left: 87%
+                  color: grey
+              - type: icon
+                icon: 'mdi:leaf'
+                style:
+                  top: 76%
+                  left: 85%
+                  color: grey
+              - type: icon
+                icon: 'mdi:plus'
+                style:
+                  top: 76%
+                  left: 89%
+                  color: grey
+              - type: icon
+                icon: 'mdi:flash'
+                style:
+                  top: 80%
+                  left: 87%
+                  color: grey
+          - type: conditional
+            conditions: 
+              - entity: select.myenergi_paddy_charge_mode
+                state: 'Eco'
+            elements:
+              - type: icon
+                icon: 'mdi:flash'
+                style:
+                  top: 72%
+                  left: 87%
+                  color: grey
+              - type: icon
+                icon: 'mdi:leaf'
+                style:
+                  top: 76%
+                  left: 87%
+                  color: grey
+              - type: icon
+                icon: 'mdi:flash'
+                style:
+                  top: 80%
+                  left: 87%
+                  color: grey
+          - type: conditional
+            conditions: 
+              - entity: select.myenergi_paddy_charge_mode
+                state: 'Fast'
+            elements:
+              - type: icon
+                icon: 'mdi:flash'
+                style:
+                  top: 72%
+                  left: 87%
+                  color: grey
+              - type: icon
+                icon: 'mdi:flash'
+                style:
+                  top: 76%
+                  left: 87%
+                  color: grey
+              - type: icon
+                icon: 'mdi:flash'
+                style:
+                  top: 80%
+                  left: 87%
+                  color: grey
+        ################################################
+        ##            Paddy  - Charging               ##
+        ################################################ 
+      - type: conditional
+        conditions: 
+          - entity: sensor.myenergi_paddy_plug_status
+            state: 'Charging'
+        elements:
+          - type: conditional
+            conditions: 
+              - entity: select.myenergi_paddy_charge_mode
+                state: 'Eco+'
+            elements:
+              - type: icon
+                icon: 'mdi:flash'
+                style:
+                  top: 72%
+                  left: 87%
+                  color: green
+              - type: icon
+                icon: 'mdi:leaf'
+                style:
+                  top: 76%
+                  left: 85%
+                  color: green
+              - type: icon
+                icon: 'mdi:plus'
+                style:
+                  top: 76%
+                  left: 89%
+                  color: green
+              - type: icon
+                icon: 'mdi:flash'
+                style:
+                  top: 80%
+                  left: 87%
+                  color: green
+              - type: icon
+                icon: 'mdi:arrow-right-bold'
+                entity: sensor.zappi_paddy_power
+                style:
+                  top: 93%
+                  left: 76%
+                  color: green
+                  transform: 'scale(2,2)'
+              - type: state-label
+                entity: sensor.zappi_paddy_power
+                style:
+                  color: green
+                  top: 91%
+                  left: 77.5%            
+          - type: conditional
+            conditions: 
+              - entity: select.myenergi_paddy_charge_mode
+                state: 'Eco'
+            elements:
+              - type: icon
+                icon: 'mdi:flash'
+                style:
+                  top: 72%
+                  left: 87%
+                  color: green
+              - type: icon
+                icon: 'mdi:leaf'
+                style:
+                  top: 76%
+                  left: 87%
+                  color: green
+              - type: icon
+                icon: 'mdi:flash'
+                style:
+                  top: 80%
+                  left: 87%
+                  color: green
+              - type: icon
+                icon: 'mdi:arrow-right-bold'
+                entity: sensor.zappi_paddy_power
+                style:
+                  top: 93%
+                  left: 76%
+                  color: green
+                  transform: 'scale(2,2)'
+              - type: state-label
+                entity: sensor.zappi_paddy_power
+                style:
+                  color: green
+                  top: 91%
+                  left: 77.5%           
+          - type: conditional
+            conditions: 
+              - entity: select.myenergi_paddy_charge_mode
+                state: 'Fast'
+            elements:
+              - type: icon
+                icon: 'mdi:flash'
+                style:
+                  top: 72%
+                  left: 87%
+                  color: red
+              - type: icon
+                icon: 'mdi:flash'
+                style:
+                  top: 76%
+                  left: 87%
+                  color: red
+              - type: icon
+                icon: 'mdi:flash'
+                style:
+                  top: 80%
+                  left: 87%
+                  color: red
+              - type: icon
+                icon: 'mdi:arrow-right-bold'
+                entity: sensor.zappi_paddy_power
+                style:
+                  top: 93%
+                  left: 76%
+                  color: red
+                  transform: 'scale(2,2)'
+              - type: state-label
+                entity: sensor.zappi_paddy_power
+                style:
+                  color: red
+                  top: 91%
+                  left: 77.5%           
+
+
+################################################
+##            Hot Tub                         ##
+################################################           
+  - type: conditional
+    conditions:
+      - entity: input_boolean.floorplan_hottub
+        state: 'on'        
+    elements:
+      - type: conditional
+        conditions:       
+          - entity: binary_sensor.hottub_temp_reached
+            state: 'on'
+        elements:
+          - type: state-label
+            entity: input_number.hottub_water_temp
+            style:
+              top: 12%
+              left: 81%
+              color: red      
+      - type: conditional
+        conditions:       
+          - entity: sensor.hottub_summary
+            state: 'heating'
+        elements:
+          - type: state-label
+            entity: input_number.hottub_water_temp
+            style:
+              top: 12%
+              left: 81%
+              color: orange    
+      - type: conditional
+        conditions:       
+          - entity: binary_sensor.hottub_temp_reached
+            state: 'off'            
+        elements:
+          - type: state-label
+            entity: input_number.hottub_water_temp
+            style:
+              top: 12%
+              left: 81%
+              color: blue    
+              
+      - type: state-icon
+        entity: light.hottub_light
+        style:
+          top: 12%
+          left: 97%
+        tap_action:
+          action: toggle
+        hold_action:
+          action: call-service
+          service: input_boolean.toggle
+          service_data:
+            entity_id: input_boolean.floorplan_show_garden_switches  
+      - type: conditional
+        conditions:       
+          - entity: sensor.hottub_summary
+            state: 'in use'
+        elements:
+          - type: icon
+            icon: 'mdi:pool'
+            style:
+              top: 8%
+              left: 88%
+              color: red
+              transform: 'scale(2,2)'
+            tap_action:          
+              action: navigate
+              navigation_path: /lovelace-whiteacres/hottub
+      - type: conditional
+        conditions:       
+          - entity: sensor.hottub_summary
+            state: 'idle'
+        elements:
+          - type: icon
+            icon: 'mdi:hot-tub'
+            style:
+              top: 8%
+              left: 88%
+              color: green
+              transform: 'scale(2,2)'
+            tap_action:          
+              action: navigate
+              navigation_path: /lovelace-whiteacres/hottub
+      - type: conditional
+        conditions:        
+          - entity: sensor.hottub_summary
+            state: 'offline'
+        elements:
+          - type: icon
+            icon: 'mdi:alert-circle-outline'
+            style:
+              top: 8%
+              left: 88%
+              color: red
+              transform: 'scale(2,2)'
+            tap_action:          
+              action: navigate
+              navigation_path: /lovelace-whiteacres/hottub
+      - type: conditional
+        conditions:        
+          - entity: sensor.hottub_summary
+            state: 'off'
+        elements:
+          - type: icon
+            icon: 'mdi:hot-tub'
+            style:
+              top: 8%
+              left: 88%
+              color: grey
+              transform: 'scale(2,2)'
+            tap_action:          
+              action: navigate
+              navigation_path: /lovelace-whiteacres/hottub
+      - type: conditional
+        conditions:       
+          - entity: sensor.hottub_summary
+            state: heating
+        elements:
+          - type: icon
+            icon: 'mdi:hot-tub'
+            style:
+              top: 8%
+              left: 88%
+              color: red
+              transform: 'scale(2,2)'
+            tap_action:          
+              action: navigate
+              navigation_path: /lovelace-whiteacres/hottub
+      - type: conditional
+        conditions:         
+          - entity: sensor.hottub_summary
+            state: circulating
+        elements:
+          - type: icon
+            icon: 'mdi:hot-tub'
+            style:
+              top: 8%
+              left: 88%
+              color: purple
+              transform: 'scale(2,2)'
+            tap_action:          
+              action: navigate
+              navigation_path: /lovelace-whiteacres/hottub
+      - type: conditional
+        conditions:         
+          - entity: sensor.hottub_summary
+            state: filtering
+        elements:
+          - type: icon
+            icon: 'mdi:hot-tub'
+            style:
+              top: 8%
+              left: 88%
+              color: orange
+              transform: 'scale(2,2)'
+            tap_action:          
+              action: navigate
+              navigation_path: /lovelace-whiteacres/hottub
+      - type: conditional
+        conditions:      
+          - entity: sensor.hottub_summary
+            state: scheduled
+        elements:
+          - type: icon
+            icon: 'mdi:hot-tub'
+            style:
+              top: 8%
+              left: 88%
+              color: black
+              transform: 'scale(2,2)'
+            tap_action:          
+              action: navigate
+              navigation_path: /lovelace-whiteacres/hottub
+
+          
+################################################
+##            Powerwall                       ##
+################################################   
+  - type: conditional
+    conditions:
+      - entity: input_boolean.floorplan_powerwall
+        state: 'on'   
+    elements:   
+      - type: state-icon
+        entity: sensor.powerwall_charge_corrected
+        style:
+          top: 49%
+          left: 86%
+          transform: 'scale(2,2)'
+      - type: state-label
+        entity: sensor.powerwall_stored_energy
+        style:
+          top: 45%
+          left: 89%
+          color: green
+      - type: conditional
+        conditions:
+          - entity: sensor.powerwall_direction
+            state: import
+        elements:
+          - type: icon
+            icon: 'mdi:arrow-left-bold'
+            entity: sensor.powerwall
+            style:
+              top: 51%
+              left: 81%
+              color: blue
+              transform: 'scale(2,2)'
+          - type: state-label
+            entity: sensor.powerwall_discharging
+            style:
+              color: blue
+              top: 62%
+              left: 84%
+      - type: conditional
+        conditions:
+          - entity: sensor.powerwall_direction
+            state: export
+        elements:
+          - type: icon
+            icon: 'mdi:arrow-right-bold'
+            entity: sensor.powerwall
+            style:
+              top: 51%
+              left: 82%
+              color: green
+              transform: 'scale(2,2)'
+          - type: state-label
+            entity: sensor.powerwall_charging
+            style:
+              color: green
+              top: 62%
+              left: 84%
+          
+################################################
+##            Solar                           ##
+################################################  
+  - type: conditional
+    conditions:
+      - entity: input_boolean.floorplan_solar
+        state: 'on'  
+    elements:        
+      - type: state-label
+        entity: sensor.solaredge_energy_today_kwh
+        style:
+          color: orange
+          top: 5%
+          left: 69%    
+      - type: conditional
+        conditions:
+          - entity: sensor.solaredge_status_text
+            state: Fault       
+        elements:
+          - type: icon
+            icon: 'mdi:alert-circle-outline'
+            entity: sensor.solar_production
+            style:
+              top: 10%
+              left: 64%
+              color: red
+              transform: 'scale(2,2)'
+      - type: conditional
+        conditions:   
+          - entity: sensor.solar_direction
+            state: 'off'
+          - entity: weather.home
+            state: sunny
+          - entity: sun.sun
+            state: above_horizon
+        elements:
+          - type: icon
+            icon: 'mdi:weather-sunset'
+            entity: sensor.solar_production
+            style:
+              top: 10%
+              left: 64%
+              color: grey
+              transform: 'scale(2,2)'
+      - type: conditional
+        conditions:   
+          - entity: sensor.solar_direction
+            state: 'off'
+          - entity: sun.sun
+            state: below_horizon
+        elements:
+          - type: icon
+            icon: 'mdi:weather-night'
+            entity: sensor.solar_production
+            style:
+              top: 10%
+              left: 64%
+              color: grey
+              transform: 'scale(2,2)'
+      - type: conditional
+        conditions:   
+#          - entity: sensor.solar_direction
+#            state: import
+          - entity: sensor.solaredge_status_text
+            state: Working              
+        elements:
+          - type: icon
+            icon: 'mdi:white-balance-sunny'
+            entity: sensor.solar_production
+            style:
+              top: 10%
+              left: 64%
+              color: orange
+              transform: 'scale(2,2)'
+          - type: state-label
+            entity: sensor.solar_production
+            style:
+              color: orange
+              top: 21%
+              left: 75.5%
+          - type: icon
+            icon: 'mdi:arrow-down-bold'
+            style:
+              color: orange
+              top: 21%
+              left: 64%
+              transform: 'scale(2,2)'
+      - type: conditional
+        conditions:
+#          - entity: sensor.solar_direction
+#            state: import        
+          - entity: sensor.solaredge_status_text
+            state: Throttled       
+        elements:
+          - type: icon
+            icon: 'mdi:white-balance-sunny'
+            entity: sensor.solar_production
+            style:
+              top: 10%
+              left: 64%
+              color: red
+              transform: 'scale(2,2)'
+          - type: state-label
+            entity: sensor.solar_production
+            style:
+              color: red
+              top: 21%
+              left: 75.5%
+          - type: icon
+            icon: 'mdi:arrow-down-bold'
+            style:
+              color: red
+              top: 21%
+              left: 64%
+              transform: 'scale(2,2)'              
+              
+  - type: conditional
+    conditions:
+      - entity: input_boolean.floorplan_weather
+        state: 'on'      
+      - entity: sun.sun
+        state: above_horizon        
+    elements:              
+      - type: conditional
+        conditions: 
+          - entity: weather.home
+            state: pouring
+        elements:
+          - type: icon
+            icon: 'mdi:weather-pouring'
+            entity: sensor.solar_production
+            style:
+              top: 8%
+              left: 68%
+              color: grey
+              transform: 'scale(2,2)'
+      - type: conditional
+        conditions:       
+          - entity: weather.home
+            state: fog
+        elements:
+          - type: icon
+            icon: 'mdi:weather-fog'
+            entity: sensor.solar_production
+            style:
+              top: 8%
+              left: 68%
+              color: grey
+              transform: 'scale(2,2)'
+      - type: conditional
+        conditions:      
+          - entity: weather.home
+            state: exceptional
+        elements:
+          - type: icon
+            icon: 'mdi:weather-hurricane'
+            entity: sensor.solar_production
+            style:
+              top: 8%
+              left: 68%
+              color: grey
+              transform: 'scale(2,2)'
+      - type: conditional
+        conditions:   
+          - entity: weather.home
+            state: partlycloudy
+        elements:
+          - type: icon
+            icon: 'mdi:cloud'
+            entity: sensor.solar_production
+            style:
+              top: 8%
+              left: 68%
+              color: grey
+              transform: 'scale(2,2)'
+      - type: conditional
+        conditions:       
+          - entity: weather.home
+            state: lightning-rainy
+        elements:
+          - type: icon
+            icon: 'mdi:weather-lightning-rainy'
+            entity: sensor.solar_production
+            style:
+              top: 10%
+              left: 64%
+              color: grey
+              transform: 'scale(2,2)'
+      - type: conditional
+        conditions:    
+          - entity: weather.home
+            state: lightning
+        elements:
+          - type: icon
+            icon: 'mdi:weather-lightning'
+            entity: sensor.solar_production
+            style:
+              top: 10%
+              left: 64%
+              color: grey
+              transform: 'scale(2,2)'
+      - type: conditional
+        conditions:    
+          - entity: weather.home
+            state: windy
+        elements:
+          - type: icon
+            icon: 'mdi:weather-windy'
+            entity: sensor.solar_production
+            style:
+              top: 10%
+              left: 64%
+              color: grey
+              transform: 'scale(2,2)'
+      - type: conditional
+        conditions:   
+          - entity: weather.home
+            state: snowy-rainy
+        elements:
+          - type: icon
+            icon: 'mdi:weather-snowy-rainy'
+            entity: sensor.solar_production
+            style:
+              top: 10%
+              left: 64%
+              color: grey
+              transform: 'scale(2,2)'
+      - type: conditional
+        conditions:   
+          - entity: weather.home
+            state: snowy
+        elements:
+          - type: icon
+            icon: 'mdi:weather-snowy'
+            entity: sensor.solar_production
+            style:
+              top: 10%
+              left: 64%
+              color: grey
+              transform: 'scale(2,2)'
+      - type: conditional
+        conditions:    
+          - entity: weather.home
+            state: rainy
+        elements:
+          - type: icon
+            icon: 'mdi:weather-rainy'
+            entity: sensor.solar_production
+            style:
+              top: 10%
+              left: 64%
+              color: grey
+              transform: 'scale(2,2)'
+      - type: conditional
+        conditions:    
+          - entity: weather.home
+            state: hail
+        elements:
+          - type: icon
+            icon: 'mdi:weather-hail'
+            entity: sensor.solar_production
+            style:
+              top: 10%
+              left: 64%
+              color: grey
+              transform: 'scale(2,2)'
+      - type: conditional
+        conditions:  
+          - entity: weather.home
+            state: cloudy
+        elements:
+          - type: icon
+            icon: 'mdi:weather-cloudy'
+            entity: sensor.solar_production
+            style:
+              top: 10%
+              left: 64%
+              color: grey
+              transform: 'scale(2,2)'
+          
+################################################
+##            Electric Grid                   ##
+################################################           
+  - type: conditional
+    conditions:
+      - entity: input_boolean.floorplan_grid
+        state: 'on'    
+    elements:
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.grid_status
+            state: 'off'
+        elements:
+          - type: icon
+            icon: 'mdi:transmission-tower'
+            entity: sensor.solaredge_grid
+#            entity: sensor.zappi_jyggy_grid
+            style:
+              color: red
+              top: 10%
+              left: 4%
+              transform: 'scale(2,2)'    
+          - type: icon
+            icon: 'mdi:alert-outline'
+            entity: binary_sensor.grid_status
+            style:
+              color: red
+              top: 21%
+              left: 3%
+              transform: 'scale(2,2)'
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.grid_status
+            state: 'on'
+        elements:             
+          - type: icon
+            icon: 'mdi:home'
+            entity: sensor.floorplan_powerwall_home_load
+            style:
+              color: black
+              top: 12%
+              left: 19%
+          - type: state-label
+            entity: sensor.floorplan_powerwall_home_load
+            style:
+              top: 12%
+              left: 28%      
+             
+        
+          - type: conditional
+            conditions: 
+              - entity: sensor.solaredge_grid_direction
+                state: 'off'
+            elements:
+              - type: icon
+                icon: 'mdi:transmission-tower'
+                entity: sensor.solaredge_grid
+                style:
+                  color: grey
+                  top: 10%
+                  left: 4%
+                  transform: 'scale(2,2)'            
+              - type: state-label
+                entity: sensor.octopus_current_price_rounded
+                style:
+                  color: red
+                  top: 25%
+                  left: 12%    
+              - type: state-label
+                entity: sensor.export_price
+                style:
+                  color: green
+                  top: 21%
+                  left: 12%                  
+                  
+          - type: conditional
+            conditions:
+              - entity: sensor.solaredge_grid_direction
+                state: export
+            elements:
+              - type: icon
+                icon: 'mdi:transmission-tower'
+                entity: sensor.solaredge_grid
+                style:
+                  color: green
+                  top: 10%
+                  left: 4%
+                  transform: 'scale(2,2)'                
+              - type: icon
+                icon: 'mdi:arrow-up-bold'
+                entity: sensor.mqtt_power
+                style:
+                  color: green
+                  top: 19%
+                  left: 4%
+                  transform: 'scale(2,2)'
+              - type: state-label
+                entity: sensor.mqtt_export_power
+                style:
+                  color: green
+                  top: 23%
+                  left: 17%
+              - type: state-label
+                entity: sensor.export_price
+                style:
+                  color: green
+                  top: 20%
+                  left: 19%
+                  
+          - type: conditional
+            conditions: 
+              - entity: sensor.solaredge_grid_direction
+                state: import
+            elements:
+              - type: icon
+                icon: 'mdi:transmission-tower'
+                entity: sensor.solaredge_grid
+                style:
+                  color: red
+                  top: 10%
+                  left: 4%
+                  transform: 'scale(2,2)'                
+              - type: icon
+                icon: 'mdi:arrow-down-bold'
+                entity: sensor.solaredge_grid
+                style:
+                  color: red
+                  top: 21%
+                  left: 4%
+                  transform: 'scale(2,2)'
+              - type: state-label
+                entity: sensor.solaredge_grid_import
+                style:
+                  color: red
+                  top: 26%
+                  left: 17%
+              - type: state-label
+                entity: sensor.octopus_current_price_rounded
+                style:
+                  color: red
+                  top: 23%
+                  left: 18%                  
+
+                  
+################################################
+##            Access Points                   ##
+################################################           
+  - type: conditional
+    conditions:
+      - entity: device_tracker.ap_kitchen
+        state: not_home
+      - entity: input_boolean.floorplan_access_points
+        state: 'on'  
+    elements:
+      - type: icon
+        icon: 'mdi:access-point-off'
+        icon: 'mdi:access-point-off'
+        entity: device_tracker.ap_kitchen
+        style:
+          color: red
+          top: 39%
+          left: 52%
+
+################################################
+##            Radiators                       ##
+################################################  
+  - type: conditional
+    conditions:
+      - entity: input_boolean.floorplan_radiators
+        state: 'on'        
+    elements:          
+              
+    ################################################
+    ##            Radiators - Boosting            ##
+    ################################################            
+      - type: conditional
+        conditions:
+          - entity: sensor.whiteacres_boost
+            state: 'ON'          
+        elements:
+          - type: icon
+            icon: 'mdi:radiator'
+            entity: sensor.whiteacres_state
+            style:
+              color: orange
+              top: 57%
+              left: 18% 
+      - type: conditional
+        conditions:
+          - entity: sensor.lounge_bay_rad_boost
+            state: 'ON'
+        elements:
+          - type: icon
+            icon: 'mdi:radiator'
+            entity: sensor.lounge_bay_rad_boost
+            title: Click to Turn Boost Off
+            style:
+              color: orange
+              top: 95%
+              left: 24%   
+            tap_action:          
+              action: call-service
+              service: hive.boost_heating
+              service_data:
+                entity_id: climate.lounge_bay_rad
+                time_period: 00:01:00
+      - type: conditional
+        conditions:
+          - entity: sensor.lounge_rad_boost
+            state: 'ON'
+        elements:
+          - type: icon
+            icon: 'mdi:radiator'
+            entity: sensor.lounge_rad_boost
+            title: Click to Turn Boost Off
+            style:
+              color: orange
+              top: 74%
+              left: 39% 
+            tap_action:          
+              action: call-service
+              service: hive.boost_heating
+              service_data:
+                entity_id: climate.lounge_rad
+                time_period: 00:01:00
+      - type: conditional
+        conditions:
+          - entity: sensor.hall_rad_boost
+            state: 'ON'
+        elements:
+          - type: icon
+            icon: 'mdi:radiator'
+            entity: sensor.hall_rad_boost
+            title: Click to Turn Boost Off
+            style:
+              color: orange
+              top: 62%
+              left: 48%   
+            tap_action:          
+              action: call-service
+              service: hive.boost_heating
+              service_data:
+                entity_id: climate.hall_rad
+                time_period: 00:01:00
+      - type: conditional
+        conditions:
+          - entity: sensor.conservatory_rad_boost
+            state: 'ON'
+        elements:
+          - type: icon
+            icon: 'mdi:radiator'
+            entity: sensor.conservatory_rad_boost
+            title: Click to Turn Boost Off
+            style:
+              color: orange
+              top: 27%
+              left: 40%    
+            tap_action:          
+              action: call-service
+              service: hive.boost_heating
+              service_data:
+                entity_id: climate.conservatory_rad
+                time_period: 00:01:00
+      - type: conditional
+        conditions:
+          - entity: sensor.kitchen_tall_rad_boost
+            state: 'ON'
+        elements:
+          - type: icon
+            icon: 'mdi:radiator'
+            entity: sensor.kitchen_tall_rad_boost
+            title: Click to Turn Boost Off
+            style:
+              color: orange
+              top: 35.6%
+              left: 38%  
+            tap_action:          
+              action: call-service
+              service: hive.boost_heating
+              service_data:
+                entity_id: climate.kitchen_tall_rad
+                time_period: 00:01:00
+      - type: conditional
+        conditions:
+          - entity: sensor.kitchen_rad_boost
+            state: 'ON'
+        elements:
+          - type: icon
+            icon: 'mdi:radiator'
+            entity: sensor.kitchen_rad_boost
+            title: Click to Turn Boost Off
+            style:
+              color: orange
+              top: 49.5%
+              left: 24%   
+            tap_action:          
+              action: call-service
+              service: hive.boost_heating
+              service_data:
+                entity_id: climate.kitchen_rad
+                time_period: 00:01:00
+      - type: conditional
+        conditions:
+          - entity: sensor.bar_rad_boost
+            state: 'ON'
+        elements:
+          - type: icon
+            icon: 'mdi:radiator'
+            entity: sensor.bar_rad_boost
+            title: Click to Turn Boost Off
+            style:
+              color: orange
+              top: 67%
+              left: 67%  
+            tap_action:          
+              action: call-service
+              service: hive.boost_heating
+              service_data:
+                entity_id: climate.bar_rad
+                time_period: 00:01:00
+      - type: conditional
+        conditions:
+          - entity: sensor.downstairs_loo_rad_boost
+            state: 'ON'
+        elements:
+          - type: icon
+            icon: 'mdi:radiator'
+            entity: sensor.downstairs_loo_rad_boost
+            title: Click to Turn Boost Off
+            style:
+              color: orange
+              top: 66%
+              left: 54%   
+            tap_action:          
+              action: call-service
+              service: hive.boost_heating
+              service_data:
+                entity_id: climate.downstairs_loo_rad
+                time_period: 00:01:00
+
+    ################################################
+    ##     Radiators - Trying to Heat But off    ###
+    ################################################            
+      - type: conditional
+        conditions:
+          - entity: sensor.whiteacres_state
+            state: 'OFF'
+          - entity: sensor.whiteacres_boost
+            state: 'OFF'       
+        elements:
+          - type: icon
+            icon: 'mdi:radiator-off'
+            entity: sensor.whiteacres_state
+            title: Click to Turn Off
+            style:
+              color: grey
+              top: 57%
+              left: 18%           
+            tap_action:          
+              action: call-service
+              service: climate.set_hvac_mode
+              service_data:
+                entity_id: climate.heating
+                hvac_mode: 'off'   
+      - type: conditional
+        conditions:
+          - entity: sensor.whiteacres_state
+            state: 'OFF'
+        elements:
+          - type: conditional
+            conditions:
+              - entity: sensor.lounge_bay_rad_state
+                state: 'ON'
+              - entity: sensor.lounge_bay_rad_boost
+                state: 'OFF'     
+            elements:
+              - type: icon
+                icon: 'mdi:radiator'
+                entity: sensor.lounge_bay_rad_state
+                title: Click to Turn Off
+                style:
+                  color: red
+                  top: 95%
+                  left: 24%        
+                tap_action:          
+                  action: call-service
+                  service: climate.set_hvac_mode
+                  service_data:
+                    entity_id: climate.lounge_bay_rad
+                    hvac_mode: 'off'
+          - type: conditional
+            conditions:
+              - entity: sensor.lounge_rad_state
+                state: 'ON'
+              - entity: sensor.lounge_rad_boost
+                state: 'OFF'     
+            elements:
+              - type: icon
+                icon: 'mdi:radiator-off'
+                entity: sensor.lounge_rad_state
+                title: Click to Turn Off
+                style:
+                  color: red
+                  top: 74%
+                  left: 39%        
+                tap_action:          
+                  action: call-service
+                  service: climate.set_hvac_mode
+                  service_data:
+                    entity_id: climate.lounge_rad
+                    hvac_mode: 'off'
+          - type: conditional
+            conditions:
+              - entity: sensor.hall_rad_state
+                state: 'ON'
+              - entity: sensor.hall_rad_boost
+                state: 'OFF'      
+            elements:
+              - type: icon
+                icon: 'mdi:radiator-off'
+                entity: sensor.hall_rad_state
+                title: Click to Turn Off
+                style:
+                  color: red
+                  top: 62%
+                  left: 48%        
+                tap_action:          
+                  action: call-service
+                  service: climate.set_hvac_mode
+                  service_data:
+                    entity_id: climate.hall_rad
+                    hvac_mode: 'off'
+          - type: conditional
+            conditions:
+              - entity: sensor.conservatory_rad_state
+                state: 'ON'
+              - entity: sensor.conservatory_rad_boost
+                state: 'OFF'     
+            elements:
+              - type: icon
+                icon: 'mdi:radiator-off'
+                entity: sensor.conservatory_rad_state
+                title: Click to Turn Off
+                style:
+                  color: red
+                  top: 27%
+                  left: 40%        
+                tap_action:          
+                  action: call-service
+                  service: climate.set_hvac_mode
+                  service_data:
+                    entity_id: climate.conservatory_rad
+                    hvac_mode: 'off'
+          - type: conditional
+            conditions:
+              - entity: sensor.kitchen_tall_rad_state
+                state: 'ON'
+              - entity: sensor.kitchen_tall_rad_boost
+                state: 'OFF'     
+            elements:
+              - type: icon
+                icon: 'mdi:radiator-off'
+                entity: sensor.kitchen_tall_rad_state
+                title: Click to Turn Off
+                style:
+                  color: red
+                  top: 35.6%
+                  left: 38%        
+                tap_action:          
+                  action: call-service
+                  service: climate.set_hvac_mode
+                  service_data:
+                    entity_id: climate.kitchen_tall_rad
+                    hvac_mode: 'off'
+          - type: conditional
+            conditions:
+              - entity: sensor.kitchen_rad_state
+                state: 'ON'
+              - entity: sensor.kitchen_rad_boost
+                state: 'OFF'     
+            elements:
+              - type: icon
+                icon: 'mdi:radiator-off'
+                entity: sensor.kitchen_rad_state
+                title: Click to Turn Off
+                style:
+                  color: red
+                  top: 49.5%
+                  left: 24%        
+                tap_action:          
+                  action: call-service
+                  service: climate.set_hvac_mode
+                  service_data:
+                    entity_id: climate.kitchen_rad
+                    hvac_mode: 'off'
+          - type: conditional
+            conditions:
+              - entity: sensor.bar_rad_state
+                state: 'ON'
+              - entity: sensor.bar_rad_boost
+                state: 'OFF'     
+            elements:
+              - type: icon
+                icon: 'mdi:radiator-off'
+                entity: sensor.bar_rad_state
+                title: Click to Turn Off
+                style:
+                  color: red
+                  top: 67%
+                  left: 67%        
+                tap_action:          
+                  action: call-service
+                  service: climate.set_hvac_mode
+                  service_data:
+                    entity_id: climate.bar_rad
+                    hvac_mode: 'off'
+          - type: conditional
+            conditions:
+              - entity: sensor.downstairs_loo_rad_state
+                state: 'ON'
+              - entity: sensor.downstairs_loo_rad_boost
+                state: 'OFF'     
+            elements:
+              - type: icon
+                icon: 'mdi:radiator-off'
+                entity: sensor.downstairs_loo_rad_state
+                title: Click to Turn Off
+                style:
+                  color: red
+                  top: 66%
+                  left: 54%        
+                tap_action:          
+                  action: call-service
+                  service: climate.set_hvac_mode
+                  service_data:
+                    entity_id: climate.downstairs_loo_rad
+                    hvac_mode: 'off'
+                    
+    ################################################
+    ##            Radiators - Heating             ##
+    ################################################            
+      - type: conditional
+        conditions:
+          - entity: sensor.whiteacres_state
+            state: 'ON'
+          - entity: sensor.whiteacres_boost
+            state: 'OFF'       
+        elements:
+          - type: icon
+            icon: 'mdi:radiator'
+            entity: sensor.whiteacres_state
+            title: Click to Turn Off
+            style:
+              color: red
+              top: 57%
+              left: 18%           
+            tap_action:          
+              action: call-service
+              service: climate.set_hvac_mode
+              service_data:
+                entity_id: climate.heating
+                hvac_mode: 'off'   
+      - type: conditional
+        conditions:
+          - entity: sensor.whiteacres_state
+            state: 'ON'
+        elements:
+          - type: conditional
+            conditions:
+              - entity: sensor.lounge_bay_rad_state
+                state: 'ON'
+              - entity: sensor.lounge_bay_rad_boost
+                state: 'OFF'     
+            elements:
+              - type: icon
+                icon: 'mdi:radiator'
+                entity: sensor.lounge_bay_rad_state
+                title: Click to Turn Off
+                style:
+                  color: red
+                  top: 95%
+                  left: 24%        
+                tap_action:          
+                  action: call-service
+                  service: climate.set_hvac_mode
+                  service_data:
+                    entity_id: climate.lounge_bay_rad
+                    hvac_mode: 'off'
+          - type: conditional
+            conditions:
+              - entity: sensor.lounge_rad_state
+                state: 'ON'
+              - entity: sensor.lounge_rad_boost
+                state: 'OFF'     
+            elements:
+              - type: icon
+                icon: 'mdi:radiator'
+                entity: sensor.lounge_rad_state
+                title: Click to Turn Off
+                style:
+                  color: red
+                  top: 74%
+                  left: 39%        
+                tap_action:          
+                  action: call-service
+                  service: climate.set_hvac_mode
+                  service_data:
+                    entity_id: climate.lounge_rad
+                    hvac_mode: 'off'
+          - type: conditional
+            conditions:
+              - entity: sensor.hall_rad_state
+                state: 'ON'
+              - entity: sensor.hall_rad_boost
+                state: 'OFF'      
+            elements:
+              - type: icon
+                icon: 'mdi:radiator'
+                entity: sensor.hall_rad_state
+                title: Click to Turn Off
+                style:
+                  color: red
+                  top: 62%
+                  left: 48%        
+                tap_action:          
+                  action: call-service
+                  service: climate.set_hvac_mode
+                  service_data:
+                    entity_id: climate.hall_rad
+                    hvac_mode: 'off'
+          - type: conditional
+            conditions:
+              - entity: sensor.conservatory_rad_state
+                state: 'ON'
+              - entity: sensor.conservatory_rad_boost
+                state: 'OFF'     
+            elements:
+              - type: icon
+                icon: 'mdi:radiator'
+                entity: sensor.conservatory_rad_state
+                title: Click to Turn Off
+                style:
+                  color: red
+                  top: 27%
+                  left: 40%        
+                tap_action:          
+                  action: call-service
+                  service: climate.set_hvac_mode
+                  service_data:
+                    entity_id: climate.conservatory_rad
+                    hvac_mode: 'off'
+          - type: conditional
+            conditions:
+              - entity: sensor.kitchen_tall_rad_state
+                state: 'ON'
+              - entity: sensor.kitchen_tall_rad_boost
+                state: 'OFF'     
+            elements:
+              - type: icon
+                icon: 'mdi:radiator'
+                entity: sensor.kitchen_tall_rad_state
+                title: Click to Turn Off
+                style:
+                  color: red
+                  top: 35.6%
+                  left: 38%        
+                tap_action:          
+                  action: call-service
+                  service: climate.set_hvac_mode
+                  service_data:
+                    entity_id: climate.kitchen_tall_rad
+                    hvac_mode: 'off'
+          - type: conditional
+            conditions:
+              - entity: sensor.kitchen_rad_state
+                state: 'ON'
+              - entity: sensor.kitchen_rad_boost
+                state: 'OFF'     
+            elements:
+              - type: icon
+                icon: 'mdi:radiator'
+                entity: sensor.kitchen_rad_state
+                title: Click to Turn Off
+                style:
+                  color: red
+                  top: 49.5%
+                  left: 24%        
+                tap_action:          
+                  action: call-service
+                  service: climate.set_hvac_mode
+                  service_data:
+                    entity_id: climate.kitchen_rad
+                    hvac_mode: 'off'
+          - type: conditional
+            conditions:
+              - entity: sensor.bar_rad_state
+                state: 'ON'
+              - entity: sensor.bar_rad_boost
+                state: 'OFF'     
+            elements:
+              - type: icon
+                icon: 'mdi:radiator'
+                entity: sensor.bar_rad_state
+                title: Click to Turn Off
+                style:
+                  color: red
+                  top: 67%
+                  left: 67%        
+                tap_action:          
+                  action: call-service
+                  service: climate.set_hvac_mode
+                  service_data:
+                    entity_id: climate.bar_rad
+                    hvac_mode: 'off'
+          - type: conditional
+            conditions:
+              - entity: sensor.downstairs_loo_rad_state
+                state: 'ON'
+              - entity: sensor.downstairs_loo_rad_boost
+                state: 'OFF'     
+            elements:
+              - type: icon
+                icon: 'mdi:radiator'
+                entity: sensor.downstairs_loo_rad_state
+                title: Click to Turn Off
+                style:
+                  color: red
+                  top: 66%
+                  left: 54%        
+                tap_action:          
+                  action: call-service
+                  service: climate.set_hvac_mode
+                  service_data:
+                    entity_id: climate.downstairs_loo_rad
+                    hvac_mode: 'off'
+                
+    ################################################
+    ##            Radiators - Scheduled off       ##
+    ################################################            
+      - type: conditional
+        conditions:
+          - entity: sensor.whiteacres_state
+            state: 'OFF'
+          - entity: sensor.whiteacres_mode
+            state: 'SCHEDULE'                  
+        elements:
+          - type: icon
+            icon: 'mdi:radiator-disabled'
+            entity: sensor.whiteacres_state
+            title: Click to Boost
+            style:
+              color: grey
+              top: 57%
+              left: 18%    
+            tap_action:          
+              action: call-service
+              service: hive.boost_heating
+              service_data:
+                entity_id: climate.heating
+                time_period: 00:30:00
+      - type: conditional
+        conditions:
+          - entity: sensor.lounge_bay_rad_state
+            state: 'OFF'
+          - entity: sensor.lounge_bay_rad_mode
+            state: 'SCHEDULE' 
+        elements:
+          - type: icon
+            icon: 'mdi:radiator-disabled'
+            entity: sensor.lounge_bay_rad_state
+            title: Click to Boost
+            style:
+              color: grey
+              top: 95%
+              left: 24%    
+            tap_action:          
+              action: call-service
+              service: hive.boost_heating
+              service_data:
+                entity_id: climate.lounge_bay_rad
+                time_period: 00:30:00
+      - type: conditional
+        conditions:
+          - entity: sensor.lounge_rad_state
+            state: 'OFF'
+          - entity: sensor.lounge_rad_mode
+            state: 'SCHEDULE' 
+        elements:
+          - type: icon
+            icon: 'mdi:radiator-disabled'
+            entity: sensor.lounge_rad_state
+            title: Click to Boost
+            style:
+              color: grey
+              top: 74%
+              left: 39%    
+            tap_action:          
+              action: call-service
+              service: hive.boost_heating
+              service_data:
+                entity_id: climate.lounge_rad
+                time_period: 00:30:00
+      - type: conditional
+        conditions:
+          - entity: sensor.hall_rad_state
+            state: 'OFF'
+          - entity: sensor.hall_rad_mode
+            state: 'SCHEDULE' 
+        elements:
+          - type: icon
+            icon: 'mdi:radiator-disabled'
+            entity: sensor.hall_rad_state
+            title: Click to Boost
+            style:
+              color: grey
+              top: 62%
+              left: 48%    
+            tap_action:          
+              action: call-service
+              service: hive.boost_heating
+              service_data:
+                entity_id: climate.hall_rad
+                time_period: 00:30:00
+      - type: conditional
+        conditions:
+          - entity: sensor.conservatory_rad_state
+            state: 'OFF'
+          - entity: sensor.conservatory_rad_mode
+            state: 'SCHEDULE' 
+        elements:
+          - type: icon
+            icon: 'mdi:radiator-disabled'
+            entity: sensor.conservatory_rad_state
+            title: Click to Boost
+            style:
+              color: grey
+              top: 27%
+              left: 40%    
+            tap_action:          
+              action: call-service
+              service: hive.boost_heating
+              service_data:
+                entity_id: climate.conservatory_rad
+                time_period: 00:30:00
+      - type: conditional
+        conditions:
+          - entity: sensor.kitchen_tall_rad_state
+            state: 'OFF'
+          - entity: sensor.kitchen_tall_rad_mode
+            state: 'SCHEDULE' 
+        elements:
+          - type: icon
+            icon: 'mdi:radiator-disabled'
+            entity: sensor.kitchen_tall_rad_state
+            title: Click to Boost
+            style:
+              color: grey
+              top: 35.6%
+              left: 38%    
+            tap_action:          
+              action: call-service
+              service: hive.boost_heating
+              service_data:
+                entity_id: climate.kitchen_tall_rad
+                time_period: 00:30:00
+      - type: conditional
+        conditions:
+          - entity: sensor.kitchen_rad_state
+            state: 'OFF'
+          - entity: sensor.kitchen_rad_mode
+            state: 'SCHEDULE' 
+        elements:
+          - type: icon
+            icon: 'mdi:radiator-disabled'
+            entity: sensor.kitchen_rad_state
+            title: Click to Boost
+            style:
+              color: grey
+              top: 49.5%
+              left: 24%    
+            tap_action:          
+              action: call-service
+              service: hive.boost_heating
+              service_data:
+                entity_id: climate.kitchen_rad
+                time_period: 00:30:00
+      - type: conditional
+        conditions:
+          - entity: sensor.bar_rad_state
+            state: 'OFF'
+          - entity: sensor.bar_rad_mode
+            state: 'SCHEDULE' 
+        elements:
+          - type: icon
+            icon: 'mdi:radiator-disabled'
+            entity: sensor.bar_rad_state
+            title: Click to Boost
+            style:
+              color: grey
+              top: 67%
+              left: 67%    
+            tap_action:          
+              action: call-service
+              service: hive.boost_heating
+              service_data:
+                entity_id: climate.bar_rad
+                time_period: 00:30:00
+      - type: conditional
+        conditions:
+          - entity: sensor.downstairs_loo_rad_state
+            state: 'OFF'
+          - entity: sensor.downstairs_loo_rad_mode
+            state: 'SCHEDULE' 
+        elements:
+          - type: icon
+            icon: 'mdi:radiator-disabled'
+            entity: sensor.downstairs_loo_rad_state
+            title: Click to Boost
+            style:
+              color: grey
+              top: 66%
+              left: 54%    
+            tap_action:          
+              action: call-service
+              service: hive.boost_heating
+              service_data:
+                entity_id: climate.downstairs_loo_rad
+                time_period: 00:30:00
+
+    ################################################
+    ##            Radiators - Off                 ##
+    ################################################     
+      - type: conditional
+        conditions:
+          - entity: sensor.whiteacres_mode
+            state: 'OFF'     
+        elements:
+          - type: icon
+            icon: 'mdi:radiator-off'
+            entity: sensor.whiteacres_mode
+            title: Click to switch to Scheduled
+            style:
+              color: blue
+              top: 57%
+              left: 18%        
+            tap_action:          
+              action: call-service
+              service: climate.set_hvac_mode
+              service_data:
+                entity_id: climate.heating
+                hvac_mode: 'auto'
+          - type: icon
+            icon: 'mdi:radiator-off'
+            entity: sensor.lounge_bay_rad_mode
+            title: Click to switch to Scheduled
+            style:
+              color: blue
+              top: 95%
+              left: 24%        
+            tap_action:          
+              action: call-service
+              service: climate.set_hvac_mode
+              service_data:
+                entity_id: climate.lounge_bay_rad
+                hvac_mode: 'auto'
+          - type: icon
+            icon: 'mdi:radiator-off'
+            entity: sensor.hall_rad_mode
+            title: Click to switch to Scheduled
+            style:
+              color: blue
+              top: 62%
+              left: 48%        
+            tap_action:          
+              action: call-service
+              service: climate.set_hvac_mode
+              service_data:
+                entity_id: climate.hall_rad
+                hvac_mode: 'auto'
+          - type: icon
+            icon: 'mdi:radiator-off'
+            entity: sensor.conservatory_rad_mode
+            title: Click to switch to Scheduled
+            style:
+              color: blue
+              top: 27%
+              left: 40%        
+            tap_action:          
+              action: call-service
+              service: climate.set_hvac_mode
+              service_data:
+                entity_id: climate.conservatory_rad
+                hvac_mode: 'auto'
+          - type: icon
+            icon: 'mdi:radiator-off'
+            entity: sensor.kitchen_tall_rad_mode
+            title: Click to switch to Scheduled
+            style:
+              color: blue
+              top: 35.6%
+              left: 38%        
+            tap_action:          
+              action: call-service
+              service: climate.set_hvac_mode
+              service_data:
+                entity_id: climate.kitchen_tall_rad
+                hvac_mode: 'auto'
+          - type: icon
+            icon: 'mdi:radiator-off'
+            entity: sensor.kitchen_rad_mode
+            title: Click to switch to Scheduled
+            style:
+              color: blue
+              top: 49.5%
+              left: 24%        
+            tap_action:          
+              action: call-service
+              service: climate.set_hvac_mode
+              service_data:
+                entity_id: climate.kitchen_rad
+                hvac_mode: 'auto'
+          - type: icon
+            icon: 'mdi:radiator-off'
+            entity: sensor.bar_rad_mode
+            title: Click to switch to Scheduled
+            style:
+              color: blue
+              top: 67%
+              left: 67%        
+            tap_action:          
+              action: call-service
+              service: climate.set_hvac_mode
+              service_data:
+                entity_id: climate.bar_rad
+                hvac_mode: 'auto'
+          - type: icon
+            icon: 'mdi:radiator-off'
+            entity: sensor.downstairs_loo_rad_mode
+            title: Click to switch to Scheduled
+            style:
+              color: blue
+              top: 66%
+              left: 54%        
+            tap_action:          
+              action: call-service
+              service: climate.set_hvac_mode
+              service_data:
+                entity_id: climate.downstairs_loo_rad
+                hvac_mode: 'auto'
+
+      - type: conditional
+        conditions:
+          - entity: sensor.whiteacres_mode
+            state: 'MANUAL'     
+        elements:
+                    
+          - type: conditional
+            conditions:
+              - entity: sensor.lounge_bay_rad_mode
+                state: 'OFF'
+            elements:
+              - type: icon
+                icon: 'mdi:radiator-off'
+                entity: sensor.lounge_bay_rad_mode
+                title: Click to switch to Scheduled
+                style:
+                  color: blue
+                  top: 95%
+                  left: 24%        
+                tap_action:          
+                  action: call-service
+                  service: climate.set_hvac_mode
+                  service_data:
+                    entity_id: climate.lounge_bay_rad
+                    hvac_mode: 'auto'
+          - type: conditional
+            conditions:
+              - entity: sensor.hall_rad_mode
+                state: 'OFF'
+            elements:
+              - type: icon
+                icon: 'mdi:radiator-off'
+                entity: sensor.hall_rad_mode
+                title: Click to switch to Scheduled
+                style:
+                  color: blue
+                  top: 62%
+                  left: 48%        
+                tap_action:          
+                  action: call-service
+                  service: climate.set_hvac_mode
+                  service_data:
+                    entity_id: climate.hall_rad
+                    hvac_mode: 'auto'
+          - type: conditional
+            conditions:
+              - entity: sensor.conservatory_rad_mode
+                state: 'OFF'
+            elements:
+              - type: icon
+                icon: 'mdi:radiator-off'
+                entity: sensor.conservatory_rad_mode
+                title: Click to switch to Scheduled
+                style:
+                  color: blue
+                  top: 27%
+                  left: 40%        
+                tap_action:          
+                  action: call-service
+                  service: climate.set_hvac_mode
+                  service_data:
+                    entity_id: climate.conservatory_rad
+                    hvac_mode: 'auto'
+          - type: conditional
+            conditions:
+              - entity: sensor.kitchen_tall_rad_mode
+                state: 'OFF'
+            elements:
+              - type: icon
+                icon: 'mdi:radiator-off'
+                entity: sensor.kitchen_tall_rad_mode
+                title: Click to switch to Scheduled
+                style:
+                  color: blue
+                  top: 35.6%
+                  left: 38%        
+                tap_action:          
+                  action: call-service
+                  service: climate.set_hvac_mode
+                  service_data:
+                    entity_id: climate.kitchen_tall_rad
+                    hvac_mode: 'auto'
+          - type: conditional
+            conditions:
+              - entity: sensor.kitchen_rad_mode
+                state: 'OFF'
+            elements:
+              - type: icon
+                icon: 'mdi:radiator-off'
+                entity: sensor.kitchen_rad_mode
+                title: Click to switch to Scheduled
+                style:
+                  color: blue
+                  top: 49.5%
+                  left: 24%        
+                tap_action:          
+                  action: call-service
+                  service: climate.set_hvac_mode
+                  service_data:
+                    entity_id: climate.kitchen_rad
+                    hvac_mode: 'auto'
+          - type: conditional
+            conditions:
+              - entity: sensor.bar_rad_mode
+                state: 'OFF'
+            elements:
+              - type: icon
+                icon: 'mdi:radiator-off'
+                entity: sensor.bar_rad_mode
+                title: Click to switch to Scheduled
+                style:
+                  color: blue
+                  top: 67%
+                  left: 67%        
+                tap_action:          
+                  action: call-service
+                  service: climate.set_hvac_mode
+                  service_data:
+                    entity_id: climate.bar_rad
+                    hvac_mode: 'auto'
+          - type: conditional
+            conditions:
+              - entity: sensor.downstairs_loo_rad_mode
+                state: 'OFF'
+            elements:
+              - type: icon
+                icon: 'mdi:radiator-off'
+                entity: sensor.downstairs_loo_rad_mode
+                title: Click to switch to Scheduled
+                style:
+                  color: blue
+                  top: 66%
+                  left: 54%        
+                tap_action:          
+                  action: call-service
+                  service: climate.set_hvac_mode
+                  service_data:
+                    entity_id: climate.downstairs_loo_rad
+                    hvac_mode: 'auto'
+
+
+
+################################################
+##            Radiators - Unavailable         ##
+################################################            
+
+      - type: conditional
+        conditions:
+          - entity: sensor.whiteacres_availability
+            state: 'Offline'            
+        elements:
+          - type: icon
+            icon: 'mdi:radiator-off'
+            entity: sensor.whiteacres_availability
+            style:
+              color: red
+              top: 40%
+              left: 56%          
+      - type: conditional
+        conditions:
+          - entity: sensor.lounge_bay_rad_availability
+            state: 'Offline'       
+        elements:
+          - type: icon
+            icon: 'mdi:radiator-off'
+            entity: sensor.lounge_bay_rad_availability
+            style:
+              color: red
+              top: 95%
+              left: 24%
+      - type: conditional
+        conditions:
+          - entity: sensor.lounge_rad_availability
+            state: 'Offline'
+        elements:
+          - type: icon
+            icon: 'mdi:radiator-off'
+            entity: sensor.lounge_rad_availability
+            style:
+              color: red
+              top: 74%
+              left: 39%
+      - type: conditional
+        conditions:
+          - entity: sensor.hall_rad_availability
+            state: 'Offline'
+        elements:
+          - type: icon
+            icon: 'mdi:radiator-off'
+            entity: sensor.hall_rad_availability
+            style:
+              color: red
+              top: 62%
+              left: 48%
+      - type: conditional
+        conditions:
+          - entity: sensor.conservatory_rad_availability
+            state: 'Offline' 
+        elements:
+          - type: icon
+            icon: 'mdi:radiator-off'
+            entity: sensor.conservatory_rad_availability
+            style:
+              color: red
+              top: 27%
+              left: 40%
+      - type: conditional
+        conditions:
+          - entity: sensor.kitchen_tall_rad_availability
+            state: 'Offline'
+        elements:
+          - type: icon
+            icon: 'mdi:radiator-off'
+            entity: sensor.kitchen_tall_rad_availability
+            style:
+              color: red
+              top: 35.6%
+              left: 38%
+      - type: conditional
+        conditions:
+          - entity: sensor.kitchen_rad_availability
+            state: 'Offline'
+        elements:
+          - type: icon
+            icon: 'mdi:radiator-off'
+            entity: sensor.kitchen_rad_availability
+            style:
+              color: red
+              top: 49.5%
+              left: 24%
+      - type: conditional
+        conditions:
+          - entity: sensor.bar_rad_availability
+            state: 'Offline'
+        elements:
+          - type: icon
+            icon: 'mdi:radiator-off'
+            entity: sensor.bar_rad_availability
+            style:
+              color: red
+              top: 67%
+              left: 67%
+      - type: conditional
+        conditions:
+          - entity: sensor.downstairs_loo_availability
+            state: 'Offline'
+        elements:
+          - type: icon
+            icon: 'mdi:radiator-off'
+            entity: sensor.downstairs_loo_availability
+            style:
+              color: red
+              top: 66%
+              left: 54%
+
+
+################################################
+##            Radiators - Low Battery         ##
+################################################            
+  - type: conditional
+    conditions:
+      - entity: input_boolean.floorplan_low_battery
+        state: 'on'             
+    elements:
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.whiteacres_low_battery
+            state: 'on'            
+        elements:
+          - type: icon
+            icon: 'mdi:battery-alert'
+            entity: sensor.whiteacres_battery_level
+            style:
+              color: red
+              top: 40%
+              left: 56%          
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.lounge_bay_rad_low_battery
+            state: 'on'     
+          - entity: sensor.lounge_bay_rad_availability
+            state: 'Online'                
+        elements:
+          - type: icon
+            icon: 'mdi:battery-alert'
+            entity: sensor.lounge_bay_rad_battery_level
+            style:
+              color: red
+              top: 95%
+              left: 24%
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.lounge_rad_low_battery
+            state: 'on'
+          - entity: sensor.lounge_rad_low_battery_rad_availability
+            state: 'Online'    
+        elements:
+          - type: icon
+            icon: 'mdi:battery-alert'
+            entity: sensor.lounge_rad_battery_level
+            style:
+              color: red
+              top: 74%
+              left: 39%
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.hall_rad_low_battery
+            state: 'on'
+          - entity: sensor.hall_rad_low_battery_rad_availability
+            state: 'Online'  
+        elements:
+          - type: icon
+            icon: 'mdi:battery-alert'
+            entity: sensor.hall_rad_battery_level
+            style:
+              color: red
+              top: 62%
+              left: 48%
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.conservatory_rad_low_battery
+            state: 'on' 
+          - entity: sensor.conservatory_rad_availability
+            state: 'Online'  
+        elements:
+          - type: icon
+            icon: 'mdi:battery-alert'
+            entity: sensor.conservatory_rad_battery_level
+            style:
+              color: red
+              top: 27%
+              left: 40%
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.kitchen_tall_rad_low_battery
+            state: 'on'
+          - entity: sensor.kitchen_tall_rad_availability
+            state: 'Online'  
+        elements:
+          - type: icon
+            icon: 'mdi:battery-alert'
+            entity: sensor.kitchen_tall_rad_battery_level
+            style:
+              color: red
+              top: 35.6%
+              left: 38%
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.kitchen_rad_low_battery
+            state: 'on'
+          - entity: sensor.kitchen_rad_availability
+            state: 'Online'  
+        elements:
+          - type: icon
+            icon: 'mdi:battery-alert'
+            entity: sensor.kitchen_rad_battery_level
+            style:
+              color: red
+              top: 49.5%
+              left: 24%
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.bar_rad_low_battery
+            state: 'on'
+          - entity: sensor.bar_rad_availability
+            state: 'Online'  
+        elements:
+          - type: icon
+            icon: 'mdi:battery-alert'
+            entity: sensor.bar_rad_battery_level
+            style:
+              color: red
+              top: 67%
+              left: 67%
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.downstairs_loo_low_battery
+            state: 'on'
+          - entity: sensor.downstairs_loo_rad_availability
+            state: 'Online'  
+        elements:
+          - type: icon
+            icon: 'mdi:battery-alert'
+            entity: sensor.downstairs_loo_rad_battery_level
+            style:
+              color: red
+              top: 66%
+              left: 54%
+
+              
+################################################
+##            Doors                           ##
+################################################    
+  - type: conditional
+    conditions:
+      - entity: input_boolean.floorplan_doors
+        state: 'on'
+    elements:    
+      - type: state-icon
+        entity: binary_sensor.shed_door
+        style:
+          top: 27%
+          left: 93%    
+      - type: state-icon
+        entity: binary_sensor.garage_back_door
+        style:
+          top: 32%
+          left: 81%             
+      - type: state-icon
+        entity: binary_sensor.back_door
+        style:
+          top: 57.5%
+          left: 5%
+      - type: state-icon
+        entity: binary_sensor.under_stairs_door
+        style:
+          top: 63.8%
+          left: 29%
+      - type: state-icon
+        entity: binary_sensor.lounge_door
+        style:
+          top: 69.5%
+          left: 34.6%
+      - type: state-icon
+        entity: binary_sensor.bar_door
+        style:
+          top: 40.25%
+          left: 59%
+      - type: state-icon
+        entity: binary_sensor.conservatory_door
+        style:
+          top: 18%
+          left: 37%
+      - type: state-icon
+        entity: binary_sensor.front_door
+        style:
+          top: 67%
+          left: 46.2%
+      - type: state-icon
+        entity: binary_sensor.downstairs_toilet_door
+        style:
+          top: 55.7%
+          left: 51%
+      - type: state-icon
+        entity: binary_sensor.kitchen_door
+        style:
+          top: 51%
+          left: 41.2%
+      - type: state-icon
+        entity: binary_sensor.back_gate_door
+        style:
+          top: 3%
+          left: 20%
+    
+
+          
+################################################
+##            Doors - Low Battery             ##
+################################################    
+  - type: conditional
+    conditions:
+      - entity: input_boolean.floorplan_low_battery
+        state: 'on'    
+    elements:  
+      - type: conditional
+        conditions:
+          - entity: input_boolean.back_door_low_battery
+            state: 'on'        
+        elements:           
+          - type: icon
+            icon: 'mdi:battery-alert'
+            entity: binary_sensor.back_door
+            style:
+              color: red
+              top: 57.5%
+              left: 5%
+      - type: conditional
+        conditions:
+          - entity: input_boolean.under_stairs_low_battery
+            state: 'on'        
+        elements:            
+          - type: icon
+            icon: 'mdi:battery-alert'
+            entity: binary_sensor.under_stairs_door
+            style:
+              color: red
+              top: 63.8%
+              left: 29%
+      - type: conditional
+        conditions:
+          - entity: input_boolean.lounge_low_battery
+            state: 'on'        
+        elements:            
+          - type: icon
+            icon: 'mdi:battery-alert'
+            entity: binary_sensor.lounge_door
+            style:
+              color: red
+              top: 69.5%
+              left: 34.6%
+      - type: conditional
+        conditions:
+          - entity: input_boolean.bar_low_battery
+            state: 'on'        
+        elements:            
+          - type: icon
+            icon: 'mdi:battery-alert'
+            entity: binary_sensor.bar_door
+            style:
+              color: red
+              top: 40.25%
+              left: 59%
+      - type: conditional
+        conditions:
+          - entity: input_boolean.conservatory_low_battery
+            state: 'on'        
+        elements:            
+          - type: icon
+            icon: 'mdi:battery-alert'
+            entity: binary_sensor.conservatory_door
+            style:
+              color: red
+              top: 18%
+              left: 37%
+      - type: conditional
+        conditions:
+          - entity: input_boolean.front_door_low_battery
+            state: 'on'        
+        elements:            
+          - type: icon
+            icon: 'mdi:battery-alert'
+            entity: binary_sensor.front_door
+            style:
+              color: red
+              top: 67%
+              left: 46.2%
+      - type: conditional
+        conditions:
+          - entity: input_boolean.downstairs_toilet_low_battery
+            state: 'on'        
+        elements:            
+          - type: icon
+            icon: 'mdi:battery-alert'
+            entity: binary_sensor.downstairs_toilet_door
+            style:
+              color: red
+              top: 55.7%
+              left: 51%
+      - type: conditional
+        conditions:
+          - entity: input_boolean.kitchen_low_battery
+            state: 'on'        
+        elements:            
+          - type: icon
+            icon: 'mdi:battery-alert'
+            entity: binary_sensor.kitchen_door
+            style:
+              color: red
+              top: 51%
+              left: 41.2%
+      - type: conditional
+        conditions:
+          - entity: input_boolean.back_gate_low_battery
+            state: 'on'        
+        elements:            
+          - type: icon
+            icon: 'mdi:battery-alert'
+            entity: binary_sensor.back_gate_door
+            style:
+              color: red
+              top: 3%
+              left: 20%
+   
+            
+################################################
+##            Temperatures                    ##
+################################################ 
+  - type: conditional
+    conditions:
+      - entity: input_boolean.floorplan_temperatures
+        state: 'on'
+    elements:       
+################################################
+##            Outside Temp & Light            ##
+################################################  
+      - type: state-label
+        entity: sensor.outside_temp
+        style:
+          top: 2%
+          left: 29%
+      - type: state-label
+        entity: sensor.outside_light_rounded
+        style:
+          top: 2%
+          left: 12.5%
+################################################
+##            Radiators                       ##
+################################################  
+      - type: state-label
+        entity: sensor.lounge_rad_current_temperature
+        style:
+          top: 75%
+          left: 26%
+      - type: state-label
+        entity: sensor.bar_rad_current_temperature
+        style:
+          top: 35%
+          left: 65%
+      - type: state-label
+        entity: sensor.kitchen_rad_current_temperature
+        style:
+          top: 50%
+          left: 17%      
+      - type: state-label
+        entity: sensor.kitchen_tall_rad_current_temperature
+        style:
+          top: 35%
+          left: 46%          
+      - type: state-label
+        entity: sensor.conservatory_rad_current_temperature
+        style:
+          top: 6%
+          left: 48%        
+      - type: state-label
+        entity: sensor.hall_rad_current_temperature
+        style:
+          top: 56%
+          left: 38%          
+
+
+################################################
+##            Cameras                         ##
+################################################  
+  - type: conditional
+    conditions:
+      - entity: input_boolean.floorplan_cameras
+        state: 'on'
+    elements:         
+
+
+    ################################################
+    ##            Cameras - vehicle detected      ##
+    ################################################   
+      - type: conditional
+        conditions:
+          - entity: input_text.camera_drive_object_detected
+            state: 'vehicle'     
+        elements:            
+          - type: icon
+            icon: 'mdi:car'
+            entity: camera.drive_medium
+            style:
+              top: 80%
+              left: 52%
+      - type: conditional
+        conditions:
+          - entity: input_text.camera_doorbell_object_detected
+            state: 'vehicle'     
+        elements:            
+          - type: icon
+            icon: 'mdi:car'
+            entity: camera.doorbell_medium
+            style:
+              top: 80%
+              left: 52%              
+              
+    ################################################
+    ##            Cameras - person detected       ##
+    ################################################   
+      - type: conditional
+        conditions:
+          - entity: sensor.camera_patio_detected_object
+            state: 'person'        
+        elements:    
+          - type: icon
+            icon: 'mdi:human'
+            entity: camera.patio_medium
+            style:
+              top: 29%
+              left: 12%
+      - type: conditional
+        conditions:
+          - entity: sensor.camera_gazebo_detected_object
+            state: 'person'     
+        elements:            
+          - type: icon
+            icon: 'mdi:human'
+            entity: camera.gazebo_medium
+            style:
+              top: 29%
+              left: 82%
+      - type: conditional
+        conditions:
+          - entity: sensor.camera_bins_detected_object
+            state: 'person'     
+        elements:            
+          - type: icon
+            icon: 'mdi:human'
+            entity: camera.bins_medium
+            style:
+              top: 45%
+              left: 2%
+      - type: conditional
+        conditions:
+          - entity: sensor.camera_doorbell_detected_object
+            state: 'person'     
+        elements:            
+          - type: icon
+            icon: 'mdi:human'
+            entity: camera.doorbell_medium
+            style:
+              top: 80%
+              left: 52%              
+      - type: conditional
+        conditions:
+          - entity: sensor.camera_drive_detected_object
+            state: 'person'     
+        elements:            
+          - type: icon
+            icon: 'mdi:human'
+            entity: camera.drive_medium
+            style:
+              top: 80%
+              left: 52%
+              
+    ################################################
+    ##            Cameras - no motion             ##
+    ################################################   
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.patio_motion
+            state: 'off'        
+        elements:    
+          - type: icon
+            icon: 'mdi:cctv'
+            entity: camera.patio_medium
+            style:
+              top: 29%
+              left: 7%
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.gazebo_motion
+            state: 'off'     
+        elements:            
+          - type: icon
+            icon: 'mdi:cctv'
+            entity: camera.gazebo_medium
+            style:
+              top: 29%
+              left: 87%
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.bins_motion
+            state: 'off'     
+        elements:            
+          - type: icon
+            icon: 'mdi:cctv'
+            entity: camera.bins_medium
+            style:
+              top: 40%
+              left: 2%
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.drive_motion
+            state: 'off'     
+        elements:            
+          - type: icon
+            icon: 'mdi:cctv'
+            entity: camera.drive_medium
+            style:
+              top: 80%
+              left: 47%
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.doorbell_motion
+            state: 'off'     
+        elements:            
+          - type: icon
+            icon: 'mdi:cctv'
+            entity: camera.doorbell_medium
+            style:
+              top: 73%
+              left: 51%
+              
+################################################
+##            Alarm                           ##
+################################################   
+  - type: conditional
+    conditions:
+      - entity: input_boolean.floorplan_appliances
+        state: 'on'      
+    elements:            
+      - type: state-icon
+        entity: alarm_control_panel.texecom
+        title: Intruder Alarm System
+        style:
+          top: 61%
+          left: 43%
+      
+################################################
+##            Lights                          ##
+################################################   
+  - type: conditional
+    conditions:
+      - entity: input_boolean.floorplan_lights
+        state: 'on'
+    elements:    
+      - type: state-icon
+        entity: light.garden_colour
+        style:
+          top: 4%
+          left: 4%
+        tap_action:
+          action: toggle           
+        hold_action:
+          action: call-service
+          service: input_boolean.toggle
+          service_data:
+            entity_id: input_boolean.floorplan_show_garden_switches          
+      - type: state-icon
+        entity: light.front_door_lights
+        style:
+          top: 75%
+          left: 46%
+        tap_action:
+          action: toggle    
+      - type: state-icon
+        entity: light.utility
+        style:
+          top: 55%
+          left: 13.5%
+        tap_action:
+          action: toggle
+      - type: state-icon
+        entity: light.under_stairs
+        style:
+          top: 65.3%
+          left: 25%
+        tap_action:
+          action: toggle
+      - type: state-icon
+        entity: light.back_door
+        style:
+          top: 64%
+          left: 2%
+        tap_action:
+          action: toggle            
+      - type: state-icon
+        entity: light.patio_light
+        style:
+          top: 28%
+          left: 23%
+        tap_action:
+          action: toggle
+        hold_action:
+          action: call-service
+          service: input_boolean.toggle
+          service_data:
+            entity_id: input_boolean.floorplan_show_garden_switches              
+      - type: state-icon
+        entity: light.patio_gazebo
+        style:
+          top: 3%
+          left: 83%
+        tap_action:
+          action: toggle
+        hold_action:
+          action: call-service
+          service: input_boolean.toggle
+          service_data:
+            entity_id: input_boolean.floorplan_show_garden_switches              
+      - type: state-icon
+        entity: light.patio_garage
+        style:
+          top: 27%
+          left: 75%
+        tap_action:
+          action: toggle
+        hold_action:
+          action: call-service
+          service: input_boolean.toggle
+          service_data:
+            entity_id: input_boolean.floorplan_show_garden_switches              
+      - type: state-icon
+        entity: light.shed_light
+        style:
+          top: 23%
+          left: 94%
+        tap_action:
+          action: toggle   
+        hold_action:
+          action: call-service
+          service: input_boolean.toggle
+          service_data:
+            entity_id: input_boolean.floorplan_show_garden_switches                
+      - type: state-icon
+        entity: light.garage_light
+        style:
+          top: 38%
+          left: 88%
+        tap_action:
+          action: toggle   
+        hold_action:
+          action: call-service
+          service: input_boolean.toggle
+          service_data:
+            entity_id: input_boolean.floorplan_show_garden_switches                            
+      - type: state-icon
+        entity: light.shed_outside_lights
+        style:
+          top: 19%
+          left: 94%          
+        tap_action:
+          action: toggle  
+        hold_action:
+          action: call-service
+          service: input_boolean.toggle
+          service_data:
+            entity_id: input_boolean.floorplan_show_garden_switches              
+      - type: state-icon
+        entity: light.patio_gazebo_wall
+        style:
+          top: 3%
+          left: 95%
+        tap_action:
+          action: toggle
+        hold_action:
+          action: call-service
+          service: input_boolean.toggle
+          service_data:
+            entity_id: input_boolean.floorplan_show_garden_switches              
+      - type: state-icon
+        entity: light.drive_lights
+        style:
+          top: 74%
+          left: 77%
+        tap_action:
+          action: toggle
+      - type: state-icon
+        entity: light.hall_light
+        style:
+          top: 61%
+          left: 37%
+        tap_action:
+          action: toggle
+      - type: state-icon
+        entity: light.hall_stairs_lightstrip
+        style:
+          top: 56%
+          left: 25%
+        tap_action:
+          action: toggle             
+      - type: state-icon
+        entity: light.downstairs_toilet
+        style:
+          top: 61%
+          left: 54.5%
+        tap_action:
+          action: toggle
+      - type: state-icon
+        entity: light.conservatory
+        style:
+          top: 16%
+          left: 48%
+        hold_action:
+          action: call-service
+          service: input_boolean.toggle
+          service_data:
+            entity_id: input_boolean.floorplan_show_conservatory_switches          
+        tap_action:
+          action: toggle
+      - type: state-icon
+        entity: light.lounge
+        style:
+          top: 79%
+          left: 26%
+        hold_action:
+          action: call-service
+          service: input_boolean.toggle
+          service_data:
+            entity_id: input_boolean.floorplan_show_lounge_switches          
+        tap_action:
+          action: toggle
+      - type: state-icon
+        entity: light.kitchen_main_plus
+        style:
+          top: 43%
+          left: 18.5%
+        hold_action:
+          action: call-service
+          service: input_boolean.toggle
+          service_data:
+            entity_id: input_boolean.floorplan_show_kitchen_switches
+        tap_action:
+          action: toggle
+      - type: state-icon
+        entity: light.kitchen_hue_ceiling
+        style:
+          top: 40%
+          left: 45%
+        hold_action:
+          action: call-service
+          service: input_boolean.toggle
+          service_data:
+            entity_id: input_boolean.floorplan_show_kitchen_switches
+        tap_action:
+          action: toggle
+      - type: state-icon
+        entity: light.kitchen_floor_lamp
+        style:
+          top: 36%
+          left: 56%
+        hold_action:
+          action: call-service
+          service: input_boolean.toggle
+          service_data:
+            entity_id: input_boolean.floorplan_show_kitchen_switches
+        tap_action:
+          action: toggle         
+      - type: state-icon
+        entity: light.bar_ceiling
+        style:
+          top: 49%
+          left: 66%
+        hold_action:
+          action: call-service
+          service: input_boolean.toggle
+          service_data:
+            entity_id: input_boolean.floorplan_show_bar_switches          
+        tap_action:
+          action: toggle
+      - type: state-icon
+        entity: light.bar_bar
+        style:
+          top: 62.5%
+          left: 74%
+        hold_action:
+          action: call-service
+          service: input_boolean.toggle
+          service_data:
+            entity_id: input_boolean.floorplan_show_bar_switches          
+        tap_action:
+          action: toggle     
+      - type: state-icon
+        entity: light.bar_palm
+        style:
+          top: 36%
+          left: 74%
+        hold_action:
+          action: call-service
+          service: input_boolean.toggle
+          service_data:
+            entity_id: input_boolean.floorplan_show_bar_switches          
+        tap_action:
+          action: toggle   
+      - type: state-icon
+        entity: light.bar_lamp
+        style:
+          top: 59%
+          left: 62%
+        hold_action:
+          action: call-service
+          service: input_boolean.toggle
+          service_data:
+            entity_id: input_boolean.floorplan_show_bar_switches          
+        tap_action:
+          action: toggle            
+
+################################################
+##            Fan                             ##
+################################################ 
+  - type: conditional
+    conditions:
+      - entity: input_boolean.floorplan_fans
+        state: 'on'
+    elements:
+      - type: state-icon
+        entity: fan.conservatory_fan
+        style:
+          top: 22%
+          left: 48%          
+    
+################################################
+##            Christmas Lights                ##
+################################################    
+  - type: conditional
+    conditions:
+      - entity: input_boolean.floorplan_christmas_lights
+        state: 'on'
+    elements:
+      - type: state-icon
+        entity: switch.lounge_tree
+        style:
+          top: 71%
+          left: 29%  
+        tap_action:
+          action: toggle        
+      - type: state-icon
+        entity: light.conservatory_tree_and_presents
+        style:
+          top: 6%
+          left: 56%   
+        tap_action:
+          action: toggle   
+      - type: state-icon
+        entity: light.front_christmas_lights
+        style:
+          top: 97%
+          left: 40%  
+        tap_action:
+          action: toggle     
+      - type: state-icon
+        entity: light.bar_tree
+        style:
+          top: 46%
+          left: 74%
+        tap_action:
+          action: toggle            
+
+
+################################################
+##            Motion Detectors                ##
+################################################  
+  - type: conditional
+    conditions:
+      - entity: input_boolean.floorplan_motion
+        state: 'on'
+    elements:
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.kitchen
+            state: 'on'        
+        elements:       
+          - type: icon
+            icon: mdi:motion-sensor
+            style:
+              color: red
+              top: 49%
+              left: 51%
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.bar
+            state: 'on'        
+        elements:       
+          - type: icon
+            icon: mdi:motion-sensor
+            style:
+              color: red
+              top: 64%
+              left: 62%   
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.shed_garage
+            state: 'on'        
+        elements:  
+          - type: icon
+            icon: mdi:motion-sensor
+            style:
+              color: red
+              top: 39%
+              left: 90%
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.lounge
+            state: 'on'        
+        elements:        
+          - type: icon
+            icon: mdi:motion-sensor
+            style:
+              color: red
+              top: 80%
+              left: 18%   
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.utility_motion
+            state: 'on'        
+        elements:                   
+          - type: icon
+            icon: 'mdi:motion-sensor'
+            style:
+              color: red
+              top: 62%
+              left: 14%   
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.downstairs_toilet_motion
+            state: 'on'        
+        elements:                     
+          - type: icon
+            icon: 'mdi:motion-sensor'
+            style:
+              color: red
+              top: 56%
+              left: 55%              
+
+################################################
+##            Sensors - motion Outside        ##
+################################################   
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.patio_sensor_motion
+            state: 'on'        
+        elements:    
+          - type: icon
+            icon: 'mdi:cctv'
+            entity: camera.patio_medium
+            style:
+              color: orange
+              top: 29%
+              left: 7%
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.patio_garage_sensor_motion
+            state: 'on'     
+        elements:            
+          - type: icon
+            icon: 'mdi:cctv'
+            entity: camera.gazebo_medium
+            style:
+              color: orange
+              top: 29%
+              left: 87%
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.drive_sensor_motion
+            state: 'on'     
+        elements:            
+          - type: icon
+            icon: 'mdi:cctv'
+            entity: camera.drive_medium
+            style:
+              color: orange
+              top: 80%
+              left: 47%
+
+################################################
+##            Cameras - motion Outside        ##
+################################################   
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.patio_motion
+            state: 'on'        
+        elements:    
+          - type: icon
+            icon: 'mdi:cctv'
+            entity: camera.patio_medium
+            style:
+              color: red
+              top: 29%
+              left: 7%
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.gazebo_motion
+            state: 'on'     
+        elements:            
+          - type: icon
+            icon: 'mdi:cctv'
+            entity: camera.gazebo_medium
+            style:
+              color: red
+              top: 29%
+              left: 87%
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.bins_motion
+            state: 'on'     
+        elements:            
+          - type: icon
+            icon: 'mdi:cctv'
+            entity: camera.bins_medium
+            style:
+              color: red
+              top: 40%
+              left: 2%
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.drive_motion
+            state: 'on'     
+        elements:            
+          - type: icon
+            icon: 'mdi:cctv'
+            entity: camera.drive_medium
+            style:
+              color: red
+              top: 80%
+              left: 47%
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.doorbell_motion
+            state: 'on'     
+        elements:            
+          - type: icon
+            icon: 'mdi:cctv'
+            entity: camera.doorbell_medium
+            style:
+              color: red
+              top: 73%
+              left: 51%              
+################################################
+##            Camera Motion Detectors         ##
+################################################  
+  - type: conditional
+    conditions:
+      - entity: input_boolean.floorplan_camera_motion
+        state: 'on'
+    elements:
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.kitchen_motion
+            state: 'on'        
+        elements:         
+          - type: icon
+            icon: mdi:motion-sensor
+            style:
+              color: red
+              top: 45%
+              left: 47%   
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.kitchen_2_motion
+            state: 'on'        
+        elements:         
+          - type: icon
+            icon: mdi:motion-sensor
+            style:
+              color: red
+              top: 44%
+              left: 9%              
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.bar_motion
+            state: 'on'        
+        elements:     
+          - type: icon
+            icon: mdi:motion-sensor
+            style:
+              color: red
+              top: 59%
+              left: 74%          
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.lounge_motion
+            state: 'on'        
+        elements:        
+          - type: icon
+            icon: mdi:motion-sensor
+            style:
+              color: red
+              top: 80.5%
+              left: 13%
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.hall_motion
+            state: 'on'        
+        elements:        
+          - type: icon
+            icon: mdi:motion-sensor
+            style:
+              color: red
+              top: 65%
+              left: 33.5%
+
+################################################
+##            Presence - wallet               ##
+################################################  
+  - type: conditional
+    conditions:
+      - entity: input_boolean.floorplan_presence_wallet
+        state: 'on'
+    elements:
+    
+    
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_bruce_wallet          
+            state: conservatory
+        elements:
+          - type: state-icon
+            entity: person.bruce_hartley
+            style:
+              top: 13%
+              left: 43%
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_bruce_wallet          
+            state: bar
+        elements:
+          - type: state-icon
+            entity: sperson.bruce_hartley  
+            style:
+              top: 63%
+              left: 68%
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_bruce_wallet
+            state: lounge
+        elements:
+          - type: state-icon
+            entity: person.bruce_hartley
+            style:
+              top: 87%
+              left: 11%              
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_bruce_wallet          
+            state: kitchen
+        elements:
+          - type: state-icon
+            entity: person.bruce_hartley
+            style:
+              top: 38%
+              left: 14%  
+
+################################################
+##            Presence - dog                  ##
+################################################ 
+ 
+  - type: conditional
+    conditions:
+      - entity: input_boolean.floorplan_presence_dog
+        state: 'on'
+    elements:              
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_dog_animo
+            state: conservatory
+        elements:
+          - type: state-icon
+            entity: person.dog
+            style:
+              top: 29%
+              left: 48%  
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_dog_animo
+            state: bar
+        elements:
+          - type: state-icon
+            entity: person.dog
+            style:
+              top: 42%
+              left: 64% 
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_dog_animo
+            state: lounge
+        elements:
+          - type: state-icon
+            entity: person.dog
+            style:
+              top: 74%
+              left: 10%  
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_dog_animo
+            state: kitchen
+        elements:
+          - type: state-icon
+            entity: person.dog
+            style:
+              top: 44%
+              left: 39%   
+              
+################################################
+##            Presence - iphone_ra            ##
+################################################  
+  - type: conditional
+    conditions:
+      - entity: input_boolean.floorplan_presence_iphone_ra
+        state: 'on'
+    elements:
+    
+################################################
+##            Presence - Conservatory         ##
+################################################    
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_moira_iphone
+            state: conservatory
+        elements:
+          - type: state-icon
+            entity: person.moira
+            tap_action:
+              action: toggle
+            style:
+              top: 8%
+              left: 48%          
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_sarah_iphone
+            state: conservatory
+        elements:
+          - type: state-icon
+            entity: person.sarah_hartley
+            style:
+              top: 24%
+              left: 43%
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_bruce_iphone
+            state: conservatory
+        elements:
+          - type: state-icon
+            entity: person.bruce_hartley
+            style:
+              top: 13%
+              left: 43%
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_sophie_iphone
+            state: conservatory
+        elements:
+          - type: state-icon
+            entity: person.sophie_hartley
+            style:
+              top: 13%
+              left: 53%
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_kate_iphone
+            state: conservatory
+        elements:
+          - type: state-icon
+            entity: person.kate_hartley
+            style:
+              top: 24%
+              left: 53%
+            
+              
+################################################
+##            Presence - Bar                  ##
+################################################    
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_moira_iphone
+            state: bar
+        elements:
+          - type: state-icon
+            entity: person.moira
+            style:
+              top: 49%
+              left: 63%          
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_sarah_iphone
+            state: bar
+        elements:
+          - type: state-icon
+            entity: person.sarah_hartley
+            style:
+              top: 57%
+              left: 63%
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_bruce_iphone
+            state: bar
+        elements:
+          - type: state-icon
+            entity: person.bruce_hartley
+            style:
+              top: 63%
+              left: 68%
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_sophie_iphone
+            state: bar
+        elements:
+          - type: state-icon
+            entity: person.sophie_hartley
+            style:
+              top: 52%
+              left: 72%             
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_kate_iphone
+            state: bar
+        elements:
+          - type: state-icon
+            entity: person.kate_hartley
+            style:
+              top: 42%
+              left: 72%      
+               
+          
+################################################
+##            Presence - Lounge               ##
+################################################  
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_moira_iphone
+            state: lounge
+        elements:
+          - type: state-icon
+            entity: person.moira
+            style:
+              top: 88%
+              left: 36%                  
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_bruce_iphone
+            state: lounge
+        elements:
+          - type: state-icon
+            entity: person.bruce_hartley
+            style:
+              top: 87%
+              left: 11%
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_kate_iphone
+            state: lounge
+        elements:
+          - type: state-icon
+            entity: person.kate_hartley
+            style:
+              top: 88%
+              left: 28%
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_sophie_iphone
+            state: lounge
+        elements:
+          - type: state-icon
+            entity: person.sophie_hartley
+            style:
+              top: 80%
+              left: 36%          
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_sarah_iphone
+            state: lounge
+        elements:
+          - type: state-icon
+            entity: person.sarah_hartley
+            style:
+              top: 87%
+              left: 19%
+          
+################################################
+##            Presence - kitchen              ##
+################################################ 
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_moira_iphone
+            state: kitchen
+        elements:
+          - type: state-icon
+            entity: person.moira
+            style:
+              top: 48%
+              left: 31%    
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_bruce_iphone
+            state: kitchen
+        elements:
+          - type: state-icon
+            entity: person.bruce_hartley
+            style:
+              top: 38%
+              left: 14%
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_sophie_iphone
+            state: kitchen
+        elements:
+          - type: state-icon
+            entity: person.sophie_hartley
+            style:
+              top: 48%
+              left: 14%            
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_kate_iphone
+            state: kitchen
+        elements:
+          - type: state-icon
+            entity: person.kate_hartley
+            style:
+              top: 48%
+              left: 23%          
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_sarah_iphone
+            state: kitchen
+        elements:
+          - type: state-icon
+            entity: person.sarah_hartley
+            style:
+              top: 38%
+              left: 23%
+ 
+              
+################################################
+##            Presence - watch                ##
+################################################  
+  - type: conditional
+    conditions:
+      - entity: input_boolean.floorplan_presence_watch
+        state: 'on'
+    elements:
+    
+################################################
+##            Presence - Conservatory         ##
+################################################    
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_moira_watch
+            state: conservatory
+        elements:
+          - type: state-icon
+            entity: person.moira
+            style:
+              top: 8%
+              left: 48%          
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_sarah_watch
+            state: conservatory
+        elements:
+          - type: state-icon
+            entity: person.sarah_hartley
+            style:
+              top: 24%
+              left: 43%
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_bruce_watch
+            state: conservatory
+        elements:
+          - type: state-icon
+            entity: person.bruce_hartley
+            style:
+              top: 13%
+              left: 43%
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_sophie_watch
+            state: conservatory
+        elements:
+          - type: state-icon
+            entity: person.sophie_hartley
+            style:
+              top: 13%
+              left: 53%
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_kate_watch
+            state: conservatory
+        elements:
+          - type: state-icon
+            entity: person.kate_hartley
+            style:
+              top: 24%
+            
+              
+################################################
+##            Presence - Bar                  ##
+################################################    
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_moira_watch
+            state: bar
+        elements:
+          - type: state-icon
+            entity: person.moira
+            style:
+              top: 49%
+              left: 63%          
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_sarah_watch
+            state: bar
+        elements:
+          - type: state-icon
+            entity: person.sarah_hartley
+            style:
+              top: 57%
+              left: 63%
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_bruce_watch
+            state: bar
+        elements:
+          - type: state-icon
+            entity: person.bruce_hartley
+            style:
+              top: 63%
+              left: 68%
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_sophie_watch
+            state: bar
+        elements:
+          - type: state-icon
+            entity: person.sophie_hartley
+            style:
+              top: 52%
+              left: 72%             
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_kate_watch
+            state: bar
+        elements:
+          - type: state-icon
+            entity: person.kate_hartley
+            style:
+              top: 42%
+              left: 72%      
+          
+################################################
+##            Presence - Lounge               ##
+################################################  
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_moira_watch
+            state: lounge
+        elements:
+          - type: state-icon
+            entity: person.moira
+            style:
+              top: 88%
+              left: 36%                  
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_bruce_watch
+            state: lounge
+        elements:
+          - type: state-icon
+            entity: person.bruce_hartley
+            style:
+              top: 87%
+              left: 11%
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_kate_watch
+            state: lounge
+        elements:
+          - type: state-icon
+            entity: person.kate_hartley
+            style:
+              top: 88%
+              left: 28%
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_sophie_watch
+            state: lounge
+        elements:
+          - type: state-icon
+            entity: person.sophie_hartley
+            style:
+              top: 80%
+              left: 36%          
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_sarah_watch
+            state: lounge
+        elements:
+          - type: state-icon
+            entity: person.sarah_hartley
+            style:
+              top: 87%
+              left: 19%
+           
+################################################
+##            Presence - kitchen              ##
+################################################ 
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_moira_watch
+            state: kitchen
+        elements:
+          - type: state-icon
+            entity: person.moira
+            style:
+              top: 48%
+              left: 31%    
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_bruce_watch
+            state: kitchen
+        elements:
+          - type: state-icon
+            entity: person.bruce_hartley
+            style:
+              top: 38%
+              left: 14%
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_sophie_watch
+            state: kitchen
+        elements:
+          - type: state-icon
+            entity: person.sophie_hartley
+            style:
+              top: 48%
+              left: 14%            
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_kate_watch
+            state: kitchen
+        elements:
+          - type: state-icon
+            entity: person.kate_hartley
+            style:
+              top: 48%
+              left: 23%          
+      - type: conditional
+        conditions:
+          - entity: sensor.espresence_sarah_watch
+            state: kitchen
+        elements:
+          - type: state-icon
+            entity: person.sarah_hartley
+            style:
+              top: 38%
+              left: 23%
+          
+              
+################################################
+##            Appliances                      ##
+################################################ 
+  - type: conditional
+    conditions:
+      - entity: input_boolean.floorplan_appliances
+        state: 'on'        
+    elements:  
+      - type: state-icon
+        entity: binary_sensor.fridge_freezer_door
+        style:
+          top: 45%
+          left: 56%    
+      - type: state-icon
+        entity: binary_sensor.fridge_door
+        style:
+          top: 50%
+          left: 56%
+      - type: conditional
+        conditions:     
+          - entity: sensor.washing_machine_state
+            state: 'Heating'
+        elements:
+          - type: icon
+            icon: 'mdi:washing-machine'
+            entity: sensor.washing_machine_state
+            style:
+              color: red
+              top: 63%
+              left: 19% 
+      - type: conditional
+        conditions:     
+          - entity: sensor.washing_machine_state
+            state: 'Washing'
+        elements:
+          - type: icon
+            icon: 'mdi:washing-machine'
+            entity: sensor.washing_machine_state
+            style:
+              color: green
+              top: 63%
+              left: 19% 
+      - type: conditional
+        conditions:    
+          - entity: sensor.washing_machine_state
+            state: 'Fast-Spin'
+        elements:
+          - type: icon
+            icon: 'mdi:washing-machine'
+            entity: sensor.washing_machine_state
+            style:
+              color: purple
+              top: 63%
+              left: 19%           
+      - type: conditional
+        conditions:    
+          - entity: sensor.washing_machine_state
+            state: 'Spin'
+        elements:
+          - type: icon
+            icon: 'mdi:washing-machine'
+            entity: sensor.washing_machine_state
+            style:
+              color: blue
+              top: 63%
+              left: 19%             
+      - type: conditional
+        conditions:       
+          - entity: sensor.washing_machine_state
+            state: 'Standby'
+        elements:
+          - type: icon
+            icon: 'mdi:washing-machine-alert'
+            entity: sensor.washing_machine_state
+            style:
+              color: black
+              top: 63%
+              left: 19%          
+      - type: conditional
+        conditions:       
+          - entity: sensor.washing_machine_state
+            state: 'Off'
+        elements:
+          - type: icon
+            icon: 'mdi:washing-machine-off'
+            entity: sensor.washing_machine_state
+            style:
+              color: grey
+              top: 63%
+              left: 19%             
+################################################
+##            Lounge TV                       ##
+################################################           
+
+      - type: conditional
+        conditions:     
+          - entity: light.lounge_ambilight
+            state: 'on'
+        elements:
+          - type: icon
+            icon: 'mdi:television-ambient-light'
+            entity: light.lounge_ambilight
+            style:
+              color: yellow
+              top: 68%
+              left: 11%
+              transform: 'scale(2.6,2.6)'             
+            tap_action:          
+              action: navigate
+              navigation_path: /lovelace-remote/remote
+              
+      - type: conditional
+        conditions:     
+          - entity: media_player.lounge_skyq
+            state: 'off'
+        elements:
+          - type: icon
+            icon: 'mdi:television-off'
+            entity: media_player.lounge_skyq
+            style:
+              color: grey
+              top: 68%
+              left: 11%
+              transform: 'scale(2,2)'             
+            tap_action:          
+              action: navigate
+              navigation_path: /lovelace-remote/remote
+   
+      - type: conditional
+        conditions:      
+          - entity: media_player.lounge_skyq
+            state: playing
+        elements:
+          - type: icon
+            icon: 'mdi:television-play'
+            entity: media_player.lounge_skyq
+            style:
+              color: blue
+              top: 68%
+              left: 11%
+              transform: 'scale(2,2)'    
+            tap_action:          
+              action: navigate
+              navigation_path: /lovelace-remote/remote     
+
+      - type: conditional
+        conditions:       
+          - entity: media_player.lounge_skyq
+            state: paused
+        elements:
+          - type: icon
+            icon: 'mdi:television-pause'
+            entity: media_player.lounge_skyq
+            style:
+              color: Black
+              top: 68%
+              left: 11%
+              transform: 'scale(2,2)'      
+            tap_action:          
+              action: navigate
+              navigation_path: /lovelace-remote/remote        
+
+#          - type: image
+#            image: '/api/media_player_proxy/media_player.lounge_skyq?token=428a999de739c4589a5c5aca041213cb084ef05f43dd9b31b51765521c75c531&cache=de79e58fb7733ee3'
+#            entity: media_player.lounge_skyq
+#            style:
+#              top: 38%
+#              left: -10%
+#              transform: 'scale(.2,.2)'             
+#            tap_action:          
+#              action: navigate
+#              navigation_path: /lovelace-remote/remote
+              
+              
+image: '/local/floorplan_ground_floor.png'

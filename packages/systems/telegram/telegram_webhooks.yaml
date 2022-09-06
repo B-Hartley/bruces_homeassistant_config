@@ -1,0 +1,8 @@
+telegram_bot:
+  - platform: webhooks
+    parse_mode: html
+    api_key: !secret telegram_api_key
+    allowed_chat_ids: !secret telegram_bot_chat_ids
+    trusted_networks:
+    - 172.30.33.0/24
+    - 127.0.0.1

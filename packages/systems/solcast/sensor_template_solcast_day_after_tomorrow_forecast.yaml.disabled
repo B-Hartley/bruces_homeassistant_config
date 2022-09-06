@@ -1,0 +1,9 @@
+templaet:
+  sensor:
+    - name: "Solcast Forecast The Day After Tomorrow"
+      unique_id: solcast_forecast_the_day_after_tomorrow
+      unit_of_measurement: 'kWh'
+      device_class: energy            
+      state: "{{ state_attr('sensor.solcast_forecast', 'the day after tomorrow') | round(1)  }}"    
+
+            

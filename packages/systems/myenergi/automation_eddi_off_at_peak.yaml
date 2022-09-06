@@ -1,0 +1,28 @@
+automation:
+  - id: eddi_off_at_agile_peak
+    alias: 'Hot Water: Turn off for Peak'
+
+    description: >
+      Eddi off at Peak
+    
+    trigger:
+      - platform: homeassistant
+        event: start
+      - platform: event
+        event_type: automation_reloaded      
+      - platform: state
+        entity_id: binary_sensor.agile_peak
+  
+    condition: 
+      - condition: not
+        conditions:
+          - condition: state
+            entity_id: binary_sensor.agile_peak
+            state: "unavailable"
+            
+    action:
+        service: select.select_option
+        target: 
+          entity_id: select.myenergi_eddi_operating_mode
+        data:
+          option: "{%- if is_state('binary_sensor.agile_peak','on') -%}Stopped{%- else -%}Normal{%- endif -%}"

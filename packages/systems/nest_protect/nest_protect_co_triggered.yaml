@@ -1,0 +1,30 @@
+automation:
+  # CO trigger - Critical Notication
+  - id: co_alarm_triggered
+    alias: Carbon Monoxide Alarm
+    description: Carbon monoxide alarm
+    trigger:
+      - entity_id: 
+          - binary_sensor.nest_protect_downstairs_co_status
+          - binary_sensor.nest_protect_garage_co_status
+          - binary_sensor.nest_protect_loft_co_status
+          - binary_sensor.nest_protect_kates_co_status
+          - binary_sensor.nest_protect_stairs_co_status
+        platform: state
+        to: "on"
+    action:
+    - service: notify.bruce_and_sarah_phones
+      data:
+        title: Carbon Monoxide Alarm Triggered
+        message: The carbon monoxide alarm is going off!
+        data:
+          push:
+            sound:
+              name: default
+              critical: 1
+              volume: 1.0
+    - service: persistent_notification.create
+      data:
+        title: "Carbon Monoxide Alarm Triggered"
+        message: "The carbon monoxide alarm is going off!"
+        notification_id: carbon_monoxide

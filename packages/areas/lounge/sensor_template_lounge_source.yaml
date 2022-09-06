@@ -1,0 +1,6 @@
+template:
+  sensor:
+    - name: "Lounge Source"
+      unique_id: lounge_source
+      availability: "{{ states('media_player.lounge_skyq')!='off' }}"      
+      state: "{{ state_attr('media_player.lounge_amp','source') }}"

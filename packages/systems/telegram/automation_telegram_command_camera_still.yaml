@@ -1,0 +1,75 @@
+automation:
+  - id: telegram_callback_camera_still
+    alias: 'Show a camera still'
+    
+    description: >
+      Show a camera still
+      
+    trigger:
+      - platform: event
+        event_type: telegram_callback
+        event_data:
+          command: '/still_drive'  
+      - platform: event
+        event_type: telegram_callback
+        event_data:
+          command: '/still_patio'     
+      - platform: event
+        event_type: telegram_callback
+        event_data:
+          command: '/still_bins'     
+      - platform: event
+        event_type: telegram_callback
+        event_data:
+          command: '/still_gazebo'     
+      - platform: event
+        event_type: telegram_callback
+        event_data:
+          command: '/still_hall'     
+      - platform: event
+        event_type: telegram_callback
+        event_data:
+          command: '/still_lounge'     
+      - platform: event
+        event_type: telegram_callback
+        event_data:
+          command: '/still_kitchen'     
+      - platform: event
+        event_type: telegram_callback
+        event_data:
+          command: '/still_kitchen_2'       
+      - platform: event
+        event_type: telegram_callback
+        event_data:
+          command: '/still_landing'     
+      - platform: event
+        event_type: telegram_callback
+        event_data:
+          command: '/still_bar'      
+            
+    variables:
+      pic_file: "{{ trigger.event.data.command[7:] + '_' + now().strftime('%d%m%y%H%M%S') }}"          
+      
+    action:
+      - service: camera.snapshot
+        target:
+          entity_id: "camera.{{ trigger.event.data.command[7:]}}"
+        data:
+          filename: "/config/www/cam_snaps/{{ pic_file }}.jpg"
+      - service: telegram_bot.send_photo
+        data:
+          file: "/config/www/cam_snaps/{{ pic_file }}.jpg"    
+          caption: "{{ trigger.event.data.command[7:]}} @ {{ now().strftime('%H:%M:%S') }}"          
+          target: "{{trigger.event.data.chat_id}}"
+      - service: telegram_bot.answer_callback_query
+        data:
+          message: "{{ trigger.event.data.command[7:]}} @ {{ now().strftime('%H:%M:%S') }}"
+          callback_query_id: '{{ trigger.event.data.id }}'          
+      - service: telegram_bot.edit_replymarkup
+        data:
+          message_id: "{{ trigger.event.data.message.message_id }}"
+          chat_id: "{{ trigger.event.data.chat_id }}"
+          inline_keyboard: []          
+
+       
+ 

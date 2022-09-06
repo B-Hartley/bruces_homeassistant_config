@@ -1,0 +1,18 @@
+automation:
+  - id: ios_action_skyq_on_off
+    alias: "on/off SkyQ from Phone"
+    
+    description: >
+      Sky Q On / Off from ios
+      
+    trigger:
+      - platform: event
+        id: "ios"
+        event_type: ios.action_fired
+        event_data:
+          actionName: 'Power Sky Q'
+          
+    action:
+      - service: switch.toggle
+        target:
+          entity_id: switch.switch_skytv

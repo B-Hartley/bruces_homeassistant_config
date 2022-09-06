@@ -1,0 +1,25 @@
+script:
+  sonos_doorbell:
+    mode: parallel
+    max: 10
+    alias: "Sonos Doorbell"
+    sequence:
+      - service: sonos.snapshot
+        data:
+          entity_id: "{{ sonos_entity }}"
+      - service: sonos.unjoin
+        data:
+          entity_id: "{{ sonos_entity }}"
+      - service: media_player.volume_set
+        data:
+          entity_id: "{{ sonos_entity }}"
+          volume_level: "{{ volume }}"
+      - service: media_player.play_media
+        data:
+          entity_id: "{{ sonos_entity }}"
+          media_content_type: music
+          media_content_id: "{{ state_attr('sensor.doorbell','file_list')|random|replace('/config/www/','http://192.168.11.124:8123/local/') }}"
+      - delay: "{{ delay }}"
+      - service: sonos.restore
+        data:
+          entity_id: "{{ sonos_entity }}"

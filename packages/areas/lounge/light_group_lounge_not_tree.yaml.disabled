@@ -1,0 +1,13 @@
+light:          
+  - platform: group
+    name: Lounge Not Tree
+    entities:
+    - light.lounge_left_front
+    - light.lounge_bar_cart    
+    - light.lounge_right
+    - light.lounge_left_back
+    - light.lounge_corner
+    - light.lounge_bar_cart
+    - light.lounge_tv_left
+    - light.lounge_tv_right
+    - light.lounge_lamp

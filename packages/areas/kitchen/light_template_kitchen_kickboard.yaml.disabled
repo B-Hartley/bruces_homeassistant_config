@@ -1,0 +1,17 @@
+light:
+  - platform: template
+    lights:
+      kitchen_kickboard:
+        unique_id: kitchen_kickboard
+        friendly_name: "Kitchen Kickboard"
+        availability_template: "{{ states('switch.kitchen_kickboard') in ['on','off'] }}"
+        value_template: "{{ states('switch.kitchen_kickboard') }}"
+        turn_on:
+          service: switch.turn_on
+          entity_id: switch.kitchen_kickboard
+        turn_off:
+          service: switch.turn_off
+          entity_id: switch.kitchen_kickboard
+        set_level:
+          service: switch.turn_"{{ 'off' if brightness == 0 else 'on' }}'
+          entity_id: switch.kitchen_kickboard

@@ -1,0 +1,12 @@
+{
+  "config": {
+    "error": {},
+    "step": {
+      "user": {
+        "data": { "username": "Tesla Username", "password": "Tesla Password" },
+        "description": "Enter your Tesla Gatway details.",
+        "title": "Authentication"
+      }
+    }
+  }
+}

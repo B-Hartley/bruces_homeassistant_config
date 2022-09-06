@@ -1,0 +1,7 @@
+sensor:
+  - platform: mqtt_room
+    device_id: !secret sarah_iphone_ra
+    name: 'EsPresence Sarah iPhone'
+    state_topic: 'espresense/rooms'
+    timeout: 60
+    away_timeout: 120

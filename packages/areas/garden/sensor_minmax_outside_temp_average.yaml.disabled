@@ -1,0 +1,9 @@
+sensor:
+  - platform: min_max
+    name: Outside Temp
+    type: mean
+    round_digits: 1
+    entity_ids:
+      - sensor.patio_sensor_temperature
+      - sensor.patio_garage_sensor_temperature
+      - sensor.drive_sensor_temperature

@@ -1,0 +1,16 @@
+light:          
+  - platform: group
+    unique_id: light_group_front_christmas
+    name: Front Christmas Lights
+    entities:
+    - light.back_bush
+    - light.bar_curtain
+    - light.bedroom_curtain
+    - light.double_bush
+    - light.front_bush
+    - light.light_tree
+    - light.lounge_curtain
+    - light.porch_icicles
+    - light.landing_curtain
+    - light.guest_left_curtain
+    - light.guest_right_curtain

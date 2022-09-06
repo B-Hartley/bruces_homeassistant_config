@@ -1,0 +1,5 @@
+sensor:
+  - platform: integration
+    name: Fridge Energy
+    unit_prefix: k
+    source: sensor.fridge_mss310_power_sensor_w_0

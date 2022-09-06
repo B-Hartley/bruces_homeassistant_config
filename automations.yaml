@@ -1,0 +1,31 @@
+automation:
+- id: kitchen_doormat_dog
+  alias: Frigate Kitchen Doormat Dog
+  description: ''
+  use_blueprint:
+    path: hunterjm/frigate_0.10_notification.yaml
+    input:
+      notify_device: 5ba0a503da759f7381a73aca352be0d1
+      zone_filter: true
+      zones:
+      - doormat
+      camera: kitchen
+      notify_group: Bruce
+      update_thumbnail: true
+      labels:
+      - dog
+- id: '1659298886817'
+  alias: Frigate Notification (0.10.0)
+  description: ''
+  use_blueprint:
+    path: hunterjm/frigate_0.10_notification.yaml
+    input:
+      camera: Kitchen
+      notify_device: 5ba0a503da759f7381a73aca352be0d1
+      base_url: https://uoni8i8bp6wr0c2tkiuteehpqh3r3em5.ui.nabu.casa/
+      update_thumbnail: true
+      zone_filter: true
+      zones:
+      - doormat
+      labels:
+      - dog

@@ -1,0 +1,22 @@
+switch:
+  - platform: template
+    switches:
+      hottub_bubbles:
+        availability_template: "{{ states('sensor.hottub_online') }}"
+        unique_id: hottub_bubbles
+        friendly_name: Bubbles 
+        value_template: "{% if state_attr('sensor.hottub_status', 'wave_power') == 1 %}on{% else %}off{% endif %}"
+        turn_on:
+          - service: rest_command.hottub_command
+            data: 
+              hottub_command: turn_wave_on
+          - delay: 00:00:05
+          - service: homeassistant.update_entity
+            entity_id: sensor.hottub_status
+        turn_off:
+          - service: rest_command.hottub_command   
+            data: 
+              hottub_command: turn_wave_off
+          - delay: 00:00:05
+          - service: homeassistant.update_entity
+            entity_id: sensor.hottub_status

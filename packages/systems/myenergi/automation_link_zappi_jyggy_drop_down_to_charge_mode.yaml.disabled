@@ -1,0 +1,168 @@
+automation:
+  - id: link_zappi_jyggy_charge_mode
+    alias: 'Link Jyggy Charge Mode Drop Down'
+    mode: queued
+    
+    description: >
+      Zappi Jyggy Charge Mode Drop Down Sync with Zappi Mode
+      
+    trigger:
+      - platform: homeassistant
+        id: 'start'
+        event: start
+      - platform: event
+        id: 'reload'
+        event_type: automation_reloaded      
+      - platform: state
+        id: 'input_select'
+        entity_id: input_select.zappi_jyggy_charge_mode
+      - platform: state
+        id: 'sensor'
+        entity_id: sensor.zappi_jyggy_mode
+          
+    
+    action:
+      - choose:
+            # Home Assistant Re-start of Automation Re-load
+          - alias: "Home Assistant Restart or Automation reload"
+            conditions: 
+              - condition: trigger
+                id: 
+                  - 'start'
+                  - 'reload'
+            sequence:
+              - alias: "Repeat until previous command is complete"
+                repeat:
+                  sequence:   
+                    - service: homeassistant.update_entity
+                      target:
+                        entity_id: sensor.zappi_jyggy_cmt
+                    - delay: 3  
+                  until:  
+                    - condition: numeric_state
+                      entity_id: sensor.zappi_jyggy_cmt
+                      above: 250
+
+              - alias: "Check if command failed"            
+                condition: state
+                entity_id: sensor.zappi_jyggy_mode
+                state:
+                  - 'Fast'
+                  - 'Eco'
+                  - 'Eco+'
+                  - 'Stopped'
+                
+              - alias: "Set input select to Zappi Jyggy Charge Mode"
+                service: input_select.select_option
+                target: 
+                  entity_id: input_select.zappi_jyggy_charge_mode
+                data:
+                  option: "{{ states('sensor.zappi_jyggy_mode') }}"
+                                   
+            # Requested Zappi Jyggy Mode has changed     
+          - alias: "Zappi Drop Down Changed"            
+            conditions: 
+              - condition: trigger
+                id: 'input_select'
+            sequence:
+              - alias: "Repeat until previous command is complete"
+                repeat:
+                  sequence:   
+                    - alias: "update CMT every 3 seconds"                      
+                      service: homeassistant.update_entity
+                      target:
+                        entity_id: sensor.zappi_jyggy_cmt
+                    - delay: 3    
+                  until: 
+                    - condition: numeric_state
+                      entity_id: sensor.zappi_jyggy_cmt
+                      above: 250
+                  
+              - alias: "check that not already showing the right mode"
+                condition: template
+                value_template: "{{ states('input_select.zappi_jyggy_charge_mode') != states('sensor.zappi_jyggy_mode') }}"                
+
+              - alias: Set Zappi to required Mode
+                service: shell_command.zappi_set_mode
+                data:
+                  myenergi_serial: !secret myenergi_serial
+                  myenergi_password: !secret myenergi_password
+                  zappi_serial: !secret zappi_serial_jyggy
+                  zappi_mode: "{% set mapper = {'Fast':'1','Eco': '2','Eco+':'3','Stopped':'4'} %}{{mapper[states('input_select.zappi_jyggy_charge_mode')]}}"
+
+              - alias: "Repeat until this command is complete"
+                repeat:
+                  sequence:   
+                    - alias: "update CMT every 3 seconds"                  
+                      service: homeassistant.update_entity
+                      target:
+                        entity_id: sensor.zappi_jyggy_cmt
+                    - delay: 3    
+                  until: 
+                    - condition: numeric_state
+                      entity_id: sensor.zappi_jyggy_cmt
+                      above: 250
+
+              - alias: "Check if command failed"            
+                condition: state      
+                entity_id: sensor.zappi_jyggy_cmt
+                state: '253'
+                
+              - alias: "Send Telegram as command failed"     
+                service: telegram_bot.send_message
+                data:
+                  target: !secret telegram_chat_id_bruce         
+                  message: >
+                    Zappi Jyggy failed to change to required mode.
+                        
+                    Currently set to {{ states('sensor.zappi_jyggy_mode') }}
+                    
+                    Last Online at: {{ states('sensor.zappi_jyggy_last_online') }}    
+                    
+                  inline_keyboard:
+                    - 'Fast:/jyggy_fast, Eco+:/jyggy__ecoplus'
+                    - 'Eco:/jyggy__eco, Stop:/jyggy__stop' 
+                    - 'Refresh:/jyggy__refresh, OK:/remove_keyboard'       
+            
+            # Zappi Mode has changed and current command has completed
+          - alias: "Zappi mode Changed"
+            conditions: 
+              - condition: trigger
+                id: 'sensor'
+            sequence:
+              - alias: "Repeat until previous command is complete"
+                repeat:
+                  sequence:   
+                    - alias: "update CMT every 3 seconds"
+                      service: homeassistant.update_entity
+                      target:
+                        entity_id: sensor.zappi_jyggy_cmt
+                    - delay: 3    
+                  until:  
+                    - condition: numeric_state
+                      entity_id: sensor.zappi_jyggy_cmt
+                      above: 250
+          
+              - alias: "Check if command suceeded"
+                condition: state      
+                entity_id: sensor.zappi_jyggy_cmt
+                state: '254'
+
+              - alias: "Check if command failed"            
+                condition: state
+                entity_id: sensor.zappi_jyggy_mode
+                state:
+                  - 'Fast'
+                  - 'Eco'
+                  - 'Eco+'
+                  - 'Stopped' 
+    
+              - alias: "Set Drop Down to charge mode for Zappi Jyggy"  
+                service: input_select.select_option
+                target: 
+                  entity_id: input_select.zappi_jyggy_charge_mode
+                data:
+                  option: "{{ states('sensor.zappi_jyggy_mode') }}"
+                  
+                  
+

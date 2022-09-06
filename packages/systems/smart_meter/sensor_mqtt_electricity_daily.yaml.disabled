@@ -1,0 +1,8 @@
+mqtt:
+  sensor:
+    - name: "Electricity Daily"
+      state_topic: !secret smart_hild_state_topic
+      unit_of_measurement: 'kWh'
+      device_class: energy
+      value_template: "{{ (value_json['elecMtr']['0702']['04']['01']|int(base=16) * value_json['elecMtr']['0702']['03']['01']|int(base=16) / value_json['elecMtr']['0702']['03']['02']|int(base=16))|int }}"
+      icon: 'mdi:flash'

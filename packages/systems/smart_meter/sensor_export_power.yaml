@@ -1,0 +1,17 @@
+template:
+  sensor:
+    - unique_id: mqtt_export_power
+      name: "MQTT Export Power"
+      device_class: power
+      unit_of_measurement: "kW"
+      icon: mdi:flash
+      state: "{{ float(states('sensor.smart_meter_electricity_power'),0)|abs if float(states('sensor.smart_meter_electricity_power'),0) < -0.05 else 0.0 }}"
+
+#template:
+#  sensor:
+#    - name: "Export Power Integration"
+#      unique_id: export_power_integration
+#      device_class: energy
+#      unit_of_measurement: "kWh"
+#      state: "{{((states('sensor.electricity_consumption')|float(0)) / -1000.0)|round(2) if (states('sensor.electricity_consumption')|float(0) ) < 20.0 else 0.0 }}"
+

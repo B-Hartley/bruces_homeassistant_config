@@ -1,0 +1,11 @@
+script:
+  deepstack_all_cams:
+    sequence:
+      # This is Home Assistant Script Syntax
+      - service: image_processing.scan
+        data:
+          entity_id: image_processing.bar_face
+      - delay: 3
+      - service: image_processing.scan
+        data:
+          entity_id: image_processing.bins_face            

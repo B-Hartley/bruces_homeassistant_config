@@ -1,0 +1,474 @@
+title: Hot Tub
+path: hottub
+icon: 'mdi:hot-tub'
+badges: []
+cards:
+
+
+  - type: vertical-stack
+    cards:
+      - type: 'custom:button-card'
+        entity: input_number.hottub_water_temp
+        show_name: false
+        icon: 'mdi:hot-tub'
+        styles:
+          grid:
+            - position: relative
+          custom_fields:
+            circpump:
+              - position: absolute
+              - left: 2%
+              - top: 20%
+            filter:
+              - position: absolute
+              - left: 2%
+              - top: 50%             
+            pump1:
+              - position: absolute
+              - left: 15%
+              - top: 20%
+            pump2:
+              - position: absolute
+              - left: 15%
+              - top: 50%       
+            light1:
+              - position: absolute
+              - left: 80%
+              - top: 50%                 
+            hottubtemp:
+#              - background-color: >
+#                  [[[
+#                    if (states['input_number.hottub_water_temp'].state > 38)
+#                      return "red";
+#                    return "blue";
+#                  ]]]
+              - border-radius: 50%
+              - position: absolute
+              - left: 75%
+              - top: 0%
+              - height: 100px
+              - width: 100px
+              - font-size: 28px
+              - line-height: 80px
+        custom_fields:
+          light1: >
+            [[[ if (states['light.hottub_light'].state == 'on') return `<ha-icon
+            icon="mdi:lightbulb-group"
+            style="width: 50px; height: 50px; color: red;">
+            </ha-icon>`]]]            
+          pump1: >
+            [[[ if (states['switch.pump_1'].state == 'on') return `<ha-icon
+            icon="mdi:fan"
+            style="width: 50px; height: 50px; color: blue;">
+            </ha-icon>`]]]      
+          pump2: >
+            [[[ if (states['switch.pump_2'].state == 'on') return `<ha-icon
+            icon="mdi:fan"
+            style="width: 50px; height: 50px; color: blue;">
+            </ha-icon>`]]]   
+          circpump: >
+            [[[ if (states['climate.spa_thermostat'].state == 'heat') return `<ha-icon
+            icon="mdi:fire"
+            style="width: 50px; height: 50px; color: red;">
+            </ha-icon>`;
+            if (states['binary_sensor.circulation_pump'].state == 'on') return `<ha-icon
+            icon="mdi:sync"
+            style="width: 50px; height: 50px; color: deepskyblue;">
+            </ha-icon>`]]]        
+          filter: >
+            [[[ if (states['binary_sensor.filter_cycle_1_status'].state == 'on') return `<ha-icon
+            icon="mdi:air-filter"
+            style="width: 50px; height: 50px; color: green;">
+            </ha-icon>`]]]             
+          hottubtemp: >
+            [[[ return states['input_number.hottub_water_temp'].state + '°C']]]          
+    #    tap_action:
+    #      action: call-service
+    #      service: script.turn_on
+    #      service_data:
+    #        entity_id: script.hottub_card_tap
+    #    double_tap_action:
+    #      action: call-service
+    #      service: script.turn_on
+    #      service_data:
+    #        entity_id: script.hottub_card_double_tap
+        state:
+          - operator: '>'
+            value: 38
+            color: red
+          - operator: '>'
+            value: 37.5
+            color: orange          
+          - operator: '>'
+            value: 37
+            color: yellow
+          - operator: '>'
+            value: 36
+            color: green    
+          - operator: '>'
+            value: 34
+            color: blue
+          - operator: '>'
+            value: 27
+            color: grey            
+            
+            
+            
+      - type: conditional
+        conditions:
+          - entity: input_boolean.hottub_scheduled
+            state: "on"
+        card:
+          type: entity
+          entity: input_datetime.hottub_ready_by
+          name: Ready By
+
+      - entities:
+          - entity: climate.spa_thermostat
+            name: Spa
+          - entity: binary_sensor.bwa_wi_fi_module
+            name: Wi-Fi          
+          - entity: input_number.hottub_standard_temp
+            name:  Target Temperature     
+          - entity: sensor.hottub_schedule_target_temp
+            name:  Immediate Target Temperature     
+          - entity: binary_sensor.circulation_pump
+            name: Circulation Pump
+          - entity: switch.pump_1
+            name: Jets 1
+          - entity: switch.pump_2        
+            name: Jets 2      
+          - entity: light.hottub_light
+            name: Lights
+          - entity: switch.temperature_range
+            name: Temp Range  
+          - entity: switch.heat_mode
+            name: Heat Mode          
+          - entity: sensor.hottub_summary
+            name: Status
+          - entity: binary_sensor.hot_tub_door
+            name: Cover
+          - entity: input_boolean.hottub_scheduled
+            name: Schedule on
+          - entity: input_number.hottub_heat_below_x_pence
+            name: Heat below x pence
+          - entity: sensor.hottub_heating_this_week
+            name: Heating Time This Week
+          - entity: sensor.hottub_chlorine_tablet_last_added
+            name: Chlorine Added         
+            tap_action:
+              action: call-service
+              service: input_button.press
+              service_data:
+                entity_id: input_button.hottub_chlorine_tablet
+              confirmation:
+                text: "Are you adding a chlorine tablet ?"            
+          - entity: sensor.hottub_filter_last_changed
+            name: Filter Changed          
+            tap_action:
+              action: call-service
+              service: input_button.press
+              service_data:
+                entity_id: input_button.hottub_filter_last_changed
+              confirmation:
+                text: "Are you changing the filter ?"            
+          - entity: sensor.hottub_water_last_changed
+            name: Water Changed  
+            tap_action:
+              action: call-service
+              service: input_button.press
+              service_data:
+                entity_id: input_button.hottub_water_last_changed
+              confirmation:
+                text: "Are you changing the water ?"            
+        show_header_toggle: false
+        title: Hot Tub
+        type: entities
+        state_color: true
+        
+      - entities:
+          - entity: sensor.bathrobe_1_last_washed
+            name: Robe 1 
+            tap_action:
+              action: call-service
+              service: input_button.press
+              service_data:
+                entity_id: input_button.bathrobe_1
+              confirmation:
+                text: "Are you washing Robe 1 ?"
+          - entity: sensor.bathrobe_2_last_washed
+            name: Robe 2
+            tap_action:
+              action: call-service
+              service: input_button.press
+              service_data:
+                entity_id: input_button.bathrobe_2              
+              confirmation:
+                text: "Are you washing Robe 2 ?"
+          - entity: sensor.bathrobe_3_last_washed
+            name: Robe 3 
+            tap_action:
+              action: call-service
+              service: input_button.press
+              service_data:
+                entity_id: input_button.bathrobe_3              
+              confirmation:
+                text: "Are you washing Robe 3 ?"
+          - entity: sensor.bathrobe_4_last_washed
+            name: Robe 4 
+            tap_action:
+              action: call-service
+              service: input_button.press
+              service_data:
+                entity_id: input_button.bathrobe_4              
+              confirmation:
+                text: "Are you washing Robe 4 ?"
+          - entity: sensor.bathrobe_5_last_washed
+            name: Robe 5 
+            tap_action:
+              action: call-service
+              service: input_button.press
+              service_data:
+                entity_id: input_button.bathrobe_5              
+              confirmation:
+                text: "Are you washing Robe 5 ?"
+          - entity: sensor.bathrobe_6_last_washed
+            name: Robe 6   
+            tap_action:
+              action: call-service
+              service: input_button.press
+              service_data:
+                entity_id: input_button.bathrobe_6              
+              confirmation:
+                text: "Are you washing Robe 6 ?"  
+        columns: 3            
+        title: Bath Robes Last Washed
+        type: glance
+        
+  - icon: 'mdi:menu'
+    show_icon: true
+    show_name: false
+    styles:
+      card:
+        - height: 90px
+    tap_action:
+      action: navigate
+      haptic: success
+      navigation_path: /lovelace-switchboard/menu
+    type: 'custom:button-card'
+  - type: logbook
+    entities:
+      - sensor.hottub_summary
+    hours_to_show: 24
+
+  - entities:
+      - color: blue
+        entity: input_number.hottub_water_temp
+        name: Water
+        show_points: false
+      - color: green
+        entity: input_number.hottub_water_target
+        name: Guide
+        show_points: false        
+  #    - color: yellow
+     #   entity: input_number.hottub_standard_temp
+   #     name: Target Temp
+      - color: red
+        entity: sensor.hottub_heating_on        
+        name: Heater On
+        show_line: false
+        show_points: false
+        show_legend: false
+        y_axis: secondary        
+    font_size: 75
+    font_size_header: 22
+ #   lower_bound: 32
+    hour24: true
+    line_width: 3
+    name: ' '
+    hours_to_show: 12
+    points_per_hour: 6
+    show:
+      extrema: true
+      icon: false
+      labels: true
+      points: true
+    type: 'custom:mini-graph-card'
+
+
+
+
+
+
+
+
+#  - type: 'custom:button-card'
+#    aspect_ratio: 1/1
+#    custom_fields:
+#      readyby:
+#        card:
+#          type: conditional
+#          conditions:
+#            - entity: input_boolean.hottub_scheduled
+#              state: "on"
+#          card:
+#            type: entity
+#            entity: input_datetime.hottub_ready_by
+#            name: Ready By
+#            style: |
+#              ha-card {
+#                box-shadow: none;
+#              }
+#          tap_action:
+#            action: call-service
+#            service: script.turn_on
+#            service_data:
+#              entity_id: script.hottub_readyby_tap
+#          double_tap_action:
+#            action: call-service
+#            service: script.turn_on
+#            service_data:
+#              entity_id: script.hottub_readby_double_tap
+#      graph:
+#        card:
+#          type: sensor
+#          entity: input_number.hottub_water_temp
+#          name: Hot Tub
+#          graph: line
+#          style: |
+#            ha-card {
+#              box-shadow: none;
+#            }
+#    styles:
+#      custom_fields:
+#        graph:
+#          - filter: opacity(75%)
+#          - overflow: unset
+#      card: null
+#      grid:
+#        - grid-template-areas: '"i" "n" "readyby" "graph"'
+#        - grid-template-columns: 1fr
+#        - grid-template-rows: 1fr min-content min-content
+#    entity: sensor.hottub_summary
+#    show_name: false
+#    icon: 'mdi:help'
+#    tap_action:
+#      action: call-service
+#      service: script.turn_on
+#      service_data:
+#        entity_id: script.hottub_card_tap
+#    double_tap_action:
+#      action: call-service
+#      service: script.turn_on
+#      service_data:
+#        entity_id: script.hottub_card_double_tap
+#    state:
+#      - value: offline
+#        icon: 'mdi:access-point-off'
+#        color: red
+#      - value: filtering
+#        icon: 'mdi:air-filter'
+#        color: red      
+#      - value: circulating
+#        icon: 'mdi:water-pump'
+#        color: blue           
+#      - value: off
+#        icon: 'mdi:power'
+#        color: red
+#      - value: scheduled
+#        icon: 'mdi:clock'
+#        color: orange
+#      - value: heating
+#        icon: 'mdi:fire'
+#        color: red
+#      - value: in use
+#        icon: 'mdi:pool'
+#        color: red    
+
+
+
+#  - type: custom:button-card
+#    entity: 'input_number.hottub_water_temp'
+#    icon: 'mdi:hot-tub'
+#    aspect_ratio: 1/1
+#    name: Hot Tub
+#    styles:
+#      card:
+#        - background-color: '#000044'
+#        - border-radius: 10%
+#        - padding: 10%
+#        - color: ivory
+#        - font-size: 10px
+#        - text-shadow: 0px 0px 5px black
+#        - text-transform: capitalize
+#      grid:
+#        - grid-template-areas: '"i temp" "n n" "filter filter" "jets jets" "light light"'
+#        - grid-template-columns: 1fr 1fr
+#        - grid-template-rows: 1fr min-content min-content min-content min-content
+#      name:
+#        - font-weight: bold
+#        - font-size: 13px
+#        - color: white
+#        - align-self: middle
+#        - justify-self: start
+#        - padding-bottom: 4px
+#      img_cell:
+#        - justify-content: start
+#        - align-items: start
+#        - margin: none
+#      icon:
+#        - color: >
+#            [[[
+#              if (entity.state < 35) return 'green';
+#              if (entity.state >= 35 && entity.state < 38) return 'orange';
+#              else return 'red';
+#            ]]]
+#        - width: 70%
+#        - margin-top: -10%
+#      custom_fields:
+#        temp:
+#          - align-self: start
+#          - justify-self: end
+#        filter:
+#          - padding-bottom: 2px
+#          - align-self: middle
+#          - justify-self: start
+#          - --text-color-sensor: '[[[ if (states["input_numbere.hottub_water_temp"].state > 38) return "red"; ]]]'
+#        jets:
+#          - padding-bottom: 2px
+#          - align-self: middle
+#          - justify-self: start
+##          - --text-color-sensor: '[[[ if (states["sensor.raspi_ram"].state > 80) return "red"; ]]]'
+#        light:
+#          - align-self: middle
+#          - justify-self: start
+##          - --text-color-sensor: '[[[ if (states["sensor.raspi_sd"].state > 80) return "red"; ]]]'
+#    custom_fields:
+#      temp: >
+#        [[[
+#          return `<ha-icon
+#            icon="mdi:thermometer"
+#            style="width: 12px; height: 12px; color: yellow;">
+#            </ha-icon><span>${entity.state}°C</span>`
+#        ]]]
+#      filter: >
+#        [[[
+#          return `<ha-icon
+#            icon="mdi:recycle"
+#            style="width: 12px; height: 12px; color: deepskyblue;">
+#            </ha-icon><span>Filter: <span style="color: var(--text-color-sensor);">${states['binary_sensor.spa_filter1'].state}%</span></span>`
+#        ]]]
+#      jets: >
+#        [[[
+#          return `<ha-icon
+#            icon="mdi:fan"
+#            style="width: 12px; height: 12px; color: deepskyblue;">
+#            </ha-icon><span>Jets: <span style="color: var(--text-color-sensor);">${states['fan.spa_pump1'].state or states['fan.spa_pump2'].state}%</span></span>`
+#        ]]]
+#      light: >
+#        [[[
+#          return `<ha-icon
+#            icon="mdi:light"
+#            style="width: 12px; height: 12px; color: deepskyblue;">
+#            </ha-icon><span>Light: <span style="color: var(--text-color-sensor);">${states['switch.spa_light1'].state}%</span></span>`
+#        ]]]

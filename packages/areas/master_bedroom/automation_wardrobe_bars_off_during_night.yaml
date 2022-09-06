@@ -1,0 +1,27 @@
+automation:
+  - id: wardrobe_bars_off_during_night
+    alias: 'Switch off wardrobe bars during night '
+
+    description: >
+      Switch off wardrobe bars during night
+      If there is a powercut, these lights switch on when the power comes back on.
+      They are in the bedroom and very bright, so this automation detects that and switches them off.      
+      
+    trigger:
+      - platform: state
+        id: "bars"
+        entity_id: light.master_bedroom_wardrobe_bars
+        to: 'on'
+        
+    condition:
+      - condition: state
+        entity_id: 
+          - input_boolean.bruce_is_asleep
+          - input_boolean.sarah_is_asleep
+        match: any
+        state: 'on'
+    
+    action:
+      - service: light.turn_off
+        target:
+          entity_id: light.master_bedroom_wardrobe_bars

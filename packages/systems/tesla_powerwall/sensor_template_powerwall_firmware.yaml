@@ -1,0 +1,6 @@
+template:
+  sensor:
+    - name: "Powerwall Firmware"
+      unique_id: powerwall_firmware_version
+      availability: "{{ device_attr(device_id('binary_sensor.grid_services_active'), 'sw_version') != 'Unavailable' }}"
+      state: "{{ device_attr(device_id('binary_sensor.grid_services_active'), 'sw_version') }}"

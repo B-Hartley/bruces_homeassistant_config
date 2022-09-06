@@ -1,0 +1,5 @@
+template:
+  sensor:
+    - name: "Hottub Summary"
+      availability: "{{ states('sensor.hottub_online') }}"
+      state: "{% if is_state('sensor.hottub_online','false') %}offline{% elif is_state('sensor.hottub_error','on') %}error{% elif is_state('input_boolean.hottub_scheduled','on') and is_state('switch.hottub_filter','off') %}scheduled{% elif is_state('switch.hottub_power','off') %}off{% elif state_attr('sensor.hottub_status','heat_temp_reach')==1 %}at temperature{% elif is_state('switch.hottub_heat','on') %}heating{% elif is_state('switch.hottub_filter','off') %}on{% elif is_state('switch.hottub_heat','off') %}filtering{% elif is_state('switch.hottub_bubbles','off') %}heating{% else %}bubbling{% endif %}"

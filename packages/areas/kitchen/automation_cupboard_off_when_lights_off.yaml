@@ -1,0 +1,21 @@
+automation:
+  - id: cupboard_off_when_lights_off
+    alias: 'Turn off cupboard when kitchen lights off'
+    
+    description: >
+      All kitchen lights off, cupboard off too
+      
+    trigger: 
+      - platform: state
+        id: "off"
+        entity_id: light.kitchen_main
+        from: 'on'
+        to: 'off'
+        
+    action:
+      - service: light.turn_off
+        target:
+          entity_id: 
+            - light.kitchen_cupboard
+            - light.kitchen_kickboard    
+            - light.kitchen_worktop     

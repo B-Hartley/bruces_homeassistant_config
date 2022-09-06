@@ -1,0 +1,38 @@
+automation:
+  - id: link_jyggy_charge_limit
+    alias: Link Jyggy Charge Limit
+    
+    description: >
+      Link Jyggy Charge Limit to Input Number
+      
+    trigger:
+      - platform: homeassistant
+        id: "car"
+        event: start
+      - platform: event
+        id: "reload"
+        event_type: automation_reloaded             
+      - platform: state
+        id: "dropdown"
+        entity_id: input_number.jyggy_charge_limit
+        for: 2
+      - platform: state
+        id: "car"
+        entity_id: sensor.jyggy_charge_limit_soc          
+          
+    action:
+      - choose:
+          - conditions: 
+              - condition: trigger
+                id: 'dropdown'
+            sequence:
+              - service: rest_command.jyggy_api
+                data:
+                  teslafi_token: !secret teslafi_token                 
+                  jyggy_command: "set_charge_limit&charge_limit_soc={{ states('input_number.jyggy_charge_limit')|int(0) }}"
+        default:
+          - service: input_number.set_value
+            target: 
+              entity_id: input_number.jyggy_charge_limit
+            data:
+              value: "{{ states('sensor.jyggy_charge_limit_soc') }}"

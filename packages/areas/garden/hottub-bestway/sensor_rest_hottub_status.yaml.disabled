@@ -1,0 +1,42 @@
+sensor:
+  - platform: rest
+    name: hottub_status
+    scan_interval: 30
+    timeout: 20    
+#    resource: https://euapi.gizwits.com/app/devdata/{my did}/latest
+    resource: !secret bestway_status_url
+    device_class: timestamp
+    headers:
+      Content-Type: application/json
+      X-Gizwits-Application-Id: 98754e684ec045528b073876c34c7348
+    method: GET
+    value_template: "{{ value_json.updated_at | timestamp_custom ('%Y-%m-%dT%H:%M:%S+00:00') }}"
+    json_attributes_path: "$.attr"
+    json_attributes:
+      - temp_now          # Temperature of Water in Pump
+      - temp_set          # Target Temperature
+      - temp_set_unit     # Temperature displayed in C or F
+      - power             # Power - 1:On, 0:Off
+      - filter_appm_min   # Start Filter in x minutes
+      - filter_power      # Power - 1:On, 0:Off
+      - filter_timer_min  # Filter for x minutes      
+      - heat_appm_min     # Start Heat in x minutes
+      - heat_power        # Heater - 1:On, 0:Off
+      - heat_timer_min    # Heat for x minutes
+      - heat_temp_reach   # Target Temperature Reached
+      - wave_power        # Bubbles - 1:On, 0:Off
+      - wave_appm_min     # Start Bubbles in x minutes
+      - wave_timer_min    # Bubbles for x minutes
+      - locked            # Pump Keypad Locked
+      - earth             # Earth Fault
+      - system_err1       # Error 1 - Sensor Error / Water Flow Error / Debris Buildup
+      - system_err2       # Error 2 - Water Flow Error
+      - system_err3       # Error 3 - Temperature too low / Thermostat broken
+      - system_err4       # Error 4 - Temperature too high / Thermostat broken / Thermostat needs reset
+      - system_err5       # Error 5 - Temperature too high / Thermostat broken / Thermostat needs reset
+      - system_err6       # Error 6 - Electrical Fault (Current Variation)
+      - system_err7       # Error 7 - Electrical Fault
+      - system_err8       # Error 8 - Thermostat needs reset
+      - system_err9       # Error 9 - Internal Fuse Failure
+      
+# https://support.bestwayaftersales.co.uk/faq/get-help-with-your-lay-z-spa-pump/      

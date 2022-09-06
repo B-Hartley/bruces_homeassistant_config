@@ -1,0 +1,7 @@
+solcast:
+  api_key: !secret solcast_api_key2
+  resource_id: !secret solcast_resource2a_id
+  api_limit: 19 # 20  (1 call used for overnight batch upload?)
+  disable_ssl_check: False
+  disable_automatic_forecast_fetching: True
+  disable_automatic_history_fetching: True  

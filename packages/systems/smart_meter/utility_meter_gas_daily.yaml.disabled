@@ -1,0 +1,4 @@
+utility_meter:
+  daily_gas:
+    source: sensor.gas_meter_kwh
+    cycle: daily

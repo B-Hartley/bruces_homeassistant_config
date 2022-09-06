@@ -1,0 +1,3 @@
+wirelesstag:
+  username: !secret wireless_tags_user
+  password: !secret wireless_tags_pass

@@ -1,0 +1,22 @@
+type: conditional
+#view_layout:
+#  position: sidebar
+conditions:
+  - entity: input_boolean.floorplan_show_guest_bedroom_switches
+    state: "on"
+card:
+ type: entities
+ entities:
+  - entity: light.guest_bedroom_light
+    hide_state: true
+    name: Ceiling Light
+    type: 'custom:slider-entity-row'
+  - entity: light.guest_bedroom_bedside
+    hide_state: true
+    name: Bedside
+    type: 'custom:slider-entity-row'
+  - entity: input_boolean.floorplan_show_guest_bedroom_switches
+    name: Show These Switches    
+
+
+  

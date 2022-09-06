@@ -1,0 +1,11 @@
+script:
+              
+    'initjyggytracker':
+      alias: Init Jyggy Tracker
+      sequence:
+        service: device_tracker.see
+        data:
+          dev_id: jyggy
+          gps:
+            - "{{ states('sensor.jyggy_latitude') }}"
+            - "{{ states('sensor.jyggy_longitude') }}"

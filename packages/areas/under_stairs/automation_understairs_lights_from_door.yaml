@@ -1,0 +1,48 @@
+automation:
+  - id: under_stairs_light_from_door
+    alias: Under stairs lights on and off from door
+    mode: restart
+    
+    description: >
+      Understairs light on and off with door and timer
+    
+    trigger: 
+      - platform: homeassistant
+        id: "start"
+        event: start
+      - platform: event
+        id: "reload"
+        event_type: automation_reloaded    
+      - platform: state
+        id: "open"
+        entity_id: binary_sensor.under_stairs_door
+        to: 'on'
+      - platform: state
+        id: "closed"
+        entity_id: binary_sensor.under_stairs_door
+        to: 'off'
+        
+    action:
+      - choose:
+          - conditions: 
+              - condition: state
+                entity_id: binary_sensor.under_stairs_door
+                state: 'on'
+            sequence:
+              - service: light.turn_on
+                target:
+                  entity_id: light.under_stairs_light          
+              - delay: 00:15:00
+              - service: light.turn_off
+                target:
+                  entity_id: light.under_stairs_light       
+
+          - conditions: 
+              - condition: state
+                entity_id: binary_sensor.under_stairs_door
+                state: 'off'
+            sequence:
+              - service: light.turn_off
+                target:
+                  entity_id: light.under_stairs_light          
+                  

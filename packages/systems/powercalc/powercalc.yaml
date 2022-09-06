@@ -1,0 +1,3 @@
+powercalc:
+  create_domain_groups:
+    - light

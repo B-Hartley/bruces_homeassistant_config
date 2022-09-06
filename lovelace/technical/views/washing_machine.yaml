@@ -1,0 +1,31 @@
+title: Washing Machine
+path: washing-machine
+icon: 'mdi:washing-machine'
+badges: []
+cards:
+  - type: sensor
+    entity: sensor.washing_machine_current_consumption
+    graph: line
+    icon: 'mdi:washing-machine'
+    hours_to_show: 1
+  - type: entities
+    entities:
+      - entity: switch.washing_machine
+      - entity: input_boolean.washing_machine_switch
+      - entity: sensor.washing_machine_state
+      - entity: input_text.washing_machine_progress
+  - type: entities
+    entities:
+      - entity: binary_sensor.fridge_icemaker
+      - entity: binary_sensor.fridge_freezer_door
+      - entity: sensor.fridge_freezer_temperature
+      - entity: sensor.fridge_freezer_setpoint      
+      - entity: binary_sensor.fridge_door      
+      - entity: binary_sensor.fridge_rapidfreezing       
+      - entity: sensor.fridge_fridge_temperature
+      - entity: sensor.fridge_fridge_setpoint
+      - entity: binary_sensor.fridge_rapidcooling
+  - type: logbook
+    entities: 
+      - sensor.washing_machine_state
+    hours_to_show: 4

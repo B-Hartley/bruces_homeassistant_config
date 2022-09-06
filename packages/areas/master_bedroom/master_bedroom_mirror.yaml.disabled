@@ -1,0 +1,78 @@
+# Example configuration.yaml entry
+rest_command:
+  set_mirror_brightness_profile:
+    url: https://simpleplus.simplehuman.com:443/apiV1/device/calLUXProfile/update
+    method: POST
+    headers:
+      uuid: !secret mirror_uuid
+      Content-Type: application/json
+    payload: '{"deviceId": "247D4D8BBE53","brightness": "{{ brightness }}", "profileId":"{{ profileId }}"}'
+    content_type:  'application/json; charset=utf-8'
+    verify_ssl: true
+    
+    # Current status message for Rest Sensor ?
+    # Battery Level?
+    # Current Brightness?
+    # Auto brightness?
+    # colour profile?
+    # office - 4528 K - 90% max lux ?
+    
+sensor:
+- platform: rest
+  name: Mirror Sensor
+  resource: https://simpleplus.simplehuman.com:443/apiV1/ownedProduct/get
+  value_template: 'OK'
+  headers:
+    uuid: !secret mirror_uuid
+    Content-Type: application/json
+#  json_attributes:
+#    - brightness
+#    - batteryState
+#  json_attributes_path: '$.iotDevice'
+- platform: template
+  sensors:
+    mirror_brightness:
+      friendly_name: "Brightness"
+      value_template: "{{states.sensor.mirror_sensor.attributes.iotDevice.brightness}}"  
+    mirror_auto_brightness:
+      friendly_name: "Auto Brightness"
+      value_template: "{{states.sensor.mirror_sensor.attributes.iotDevice.autoBrightness}}"
+    mirror_battery_state:
+      friendly_name: "Battery State"
+      value_template: "{{states.sensor.mirror_sensor.attributes.iotDevice.batteryState}}"    
+    mirror_battery_voltage:
+      friendly_name: "Battery Voltage"
+      value_template: "{{states.sensor.mirror_sensor.attributes.iotDevice.batteryVoltage}}"      
+    mirror_color_temperature:
+      friendly_name: "Colour Temperature"
+      value_template: "{{states.sensor.mirror_sensor.attributes.iotDevice.colorTemperature}}"            
+    mirror_alarm_time:
+      friendly_name: "Alarm Time"
+      value_template: "{{states.sensor.mirror_sensor.attributes.iotDevice.alarmTime}}"            
+    mirror_rssi:
+      friendly_name: "RSSI"
+      value_template: "{{states.sensor.mirror_sensor.attributes.iotDevice.rssi}}"           
+    mirror_current_state:
+      friendly_name: "Current State"
+      value_template: "{{states.sensor.mirror_sensor.attributes.iotDevice.currentState}}"    
+      
+automation:
+  - alias: Set Mirror slider
+    trigger:
+      platform: state
+      entity_id: sensor.mirror_brightness
+    action:
+      service: input_number.set_value
+      data:
+        entity_id: input_number.mirror_brightness
+        value: "{{ states('sensor.mirror_brightness') | float }}"
+
+  - alias: Mirror slider moved
+    trigger:
+      platform: state
+      entity_id: input_number.mirror_brightness
+    action:
+      service: rest_command.set_mirror_brightness_profile
+      data:
+        brightness: "{{ states('input_number.mirror_brightness') | int }}"
+        profileId: 4

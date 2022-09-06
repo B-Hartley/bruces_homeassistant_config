@@ -1,0 +1,74 @@
+template:
+  - binary_sensor:
+      - name: "Garage Back Door Low Battery"
+        unique_id: garage_door_low_battery
+        device_class: battery
+        state: "{{ (states('sensor.garage_back_door_battery')|float(0)) < 20.0 }}"    
+  - binary_sensor:
+      - name: "Bar Door Low Battery"
+        unique_id: bar_door_low_battery
+        device_class: battery
+        state: "{{ (states('sensor.bar_door_battery')|float(0)) < 20.0 }}"        
+  - binary_sensor:
+      - name: "Conservatory Door Low Battery"
+        unique_id: conservatory_door_low_battery
+        device_class: battery
+        state: "{{ (states('sensor.conservatory_door_battery')|float(0)) < 20.0 }}"   
+  - binary_sensor:       
+      - name: "Downstairs Toilet Door Low Battery"
+        unique_id: downstairs_toilet_door_low_battery
+        device_class: battery
+        state: "{{ (states('sensor.downstairs_toilet_door_battery')|float(0)) < 20.0 }}" 
+  - binary_sensor:
+      - name: "Drum Room Door Low Battery"
+        unique_id: drum_room_door_low_battery
+        device_class: battery
+        state: "{{ (states('sensor.drum_room_door_battery')|float(0)) < 20.0 }}"    
+  - binary_sensor:    
+      - name: "Front Door Low Battery"
+        unique_id: front_door_low_battery
+        device_class: battery
+        state: "{{ (states('sensor.front_door_battery')|float(0)) < 20.0 }}"   
+  - binary_sensor:   
+      - name: "Kitchen Door Low Battery"
+        unique_id: kitchen_door_low_battery
+        device_class: battery
+        state: "{{ (states('sensor.kitchen_door_battery')|float(0)) < 20.0 }}"   
+  - binary_sensor:
+      - name: "Lounge Door Low Battery"
+        unique_id: lounge_door_low_battery
+        state: "{{ (states('sensor.lounge_door_battery')|float(0)) < 20.0 }}"  
+  - binary_sensor:
+      - name: "Under Stairs Door Low Battery"
+        unique_id: under_stairs_door_low_battery
+        device_class: battery
+        state: "{{ (states('sensor.under_stairs_door_battery')|float(0)) < 20.0 }}"   
+  - binary_sensor:     
+      - name: "Guest Bedroom Door Low Battery"
+        unique_id: guest_bedroom_door_low_battery
+        device_class: battery
+        state: "{{ (states('sensor.guest_bedroom_door_battery')|float(0)) < 20.0 }}"   
+  - binary_sensor: 
+      - name: "Kate's Bedroom Door Low Battery"
+        unique_id: kates_bedroom_door_low_battery
+        device_class: battery
+        state: "{{ (states('sensor.kates_bedroom_door_battery')|float(0)) < 20.0 }}"  
+  - binary_sensor:         
+      - name: "Sophie's Bedroom Door Low Battery"
+        unique_id: sophies_bedroom_door_low_battery
+        state: "{{ (states('sensor.sophies_bedroom_door_battery')|float(0)) < 20.0 }}"    
+  - binary_sensor:     
+      - name: "Master Bedroom Door Low Battery"
+        unique_id: master_bedroom_door_low_battery
+        device_class: battery
+        state: "{{ (states('sensor.master_bedroom_door_battery')|float(0)) < 20.0 }}"   
+  - binary_sensor:  
+      - name: "Wardrobe 1 Door Low Battery"
+        unique_id: wardrobe_door_1_low_battery
+        device_class: battery
+        state: "{{ (states('sensor.wardrobe_door_1_battery')|float(0)) < 20.0 }}"  
+  - binary_sensor:        
+      - name: "Wardrobe 2 Door Low Battery"
+        unique_id: wardrobe_door_2_low_battery
+        device_class: battery
+        state: "{{ (states('sensor.wardrobe_door_2_battery')|float(0)) < 20.0 }}"   

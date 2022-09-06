@@ -1,0 +1,176 @@
+icon: 'mdi:compass'
+path: house-tracking
+title: House Tracking
+visible:
+  - user: 86df00251766415c9acf21b3b3e51496
+badges: []
+cards:
+  - entities:
+      - entity: binary_sensor.lounge_motion
+        name: Lounge
+      - entity: binary_sensor.kitchen_motion
+        name: Kitchen
+      - entity: binary_sensor.kitchen_2_motion
+        name: Kitchen 2
+      - entity: binary_sensor.landing_motion
+        name: Landing
+      - entity: binary_sensor.bar_motion
+        name: Bar
+      - entity: binary_sensor.utility_motion
+        name: Utility
+      - entity: binary_sensor.motion_stairs
+        name: Stairs
+      - entity: binary_sensor.patio_motion
+        name: Patio
+      - entity: binary_sensor.gazebo_motion
+        name: Gazebo
+      - entity: binary_sensor.bins_motion
+        name: Bins
+      - entity: binary_sensor.drive_motion
+        name: Drive
+      - entity: binary_sensor.downstairs_toilet_motion
+        name: Downstairs Loo
+      - entity: binary_sensor.under_stairs_motion
+        name: Under Stairs
+    hours_to_show: 4
+    refresh_interval: 0
+    title: Motion Sensors - Last 4 Hours
+    type: history-graph
+  - card:
+      show_header_toggle: false
+      show_state: false
+      title: Radiators - Off
+      type: glance
+    entities:
+      - entity: climate.conservatory_rad
+        name: Conservatory
+      - entity: climate.downstairs_loo_rad
+        name: Downstairs Loo
+      - entity: climate.drum_room_rad
+        name: Drum Room
+      - entity: climate.guest_bedroom_rad
+        name: Guest Bedroom
+      - entity: climate.hall_rad
+        name: Hall
+      - entity: climate.kates_bathroom_rad
+        name: Kate Bathroom
+      - entity: climate.kates_bedroom_rad
+        name: Kate Bedroom
+      - entity: climate.kitchen_rad
+        name: Kitchen
+      - entity: climate.kitchen_tall_rad
+        name: Kitchen Tall
+      - entity: climate.landing_rad
+        name: Landing
+      - entity: climate.landing_rad_2
+        name: Landing 2
+      - entity: climate.lounge_bay_rad
+        name: Lougne Bay
+      - entity: climate.lounge_rad
+        name: Lounge
+      - entity: climate.master_bedroom_rad
+        name: Master Bedroom
+      - entity: climate.sophies_bedroom_rad
+        name: Sophie Bedroom
+      - entity: climate.studio_rad
+        name: Studio
+    show_empty: false
+    state_filter:
+      - 'off'
+    type: entity-filter
+  - card:
+      show_header_toggle: false
+      title: Radiators - Heating
+      type: entities
+    entities:
+      - entity: climate.conservatory_rad
+        name: Conservatory
+      - entity: climate.downstairs_loo_rad
+        name: Downstairs Loo
+      - entity: climate.drum_room_rad
+        name: Drum Room
+      - entity: climate.guest_bedroom_rad
+        name: Guest Bedroom
+      - entity: climate.hall_rad
+        name: Hall
+      - entity: climate.kates_bathroom_rad
+        name: Kate Bathroom
+      - entity: climate.kates_bedroom_rad
+        name: Kate Bedroom
+      - entity: climate.kitchen_rad
+        name: Kitchen
+      - entity: climate.kitchen_tall_rad
+        name: Kitchen Tall
+      - entity: climate.landing_rad
+        name: Landing
+      - entity: climate.landing_rad_2
+        name: Landing 2
+      - entity: climate.lounge_bay_rad
+        name: Lounge Bay
+      - entity: climate.lounge_rad
+        name: Lounge
+      - entity: climate.master_bedroom_rad
+        name: Master Bedroom
+      - entity: climate.sophies_bedroom_rad
+        name: Sophie Bedroom
+      - entity: climate.studio_rad
+        name: Studio
+    show_empty: false
+    state_filter:
+      - attribute: hvac_action
+        operator: ==
+        value: heating
+    type: entity-filter
+  - card:
+      title: Girls at home Tonight?
+      type: glance
+    entities:
+      - entity: calendar.kate_yarbury
+        image: /local/kate.jpg
+        name: Kate
+        show_icon: false
+        show_state: false
+      - entity: calendar.sophie_yarbury
+        image: /local/sophie.jpg
+        name: Sophie
+        show_icon: false
+        show_state: false
+    show_empty: false
+    state_filter:
+      - 'on'
+    type: entity-filter
+  - entities:
+      - entity: sensor.bruce_iphone_ble_room_presence
+        name: Bruce iPhone
+      - entity: sensor.bruces_apple_watch_room_presence
+        name: Bruce Watch
+      - entity: sensor.sarah_iphone_ble_room_presence
+        name: Sarah iPhone
+      - entity: sensor.sarahs_apple_watch_room_presence
+        name: Sarah Watch
+      - entity: sensor.kate_iphone_ble_room_presence
+        name: Kate iPhone
+      - entity: sensor.sophie_iphone_ble_room_presence
+        name: Sophie iPhone
+      - entity: sensor.sophies_apple_watch_room_presence
+        name: Sophie Watch
+      - entity: sensor.dog_animo_ble_room_presence
+        name: Dog Animo
+    type: entities
+  - entities:
+      - entity: binary_sensor.front_door
+        name: Front Door
+      - entity: binary_sensor.back_door
+        name: Back Door
+      - entity: binary_sensor.lounge
+        name: Lounge
+      - entity: binary_sensor.kitchen
+        name: Kitchen
+      - entity: binary_sensor.landing
+        name: Landing
+      - entity: binary_sensor.study
+        name: Bar
+    hours_to_show: 4
+    refresh_interval: 0
+    title: Alarm Motion Sensors - Last 2 Hours
+    type: history-graph

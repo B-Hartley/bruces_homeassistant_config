@@ -1,0 +1,18 @@
+automation:
+  - id: update_meater
+    alias: 'Update Meater when switching on and off'
+    mode: single 
+    
+    description: >
+      Update the Meater sensor when switching on or off
+
+    trigger:    
+      - platform: state
+        entity_id: input_boolean.meater
+        to: 'on'
+     
+    action:
+      - alias: Update Meater sensor
+        service: homeassistant.update_entity
+        target:
+          entity_id: sensor.meater_meat

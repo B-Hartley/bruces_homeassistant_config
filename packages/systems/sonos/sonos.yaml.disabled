@@ -1,0 +1,10 @@
+sonos:
+  media_player:
+    hosts:
+      - !secret sonos_kate_ip
+      - !secret sonos_kitchen_ip
+      - !secret sonos_masterbed_ip
+      - !secret sonos_move_ip
+      - !secret sonos_sophie_ip
+      - !secret sonos_bar_ip
+      - !secret sonos_lounge_ip

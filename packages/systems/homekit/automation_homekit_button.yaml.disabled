@@ -1,0 +1,21 @@
+automation:
+  - id: ios_remote_homekit_skyq_lounge
+    alias: 'iOS remote skyQ Lounge'
+    
+    description: >
+      Handle Homekit ios remote for skyQ Lounge
+      
+    trigger:
+      - platform: event
+        id: "ios"
+        event_type: homekit_tv_remote_key_pressed
+        event_data:
+            entity_id: media_player.lounge_skyq
+            
+    action:
+      - service: media_player.play_media
+        target:
+          entity_id: media_player.lounge_skyq
+        data:
+          media_content_id: "{% set map = {'select':'select','information':'i','back':'dismiss','arrow_up':'up','arrow_down':'down','arrow_left':'left','arrow_right':'right'} %}{{ map[trigger.event.data.key_name] }}"
+          media_content_type: skyq            

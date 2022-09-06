@@ -1,0 +1,106 @@
+card:
+  show_state: false
+  type: glance
+entities:
+  - entity: lock.jyggy_doors
+    name: Jyggy
+    state_filter:
+      - unlocked
+  - entity: binary_sensor.jyggy_fd_window
+    name: Jyggy FD Window
+    state_filter:
+      - 'on'    
+  - entity: binary_sensor.jyggy_fp_window
+    name: Jyggy FP Window
+    state_filter:
+      - 'on'          
+  - entity: binary_sensor.jyggy_rd_window
+    name: Jyggy RD Window
+    state_filter:
+      - 'on'    
+  - entity: binary_sensor.jyggy_rp_window
+    name: Jyggy RP Window
+    state_filter:
+      - 'on'   
+  - entity: binary_sensor.hot_tub_door
+    name: Hot Tub Lid
+    state_filter:
+      - 'on'      
+  - entity: binary_sensor.back_gate
+    name: Back Gate
+    state_filter:
+      - 'on'
+  - entity: binary_sensor.conservatory_door
+    name: Conservatory
+    state_filter:
+      - 'on'
+  - entity: binary_sensor.back_door
+    name: Back Door
+    state_filter:
+      - 'on'
+  - entity: binary_sensor.front_door
+    name: Front Door
+    state_filter:
+      - 'on'
+  - entity: binary_sensor.guest_bedroom_door
+    name: Guest Bed
+    state_filter:
+      - 'on'
+  - entity: binary_sensor.master_bedroom_door
+    name: Master Bed
+    state_filter:
+      - 'off'
+  - entity: binary_sensor.downstairs_toilet_door
+    name: Loo
+    state_filter:
+      - 'off'
+  - entity: binary_sensor.kates_bedroom_door
+    name: Kate's
+    state_filter:
+      - 'on'
+  - entity: binary_sensor.lounge_door
+    name: Lounge
+    state_filter:
+      - 'on'
+  - entity: binary_sensor.sophies_bedroom_door
+    name: Sophie's
+    state_filter:
+      - 'on'
+  - entity: binary_sensor.drum_room_door
+    name: Drum room
+    state_filter:
+      - 'off'
+  - entity: binary_sensor.under_stairs_door
+    name: Under Stairs
+    state_filter:
+      - 'on'
+  - entity: binary_sensor.main_bathroom_door
+    name: Bathroom
+    state_filter:
+      - 'off'
+#  - entity: binary_sensor.bar_door
+#    name: Bar
+#    state_filter:
+#      - 'on'
+#  - entity: binary_sensor.master_bedroom_ensuite_door
+#    name: En-Suite
+#    state_filter:
+#      - 'on'
+  - entity: binary_sensor.master_bedroom_wardrobe_door_1
+    name: Wardrobe 1
+    state_filter:
+      - 'on'
+  - entity: binary_sensor.master_bedroom_wardrobe_door_2
+    name: Wardrobe 2
+    state_filter:
+      - 'on'
+  - entity: binary_sensor.shed_door
+    name: Shed
+    state_filter:
+      - 'on'      
+  - entity: binary_sensor.garage_back_door
+    name: Shed
+    state_filter:
+      - 'on'          
+show_empty: false
+type: entity-filter

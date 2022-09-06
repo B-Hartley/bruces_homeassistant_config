@@ -1,0 +1,37 @@
+#- from github.com/basnijholt/home-assistant-config
+automation:
+- alias: "Frontend: turn on dark mode"
+  trigger:
+    platform: time
+    at: "20:00"
+  action:
+    entity_id: input_boolean.dark_mode
+    service: input_boolean.turn_on
+
+- alias: "Frontend: turn on light mode"
+  trigger:
+    platform: time
+    at: "06:00"
+  action:
+    entity_id: input_boolean.dark_mode
+    service: input_boolean.turn_off
+
+- alias: "Frontend: change theme"
+  trigger:
+    - platform: state
+      entity_id: input_select.theme
+    - platform: state
+      entity_id: input_boolean.dark_mode
+    - platform: state
+      entity_id: input_boolean.theme_alternative
+    - platform: homeassistant
+      event: start
+  action:
+    service: frontend.set_theme
+    data:
+      name: >
+        {% set which = "dark" if is_state("input_boolean.dark_mode", "on") else "light" -%}
+        {% set name = states("input_select.theme") -%}
+        {% set suffix = "-alternative" if is_state("input_boolean.theme_alternative", "on") else "" -%}
+        ios-{{ which }}-mode-{{ name }}{{ suffix }}
+

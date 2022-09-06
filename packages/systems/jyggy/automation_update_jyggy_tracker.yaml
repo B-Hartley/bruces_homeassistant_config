@@ -1,0 +1,22 @@
+automation:
+  - id: update jyggy tracker
+    alias: update Jyggy Tracker using Lat and Long
+    mode: single
+#    initial_state: off
+    
+    description: >
+      update Jyggy Tracker using Lat and Long
+      
+    trigger:
+      platform: state
+      entity_id: 
+        - sensor.jyggy_latitude
+        - sensor.jyggy_longitude
+
+    action:
+      service: device_tracker.see
+      data:
+        dev_id: jyggy
+        gps:
+          - "{{ states('sensor.jyggy_latitude') }}"
+          - "{{ states('sensor.jyggy_longitude') }}"

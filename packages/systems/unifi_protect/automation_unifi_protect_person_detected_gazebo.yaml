@@ -1,0 +1,69 @@
+automation:
+  - id: unifi_protect_person_detected_gazebo
+    alias: Send message when person detected gazebo
+    mode: single
+    
+    description: >
+      record and send a video when person seen
+      
+    trigger:
+      - platform: state
+        id: 'person'
+        entity_id:  sensor.gazebo_detected_object
+        to: person
+        
+    variables:
+      pic_file: "{{ 'gazebo_' + now().strftime('%d%m%H%M') }}"    
+      pic_folder: "/config/www/cam_snaps/"      
+      base_url: !secret base_url
+      
+    action:
+      - alias: "send photo by telegram"
+        service: telegram_bot.send_photo
+        data:
+          caption: "I have seen a person on the gazebo camera."
+#                  url: "{{ base_url + state_attr('camera.gazebo_medium','entity_picture') }}"
+          url: "{{ base_url + state_attr('sensor.gazebo_detected_object','event_thumbnail') }}"
+          message_tag: object_detected_gazebo                  
+          target: !secret telegram_chat_id_bruce
+          
+      - alias: "record camera to mp4"
+        service: camera.record
+        target:
+          entity_id: camera.gazebo_medium       
+        data:
+          duration: 10
+          filename: "{{ pic_folder + pic_file }}.mp4"    
+          
+      - alias: "Wait for Event to End"
+        wait_for_trigger:
+          - platform: state
+            entity_id: sensor.gazebo_detected_object
+            to: "none"
+            
+      - alias: "delete Telegram message"
+        service: telegram_bot.delete_message
+        data:
+          message_id: "{{ states('input_text.object_detected_gazebo_message_id') }}"
+          chat_id: !secret telegram_chat_id_bruce
+          
+      - alias: "send photo by telegram"          
+        service: telegram_bot.send_photo
+        data:
+          caption: "I have seen a person on the gazebo camera."
+          url: "{{ base_url + wait.trigger.from_state.attributes.event_thumbnail }}"
+          message_tag: object_detected_gazebo                  
+          target: !secret telegram_chat_id_bruce    
+          
+      - alias: "wait for video file to be written"
+        wait_template: "{{ pic_file in states.sensor.cam_snaps.attributes.file_list }}"
+        timeout: '00:00:20'
+        
+      - alias: "Edit telegram message to add keyboard"        
+        service: telegram_bot.edit_caption
+        data:
+          message_id: "{{ states('input_text.object_detected_gazebo_message_id') }}"
+          chat_id: !secret telegram_chat_id_bruce  
+          caption: "I have seen a person on the gazebo camera."
+          inline_keyboard:
+            - "Video:/vdd {{pic_file}}, OK:/remove_keyboard"                   

@@ -1,0 +1,25 @@
+lock:
+  - platform: template
+    name: Jyggy Doors
+    unique_id: jyggy_doors
+    value_template: "{{ 'unlocked' if is_state('binary_sensor.jyggy_locked','off') else 'locked' }}"
+    lock:
+      - service: rest_command.jyggy_api
+        data:
+          teslafi_token: !secret teslafi_token
+          jyggy_command: door_lock
+      - delay: 5
+      - service: homeassistant.update_entity
+        entity_id: binary_sensor.jyggy_locked
+    unlock:
+      - service: rest_command.jyggy_api
+        data:
+          teslafi_token: !secret teslafi_token        
+          jyggy_command: wake_up
+      - service: rest_command.jyggy_api
+        data:
+          teslafi_token: !secret teslafi_token        
+          jyggy_command: door_unlock
+      - delay: 5        
+      - service: homeassistant.update_entity
+        entity_id: binary_sensor.jyggy_locked

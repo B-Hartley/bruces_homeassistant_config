@@ -1,0 +1,20 @@
+card:
+  type: glance
+filter:
+  template: >
+    {%if is_state('sensor.bin_day_recycling', (as_timestamp(now()) +
+    86400) | timestamp_custom('%A %-d %B', True)) or
+    is_state('sensor.bin_day_recycling', (as_timestamp(now())) |
+    timestamp_custom('%A %-d %B',
+    True))%}sensor.bin_day_recycling{%endif%} {%if
+    is_state('sensor.bin_day_rubbish', (as_timestamp(now()) + 86400) |
+    timestamp_custom('%A %-d %B', True)) or
+    is_state('sensor.bin_day_rubbish', (as_timestamp(now()) ) |
+    timestamp_custom('%A %-d %B',
+    True))%}sensor.bin_day_rubbish{%endif%} {%if
+    is_state('sensor.bin_day_garden', (as_timestamp(now()) + 86400) |
+    timestamp_custom('%A %-d %B', True)) or
+    is_state('sensor.bin_day_garden', (as_timestamp(now()) ) |
+    timestamp_custom('%A %-d %B', True))%}sensor.bin_day_garden{%endif%}
+show_empty: false
+type: 'custom:auto-entities'

@@ -1,0 +1,6 @@
+template:
+  sensor:
+    - name: "Hottub Pump Temp"
+      availability: "{{ states('binary_sensor.hottub_online') }}"
+      unit_of_measurement: '°C'
+      state: "{{ state_attr('sensor.hottub_status', 'temp_now') | int }}"  

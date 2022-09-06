@@ -1,0 +1,37 @@
+card:
+  show_title: false
+  title: Powered on
+  type: glance
+entities:
+  - entity: switch.electric_blanket_sarah
+    hold_action:
+      action: more-info
+    name: Sarah Blanket
+    show_state: false
+    tap_action:
+      action: toggle
+  - entity: switch.electric_blanket_bruce
+    hold_action:
+      action: more-info
+    name: Bruce Blanket
+    show_state: false
+    tap_action:
+      action: toggle
+  - entity: fan.conservatory_fan
+    hold_action:
+      action: more-info
+    name: Conservatory Fan
+    show_state: false
+    tap_action:
+      action: toggle
+  - entity: fan.master_bedroom_fan
+    hold_action:
+      action: more-info
+    name: Bedroom Fan
+    show_state: false
+    tap_action:
+      action: toggle
+show_empty: false
+state_filter:
+  - 'on'
+type: entity-filter

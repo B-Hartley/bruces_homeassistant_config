@@ -1,0 +1,55 @@
+type: conditional
+#view_layout:
+#  position: sidebar
+conditions:
+  - entity: input_boolean.floorplan_show_garden_switches
+    state: "on"
+card:
+ type: entities
+ entities:
+  - entity: light.garden_colour_1
+    hide_state: true
+    name: Colour 1
+    type: 'custom:slider-entity-row'
+  - entity: light.garden_colour_2
+    hide_state: true
+    name: Colour 2
+    type: 'custom:slider-entity-row'
+  - entity: light.garden_colour_3
+    hide_state: true
+    name: Colour 3
+    type: 'custom:slider-entity-row'
+  - entity: light.garden_colour_4
+    hide_state: true
+    name: Colour 4
+    type: 'custom:slider-entity-row'
+  - entity: light.patio_light
+    hide_state: true
+    name: Patio
+    type: 'custom:slider-entity-row'    
+  - entity: light.patio_garage
+    hide_state: true
+    name: Garage
+    type: 'custom:slider-entity-row'    
+  - entity: light.shed_outside_lights
+    hide_state: true
+    name: Shed Outside
+  - entity: light.shed_light
+    hide_state: true
+    name: Shed   
+  - entity: light.patio_gazebo
+    hide_state: true
+    name: Gazebo
+    type: 'custom:slider-entity-row'  
+  - entity: light.patio_gazebo_wall
+    hide_state: true
+    name: Wall
+  - entity: light.garage_light
+    hide_state: true
+    name: Garage       
+    type: 'custom:slider-entity-row'      
+  - entity: input_boolean.floorplan_show_garden_switches
+    name: Show These Switches    
+
+
+  

@@ -1,0 +1,50 @@
+type: conditional
+#view_layout:
+#  position: sidebar
+conditions:
+  - entity: input_boolean.floorplan_show_lounge_switches
+    state: "on"
+card:
+ type: entities
+ entities:
+  - entity: light.lounge_left_front
+    hide_state: true
+    name: Left Front
+    type: 'custom:slider-entity-row' 
+  - entity: light.lounge_left_back
+    hide_state: true
+    name: Left Back
+    type: 'custom:slider-entity-row'     
+  - entity: light.lounge_right
+    hide_state: true
+    name: Right
+    type: 'custom:slider-entity-row'     
+  - entity: light.lounge_lamp
+    hide_state: true
+    name: Lamp
+    type: 'custom:slider-entity-row'      
+  - entity: light.lounge_corner
+    hide_state: true
+    name: Corner
+    type: 'custom:slider-entity-row'       
+  - entity: light.lounge_ambilight
+    hide_state: true
+    name: Ambilight
+    type: 'custom:slider-entity-row'
+  - entity: light.lounge_bar_cart
+    hide_state: true
+    name: Bar Cart
+    type: 'custom:slider-entity-row'
+  - entity: light.lounge_tv_left
+    hide_state: true
+    name: TV Left
+    type: 'custom:slider-entity-row'
+  - entity: light.lounge_tv_right
+    hide_state: true
+    name: TV Right
+    type: 'custom:slider-entity-row'    
+  - entity: input_boolean.floorplan_show_lounge_switches
+    name: Show These Switches    
+
+
+  

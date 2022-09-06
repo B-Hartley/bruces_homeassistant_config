@@ -1,0 +1,17 @@
+card:
+  show_state: true
+  title: Updates
+  type: glance
+entities:
+  - entity: sensor.hacs
+    name: HACS
+    state_filter:
+      - operator: '>'
+        value: 0
+  - entity: binary_sensor.updater
+    name: Home Assistant
+    secondary_info: newest_version
+    state_filter:
+      - value: 'on'
+show_empty: false
+type: entity-filter

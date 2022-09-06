@@ -1,0 +1,23 @@
+template:
+  sensor:
+    - name: "Sensor Count"
+      state: >
+          {%- set domains = ['sensor'] -%}
+          {%- for domain in domains -%}
+            {%- for item in states[domain] -%}
+              {% if loop.first %}
+                {{loop.length}}
+              {% endif %}
+            {%- endfor -%}
+          {%- endfor -%}
+		  
+    - name: "Automation Count"
+      state: >
+          {%- set domains = ['automation'] -%}
+          {%- for domain in domains -%}
+            {%- for item in states[domain] -%}
+              {% if loop.first %}
+                {{loop.length}}
+              {% endif %}
+            {%- endfor -%}
+          {%- endfor -%}

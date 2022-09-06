@@ -1,0 +1,177 @@
+      - cards:
+          - column_width: 20%
+            entities:
+              - entity: device_tracker.bruce_iphone
+                name: Bruce
+              - entity: sensor.bruce_iphone_interval
+                icon: 'mdi:clock-start'
+                name: Interval
+              - entity: sensor.bruce_iphone_travel_time
+                icon: 'mdi:clock-outline'
+                name: TravTime
+              - entity: sensor.bruce_iphone_zone_distance
+                icon: 'mdi:map-marker-distance'
+                name: Home
+              - entity: sensor.bruce_iphone_next_update
+                icon: 'mdi:update'
+                name: NextUpdt
+            title: Location Info - Bruce
+            type: glance
+          - column_width: 20%
+            entities:
+              - entity: sensor.bruce_iphone_waze_distance
+                icon: 'mdi:map-marker-distance'
+                name: WazeDist
+              - entity: sensor.bruce_iphone_calc_distance
+                icon: 'mdi:map-marker-distance'
+                name: CalcDist
+              - entity: sensor.bruce_iphone_dir_of_travel
+                icon: 'mdi:compass-outline'
+                name: Direction
+              - entity: sensor.bruce_iphone_last_located
+                icon: 'mdi:map-clock'
+                name: Located
+              - entity: sensor.bruce_iphone_last_update
+                icon: 'mdi:history'
+                name: LastUpdt
+            type: glance
+          - cards:
+              - entities:
+                  - entity: sensor.bruce_iphone_info
+                    icon: 'mdi:information-outline'
+                    name: Info
+                type: entities
+            type: horizontal-stack
+        type: vertical-stack
+      - cards:
+          - column_width: 20%
+            entities:
+              - entity: device_tracker.sarah_iphone
+                name: Sarah
+              - entity: sensor.sarah_iphone_interval
+                icon: 'mdi:clock-start'
+                name: Interval
+              - entity: sensor.sarah_iphone_travel_time
+                icon: 'mdi:clock-outline'
+                name: TravTime
+              - entity: sensor.sarah_iphone_zone_distance
+                icon: 'mdi:map-marker-distance'
+                name: HomeDist
+              - entity: sensor.sarah_iphone_next_update
+                icon: 'mdi:update'
+                name: NextUpdt
+            title: Location Info - Sarah
+            type: glance
+          - column_width: 20%
+            entities:
+              - entity: sensor.sarah_iphone_waze_distance
+                icon: 'mdi:map-marker-distance'
+                name: WazeDist
+              - entity: sensor.sarah_iphone_calc_distance
+                icon: 'mdi:map-marker-distance'
+                name: CalcDist
+              - entity: sensor.sarah_iphone_dir_of_travel
+                icon: 'mdi:compass-outline'
+                name: Direction
+              - entity: sensor.sarah_iphone_last_located
+                icon: 'mdi:map-clock'
+                name: Located
+              - entity: sensor.sarah_iphone_last_update
+                icon: 'mdi:history'
+                name: LastUpdt
+            type: glance
+          - entities:
+              - entity: sensor.sarah_iphone_info
+                icon: 'mdi:information-outline'
+                name: Info
+            type: entities
+        type: vertical-stack
+      - cards:
+          - column_width: 20%
+            entities:
+              - entity: device_tracker.sophie_iphone
+                name: Sophie
+              - entity: sensor.sophie_iphone_interval
+                icon: 'mdi:clock-start'
+                name: Interval
+              - entity: sensor.sophie_iphone_travel_time
+                icon: 'mdi:clock-outline'
+                name: TravTime
+              - entity: sensor.sophie_iphone_zone_distance
+                icon: 'mdi:map-marker-distance'
+                name: Home
+              - entity: sensor.sophie_iphone_next_update
+                icon: 'mdi:update'
+                name: NextUpdt
+            title: Location Info - Sophie
+            type: glance
+          - column_width: 20%
+            entities:
+              - entity: sensor.sophie_iphone_waze_distance
+                icon: 'mdi:map-marker-distance'
+                name: WazeDist
+              - entity: sensor.sophie_iphone_calc_distance
+                icon: 'mdi:map-marker-distance'
+                name: CalcDist
+              - entity: sensor.sophie_iphone_dir_of_travel
+                icon: 'mdi:compass-outline'
+                name: Direction
+              - entity: sensor.sophie_iphone_last_located
+                icon: 'mdi:map-clock'
+                name: Located
+              - entity: sensor.sophie_iphone_last_update
+                icon: 'mdi:history'
+                name: LastUpdt
+            type: glance
+          - cards:
+              - entities:
+                  - entity: sensor.sophie_iphone_info
+                    icon: 'mdi:information-outline'
+                    name: Info
+                type: entities
+            type: horizontal-stack
+        type: vertical-stack
+      - cards:
+          - column_width: 20%
+            entities:
+              - entity: device_tracker.kate_iphone
+                name: kate
+              - entity: sensor.kate_iphone_interval
+                icon: 'mdi:clock-start'
+                name: Interval
+              - entity: sensor.kate_iphone_travel_time
+                icon: 'mdi:clock-outline'
+                name: TravTime
+              - entity: sensor.kate_iphone_zone_distance
+                icon: 'mdi:map-marker-distance'
+                name: HomeDist
+              - entity: sensor.kate_iphone_next_update
+                icon: 'mdi:update'
+                name: NextUpdt
+            title: Location Info - Kate
+            type: glance
+          - column_width: 20%
+            entities:
+              - entity: sensor.kate_iphone_waze_distance
+                icon: 'mdi:map-marker-distance'
+                name: WazeDist
+              - entity: sensor.kate_iphone_calc_distance
+                icon: 'mdi:map-marker-distance'
+                name: CalcDist
+              - entity: sensor.kate_iphone_dir_of_travel
+                icon: 'mdi:compass-outline'
+                name: Direction
+              - entity: sensor.kate_iphone_last_located
+                icon: 'mdi:map-clock'
+                name: Located
+              - entity: sensor.kate_iphone_last_update
+                icon: 'mdi:history'
+                name: LastUpdt
+            type: glance
+          - entities:
+              - entity: sensor.kate_iphone_info
+                icon: 'mdi:information-outline'
+                name: Info
+            type: entities
+        type: vertical-stack
+

@@ -1,0 +1,64 @@
+automation:
+  - id: lights_on_when_dark_and_awake
+    alias: 'Lights on when dark and awake'
+    mode: restart
+    
+    description: >-
+      Lights on at dusk, off when asleep.
+      On when awake if still dark.
+
+    trigger: 
+      - platform: state
+        entity_id: 
+          - binary_sensor.light_outside
+          - switch.sarah_is_asleep
+          - switch.bruce_is_asleep
+          - switch.guest_is_asleep          
+          - input_boolean.floorplan_christmas_lights
+      - platform: homeassistant
+        id: "start"
+        event: start
+      - platform: event
+        id: "reload"
+        event_type: automation_reloaded    
+
+    action:
+      - choose:
+          - conditions: 
+              - condition: state
+                entity_id: binary_sensor.light_outside
+                state: 'off'
+              - condition: state
+                entity_id: switch.sarah_is_asleep
+                state: 'off'
+              - condition: state
+                entity_id: switch.bruce_is_asleep
+                state: 'off'
+              - condition: state
+                entity_id: switch.guest_is_asleep
+                state: 'off'                
+            sequence:
+              - service: light.turn_on
+                target:
+                  entity_id: 
+                    - light.garden_colour
+              - condition: state
+                entity_id: input_boolean.floorplan_christmas_lights
+                state: 'on'                    
+              - service: light.turn_on
+                target:
+                  entity_id:                     
+                    - light.christmas_all
+
+        default:
+          - service: light.turn_off
+            target:
+              entity_id: 
+                - light.garden_colour
+          - condition: state
+            entity_id: input_boolean.floorplan_christmas_lights
+            state: 'on'                    
+          - service: light.turn_off
+            target:
+              entity_id:                     
+                - light.christmas_all

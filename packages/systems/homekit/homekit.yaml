@@ -1,0 +1,386 @@
+homekit:
+  - filter:
+      include_domains:
+        - climate
+      exclude_entities:
+        - climate.spa_thermostat
+      include_entities:
+        - fan.conservatory_fan
+        - fan.master_bedroom_fan
+        - person.bruce_hartley
+        - person.cat_sitter
+        - person.cleaner
+        - person.jyggy
+        - person.kate_hartley
+        - person.paddy      
+        - person.sarah_hartley
+        - person.sophie_hartley
+        - switch.bruce_is_asleep
+        - switch.electric_blanket_bruce
+        - switch.electric_blanket_sarah
+        - switch.kate_is_asleep
+        - switch.sarah_is_asleep
+        - switch.sophie_is_asleep
+        - switch.guest_is_asleep
+        - water_heater.hot_water
+
+  - name: Lounge SkyQ
+    port: 56332
+    mode: accessory
+    filter:
+      include_entities:
+        - media_player.lounge_skyq
+
+  - name: Hue Lights
+    port: 56333
+    filter:
+      include_entities:
+        - light.bar_ceiling_1
+        - light.bar_ceiling_2
+        - light.bar_ceiling_3
+        - light.bar_ceiling_4
+        - light.bar_ceiling_5
+        - light.bar_ceiling_6
+        - light.bar_ceiling_7
+        - light.bar_ceiling_8
+        - light.bar_palm_1
+        - light.bar_palm_2
+        - light.bar_palm_3        
+        - light.bar_shelves
+        - light.bar_worktop
+        - light.conservatory_fan_light
+   #     - light.conservatory_lamp
+        - light.conservatory_left
+        - light.conservatory_right
+ #       - light.conservatory_table_lamp
+        - light.conservatory_wall_light
+        - light.conservatory_bright
+        - light.drum_room_light
+        - light.guest_bedroom_bedside
+        - light.guest_bedroom_light
+        - light.hall_light
+        - light.kates_bedroom_lamp
+        - light.kates_bedroom_light
+        - light.kitchen_1
+        - light.kitchen_2 
+        - light.kitchen_3  
+        - light.kitchen_4  
+        - light.kitchen_5
+        - light.kitchen_floor_lamp
+        - light.landing_light_1
+        - light.landing_light_2
+        - light.landing_light_3
+        - light.lounge_bar_cart
+        - light.lounge_corner
+        - light.lounge_right
+        - light.lounge_left_front
+        - light.lounge_left_back
+        - light.lounge_lamp
+        - light.lounge_tv_left
+        - light.lounge_tv_right
+        - light.master_bedroom_bedside_left
+        - light.master_bedroom_bedside_right
+        - light.master_bedroom_lamp
+        - light.master_bedroom_wall_left
+        - light.master_bedroom_wall_right
+        - light.master_bedroom_wardrobe
+        - light.master_bedroom_wardrobe_bars
+        - light.sophies_bedroom_bedhead 
+        - light.sophies_bedroom_lamp
+        - light.sophies_bedroom_light
+        - light.patio_garage
+        - light.patio_gazebo
+        - light.patio_gazebo_wall
+        - light.patio_light
+        - light.under_stairs
+        - light.downstairs_toilet_light
+        - light.garden_colour_1
+        - light.garden_colour_2
+        - light.garden_colour_3
+        - light.utility_light
+        - light.kitchen_cupboard
+        - light.kitchen_worktop
+        
+  - name: Zigbee Lights
+    port: 56334
+    filter:
+      include_entities:    
+        - light.back_door
+        - light.front_door_lights
+        - light.kate_lightstrip
+        - light.kitchen_ceiling_1
+        - light.kitchen_ceiling_2
+        - light.kitchen_ceiling_3
+        - light.kitchen_kickboard
+        - light.shed_light
+        - light.garage_light
+        - light.shed_outside_lights
+        
+  - name: Doors
+    port: 56335
+    filter:
+      include_entities:           
+        - binary_sensor.back_gate_door     
+        - binary_sensor.bar_door        
+        - binary_sensor.conservatory_door   
+        - binary_sensor.downstairs_toilet_door        
+        - binary_sensor.drum_room_door         
+        - binary_sensor.fridge_door    
+        - binary_sensor.guest_bedroom_door   
+        - binary_sensor.kates_bedroom_door        
+        - binary_sensor.kitchen_door            
+        - binary_sensor.lounge_door 
+        - binary_sensor.main_bathroom_door
+        - binary_sensor.master_bedroom_door
+        - binary_sensor.master_bedroom_wardrobe_door_1
+        - binary_sensor.master_bedroom_wardrobe_door_2
+        - binary_sensor.master_bedroom_ensuite_door        
+        - binary_sensor.shed_door      
+        - binary_sensor.garage_back_door            
+        - binary_sensor.sophies_bedroom_door        
+        - binary_sensor.under_stairs_door
+             
+    entity_config:   
+      binary_sensor.garage_back_door:
+        linked_battery_sensor: sensor.garage_back_door_battery       
+      binary_sensor.bar_door:
+        linked_battery_sensor: sensor.bar_door_battery      
+      binary_sensor.drum_room_door:
+        linked_battery_sensor: sensor.drum_room_door_battery         
+      binary_sensor.shed_door:
+        linked_battery_sensor: sensor.shed_door_battery      
+      binary_sensor.guest_bedroom_door:
+        linked_battery_sensor: sensor.guest_bedroom_door_battery      
+      binary_sensor.kitchen_door:
+        linked_battery_sensor: sensor.kitchen_door_battery    
+      binary_sensor.conservatory_door:
+        linked_battery_sensor: sensor.conservatory_door_battery
+      binary_sensor.downstairs_toilet_door:
+        linked_battery_sensor: sensor.downstairs_toilet_door_battery
+      binary_sensor.kates_bedroom_door:
+        linked_battery_sensor: sensor.kates_bedroom_door_battery
+      binary_sensor.lounge_door:
+        linked_battery_sensor: sensor.lounge_door_battery
+      binary_sensor.main_bathroom_door:
+        linked_battery_sensor: sensor.main_bathroom_door_battery
+      binary_sensor.master_bedroom_ensuite_door:
+        linked_battery_sensor: sensor.master_bedroom_ensuite_door_battery        
+      binary_sensor.master_bedroom_door:
+        linked_battery_sensor: sensor.master_bedroom_door_battery
+      binary_sensor.sophies_bedroom_door:
+        linked_battery_sensor: sensor.sophies_bedroom_door_battery
+      binary_sensor.under_stairs_door:
+        linked_battery_sensor: sensor.under_stairs_door_battery
+
+ # - name: Motion
+ #   port: 56336
+  #  filter:
+    #  include_entities:   
+    #    - binary_sensor.bar_motion      
+     #   - binary_sensor.bins_motion        
+     #   - binary_sensor.drive_motion         
+      #  - binary_sensor.gazebo_motion        
+     #   - binary_sensor.hall_motion        
+       # - binary_sensor.kitchen_motion        
+      #  - binary_sensor.kitchen_2_motion        
+      #  - binary_sensor.landing_motion        
+     #   - binary_sensor.lounge_motion        
+    #    - binary_sensor.patio_motion        
+    #    - binary_sensor.motion_stairs           
+     #   - binary_sensor.front_door_motion 
+
+  - name: Texecom Alarm
+    port: 56337
+    filter:
+      include_domains:
+        - alarm_control_panel
+      include_entities: 
+        - binary_sensor.back_door    
+        - binary_sensor.bar        
+        - binary_sensor.front_door    
+        - binary_sensor.kitchen     
+        - binary_sensor.landing        
+        - binary_sensor.lounge    
+        - binary_sensor.shed_garage
+#        - binary_sensor.pa_hall
+#        - binary_sensor.pa_master_bed
+    entity_config:
+      alarm_control_panel.texecom:
+        code: 1884        
+        
+  - name: Zigbee Sensors
+    port: 56338
+    filter:
+      include_entities:
+        - sensor.master_bedroom_environment_co2
+        - sensor.master_bedroom_environment_humidity
+        - sensor.master_bedroom_environment_temperature
+        - binary_sensor.utility_sensor_motion
+        - binary_sensor.downstairs_toilet_sensor_motion
+        - binary_sensor.master_bedroom_ensuite_motion
+        - binary_sensor.main_bathroom_sensor_motion
+
+  - name: Jyggy Doors
+    port: 56339
+    mode: accessory
+    filter:
+      include_entities:
+        - lock.jyggy_doors
+
+  - name: Hot Tub
+    port: 56340
+    filter:
+      include_entities:        
+        - climate.spa_thermostat
+        - light.hottub_light
+        - switch.pump_1
+        - switch.pump_2
+
+  - name: Bar Camera
+    port: 56341
+    mode: accessory    
+    filter:
+      include_entities:        
+        - camera.bar_medium
+    entity_config:
+      camera.bar_medium:
+        linked_motion_sensor: binary_sensor.bar_motion
+        support_audio: true
+
+  - name: Lounge Camera
+    port: 56342
+    mode: accessory    
+    filter:
+      include_entities:        
+        - camera.lounge_medium
+    entity_config:
+      camera.lounge_medium:
+        linked_motion_sensor: binary_sensor.lounge_motion
+        support_audio: true        
+
+  - name: Landing Camera
+    port: 56344
+    mode: accessory    
+    filter:
+      include_entities:        
+        - camera.landing_medium
+    entity_config:
+      camera.landing_medium:
+        linked_motion_sensor: binary_sensor.landing_motion
+        support_audio: true       
+
+  - name: Hall Camera
+    port: 56345
+    mode: accessory    
+    filter:
+      include_entities:        
+        - camera.hall_medium
+    entity_config:
+      camera.hall_medium:
+        linked_motion_sensor: binary_sensor.hall_motion
+        support_audio: true       
+
+  - name: Kitchen Camera
+    port: 56346
+    mode: accessory    
+    filter:
+      include_entities:        
+        - camera.kitchen_medium
+    entity_config:
+      camera.kitchen_medium:
+        linked_motion_sensor: binary_sensor.kitchen_motion
+        support_audio: true    
+
+  - name: Kitchen 2 Camera
+    port: 56347
+    mode: accessory    
+    filter:
+      include_entities:        
+        - camera.kitchen_2_medium
+    entity_config:
+      camera.kitchen_2_medium:
+        linked_motion_sensor: binary_sensor.kitchen_2_motion
+        support_audio: true    
+
+  - name: Drive Camera
+    port: 56349
+    mode: accessory    
+    filter:
+      include_entities:        
+        - camera.drive_medium
+    entity_config:
+      camera.drive_medium:
+        linked_motion_sensor: binary_sensor.drive_motion
+        support_audio: true    
+
+  - name: Gazebo Camera
+    port: 56350
+    mode: accessory    
+    filter:
+      include_entities:        
+        - camera.gazebo_medium
+    entity_config:
+      camera.gazebo_medium:
+        linked_motion_sensor: binary_sensor.gazebo_motion
+        support_audio: true    
+
+  - name: Patio Camera
+    port: 56351
+    mode: accessory    
+    filter:
+      include_entities:        
+        - camera.patio_medium
+    entity_config:
+      camera.patio_medium:
+        linked_motion_sensor: binary_sensor.patio_motion
+        support_audio: true    
+
+  - name: Bins Camera
+    port: 56352
+    mode: accessory    
+    filter:
+      include_entities:        
+        - camera.bins_medium
+    entity_config:
+      camera.bins_medium:
+        linked_motion_sensor: binary_sensor.bins_motion
+        support_audio: true  
+        
+  - name: Loft Camera
+    port: 56354
+    mode: accessory    
+    filter:
+      include_entities:        
+        - camera.loft_medium
+    entity_config:
+      camera.stairs:
+        linked_motion_sensor: binary_sensor.loft_motion
+        support_audio: true    
+                                                
+  - name: Doorbell Camera
+    port: 56355
+    mode: accessory    
+    filter:
+      include_entities:        
+        - camera.doorbell_medium
+    entity_config:
+      camera.stairs:
+        linked_motion_sensor: binary_sensor.doorbell_motion
+        linked_doorbell_sensor: binary_sensor.doorbell_doorbell
+        support_audio: true 
+        
+  - name: Nest Protect
+    port: 56353
+    filter:
+      include_entities:       
+      - binary_sensor.nest_protect_downstairs_co_status
+      - binary_sensor.nest_protect_downstairs_smoke_status
+      - binary_sensor.nest_protect_garage_co_status
+      - binary_sensor.nest_protect_garage_smoke_status
+      - binary_sensor.nest_protect_loft_co_status
+      - binary_sensor.nest_protect_loft_smoke_status
+      - binary_sensor.nest_protect_kates_co_status
+      - binary_sensor.nest_protect_kates_smoke_status
+      - binary_sensor.nest_protect_stairs_co_status
+      - binary_sensor.nest_protect_stairs_smoke_status
+      

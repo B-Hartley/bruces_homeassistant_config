@@ -1,0 +1,45 @@
+automation:
+  - id: solcast_push_measurement
+    alias: 'Solcast Push Measurement'
+	
+	description: >
+	  Push measurement to Solcast
+	  
+    trigger:
+      platform: time_pattern
+      minutes: "/30"
+	  
+    action:
+      - choose:
+            # Average Power less than 10kWh and Last Meter Was stored between 29 and 31 mins  
+          - conditions: >
+              {{ ((states('sensor.solaredge_lifetime_production') | float -  states('input_number.solar_meter_30_mins_ago') | float) * 12.0 < 10.0) and
+              ((as_timestamp(now())-state_attr('input_datetime.solar_meter_last_stored_data', 'timestamp')) < 1860)  and
+              ((as_timestamp(now())-state_attr('input_datetime.solar_meter_last_stored_data', 'timestamp')) > 1740)   }}
+            sequence:
+              - service: solcast.push_measurement
+                data:
+                  total_power: "{{ (((states('sensor.solaredge_lifetime_production') | float) -  (states('input_number.solar_meter_30_mins_ago') | float)) * 2.0) | round(2) }}"        
+                  period: 'PT30M'
+                  period_end: "{{ utcnow() |  replace(' ','T') }}"    
+              - service: input_number.set_value
+                target:
+                  entity_id: input_number.solar_meter_30_mins_ago
+				data:
+                  value: "{{ states('sensor.solaredge_lifetime_production') }}"
+              - service: input_datetime.set_datetime
+                target:
+                  entity_id: input_datetime.solar_meter_last_stored_data
+				data:
+                  datetime: "{{ now() }}"
+        default:
+          - service: input_number.set_value
+            target:
+              entity_id: input_number.solar_meter_30_mins_ago
+			data:
+              value: "{{ states('sensor.solaredge_lifetime_production') }}"        
+          - service: input_datetime.set_datetime
+            target:
+              entity_id: input_datetime.solar_meter_last_stored_data
+			data:
+              datetime: "{{ now() }}"

@@ -1,0 +1,21 @@
+---
+version: 1.0
+scenes:
+  id1:
+    label: Button 1
+    label2: Click
+    request:
+      uri: http://192.168.xx.xxx:8123/api/webhook/abcd1234abcd1234-violet
+      method: POST
+      headers:
+        Content-Type: application/json
+      body: '{ "button_name": "violet_1", "click_type": "click" }'
+  id2:
+    label: Button 2
+    label2: Click
+    request:
+      uri: http://192.168.xx.xxx:8123/api/webhook/abcd1234abcd1234-violet
+      method: POST
+      headers:
+        Content-Type: application/json
+      body: '{ "button_name": "violet_2", "click_type": "click" }'

@@ -1,0 +1,34 @@
+localtuya:
+  - host: !secret tuya_bar_ip
+    device_id: !secret tuya_bar_device_id
+    local_key: !secret tuya_bar_local_key
+    friendly_name: Tuya Bar
+    protocol_version: "3.3"
+    entities:
+      - platform: sensor
+        friendly_name: Tuya Bar Formaldehyde
+        id: 2
+        scaling: 0.1
+        unit_of_measurement: "mg/m3"
+      - platform: sensor
+        friendly_name: Tuya Bar Temperature
+        id: 18
+        scaling: 0.1
+        device_class: temperature
+        unit_of_measurement: "°C" 
+      - platform: sensor
+        friendly_name: Tuya Bar Humidity
+        id: 19
+        scaling: 0.1
+        device_class: humidity
+        unit_of_measurement: "%"
+      - platform: sensor
+        friendly_name: Tuya Bar VOC
+        id: 21
+        device_class: volatile_organic_compounds
+        unit_of_measurement: "ppm"       
+      - platform: sensor
+        friendly_name: Tuya Bar CO2
+        id: 22
+        device_class: carbon_dioxide
+        unit_of_measurement: "ppm"

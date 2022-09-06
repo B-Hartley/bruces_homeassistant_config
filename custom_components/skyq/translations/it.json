@@ -1,0 +1,58 @@
+{
+  "config": {
+    "abort": {
+      "already_configured": "Questa casella Sky Q è già configurata.."
+    },
+    "error": {
+      "cannot_connect": "Impossibile connettersi all'host.",
+      "invalid_host": "Nome host o IP non valido."
+    },
+    "step": {
+      "user": {
+        "data": {
+          "host": "Host",
+          "name": "Nome"
+        },
+        "description": "Imposta l'integrazione Sky Q. In caso di problemi con la configurazione, visitare: https://github.com/RogerSelwyn/Home_Assistant_SkyQ_MediaPlayer \n\nAccertarsi che la casella Sky Q sia accesa.",
+        "title": "Sky Q"
+      }
+    }
+  },
+  "options": {
+    "error": {
+      "cannot_connect": "Connessione fallita.",
+      "invalid_sources": "La stringa di origini personalizzate non è valida: deve essere JSON",
+      "invalid_command": "Il comando in Origini personalizzate non è valido - controlla GitHub"
+    },
+    "step": {
+      "user": {
+        "data": {
+          "channel_sources_display": "Elenco delle fonti del canale",
+          "output_programme_image": "Mostra immagine del programma",
+          "live_tv": "Mostra i dettagli della TV in diretta",
+          "get_live_record": "Ottieni lo stato della registrazione in tempo reale",
+          "generate_switches_for_channels": "Genera switch per canali",
+          "room": "Nome stanza opzionale - richiesto per gli interruttori",
+          "volume_entity": "Entità di Media Player per controllare il volume di",
+          "advanced_options": "Mostra opzioni avanzate"
+        },
+        "title": "Sky Q",
+        "description": "Opzioni di configurazione per {name}"
+      },
+      "advanced": {
+        "data": {
+          "tv_device_class": "Classe dispositivo TV (disabilita per ricevitore)",
+          "country": "Sostituisci paese",
+          "epg_cache_len": "Longitud de la caché de EPG para Media Browser",
+          "sources": "Fonti personalizzate - leggi Github"
+        },
+        "title": "Sky Q",
+        "description": "Opzioni di configurazione avanzate per {name}"
+      },
+      "retry": {
+        "data": {},
+        "title": "Riavvia la casella Sky Q e riprova"
+      }
+    }
+  }
+}

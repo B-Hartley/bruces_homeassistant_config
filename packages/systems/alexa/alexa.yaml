@@ -1,0 +1,111 @@
+#alexa:
+#  smart_home:
+#    locale: en-GB
+#    endpoint: https://api.eu.amazonalexa.com/v3/events
+#    client_id: !secret alexa_client_id
+#    client_secret: !secret alexa_client_secret
+cloud:
+  alexa:
+    filter:
+      include_domains:
+#        - camera
+        - fan
+        - alarm
+      include_entities:
+        - climate.spa_thermostat
+        - light.hottub_light
+        - switch.pump_1
+        - switch.pump_2
+        - media_player.lounge_skyq
+        - binary_sensor.doorbell_doorbell        
+        - binary_sensor.front_door
+        - binary_sensor.back_door
+        - binary_sensor.lounge
+        - binary_sensor.kitchen
+        - binary_sensor.landing
+        - binary_sensor.bar
+        - binary_sensor.shed_garage
+        - binary_sensor.back_gate_door
+        - binary_sensor.conservatory_door
+        - light.garage_light
+        - light.kitchen_ceiling_1
+        - light.kitchen_ceiling_2
+        - light.kitchen_ceiling_3
+        - light.kitchen_kickboard
+        - switch.bruce_is_asleep
+        - switch.guest_is_asleep        
+        - switch.sarah_is_asleep
+        - switch.kate_is_asleep
+        - switch.sophie_is_asleep
+        - script.play_sky_in_the_lounge
+        - script.pause_sky_in_the_lounge
+    entity_config:
+      binary_sensor.doorbell_doorbell:
+        name: Doorbell
+        description: Front Door Doorbell
+        display_categories: DOORBELL
+      media_player.lounge_skyq:
+        name: Lounge TV
+        description: The Lounge TV
+      alarm_control_panel.texecom:
+        name: Alarm System
+        description: Alarm System Panel
+      binary_sensor.front_door:
+        name: Front Door
+        description: The front door
+      binary_sensor.back_door:
+        name: Back Door
+        description: The back door
+      binary_sensor.lounge:
+        name: Lounge Motion
+        description: The motion detector in the lounge
+      binary_sensor.kitchen:
+        name: Kitchen Motion
+        description: The motion detector in the kitchen
+      binary_sensor.landing:
+        name: Landing Motion
+        description: The motion detector on the landing
+      binary_sensor.bar:
+        name: Studio Motion
+        description: The motion detector in the Bar
+      binary_sensor.shed_garage:
+        name: Shed Motion
+        description: The motion detector in the shed and Garage
+      binary_sensor.utility_sensor_motion:
+        name: Utility Motion
+        description: The motion detector in the utility
+      binary_sensor.downstairs_toilet_sensor_motion:
+        name: Downstairs Toilet Motion
+        description: The motion detector in the downstairs toilet
+      binary_sensor.under_stairs_sensor_motion:
+        name: Understairs Motion
+        description: The motion detector under the stairs
+      binary_sensor.back_gate_door:
+        name: Back Gate
+        description: The back gate
+      binary_sensor.conservatory_door:
+        name: Conservatory Door
+        description: The conservatory door
+      script.play_sky_tv:
+        name: Play Sky TV
+        description: Play Sky TV
+      script.pause_sky_tv:
+        name: Pause Sky TV
+        description: Pause Sky TV
+#      camera.kitchen_medium:
+#        name: "Kitchen"
+#        description: "Kitchen Camera"
+#        display_categories: CAMERA
+#      camera.patio_medium:
+#        name: "Patio"
+#        description: "Patio Camera"
+#        display_categories: CAMERA
+#intent_script:
+#  ActivateSceneIntent:
+#    action:
+#      service: scene.turn_on
+#      data:
+#        entity_id: scene.{{ Scene|replace(" ", "_") }}
+#    speech:
+#      type: plain
+#      text: OK

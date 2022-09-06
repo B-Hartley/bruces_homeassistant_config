@@ -1,0 +1,12 @@
+automation:
+  - id: clear_notifcation_from_iphone
+    alias: Clear Notififcation from iPhone
+    trigger:
+      platform: event
+      event_type: ios.notification_action_fired
+      event_data:
+        actionName: BOOLEAN_DISABLE
+    action:
+      - service: input_boolean.turn_off
+        target:
+          entity_id: "{{trigger.event.data.action_data.entity_id}}"

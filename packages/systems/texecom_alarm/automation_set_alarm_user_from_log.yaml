@@ -1,0 +1,24 @@
+automation:
+  - id: set_alarm_user
+    alias: set_alarm_user_from_log
+    
+    description: >
+      User from Alarm Log
+      
+    trigger:
+      - platform: state
+        id: 'user'
+        entity_id: sensor.alarm_log
+        to: 
+          - 'UserCode'
+          - 'ProxTag'
+          
+    action:
+      - service: input_text.set_value
+        target:
+          entity_id: input_text.alarm_user
+        data:
+          value: >           
+            {% set userCode = state_attr('sensor.alarm_log','parameter') %}
+            {% set mapper = {0:'Engineer',1:'MASTER',2:'Bruce',3:'Sarah',4:'Sophie',5:'Kate',6:'Maid For',7:'Jeanette',8:'Cat Sit',9:'Key Safe',10:'Moira',25:'QuickArm',29:'App'} %}           
+            {{mapper[userCode] if userCode in mapper else 'UNKNOWN'}}

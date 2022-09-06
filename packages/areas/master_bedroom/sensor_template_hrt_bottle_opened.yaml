@@ -1,0 +1,6 @@
+template:
+  sensor:
+    - name: "HRT Bottle Open"
+      unique_id: hrt_bottle_open
+      unit_of_measurement: days
+      state: "{{ ((as_timestamp(now()) - as_timestamp(states('input_button.hrt_bottle_opened')))|int(0))// 86400 }}"

@@ -1,0 +1,172 @@
+#######################
+## Zappis can switch around the json so I have to check which is which.
+## Jyggy Serial number is numerically lower so compare them
+## Avoids listing the serial numbers in this file
+#######################
+
+rest:
+  - resource: https://s18.myenergi.net/cgi-jstatus-*
+#  - resource_template: "https://{{ 's18.myenergi.net' if states('sensor.myenergi_asn') in ('Unavailable','unknown') else states('sensor.myenergi_asn') }}/cgi-jstatus-*"
+    scan_interval: 7
+    timeout: 30
+    authentication: digest
+    username: !secret myenergi_serial
+    password: !secret myenergi_password
+    headers:
+      User-Agent: Home Assistant
+      Content-Type: application/json
+      Accept: application/json
+
+    
+    binary_sensor:
+      - name: Eddi Active Heater
+        value_template: "{{ value_json[0].eddi[0].div  > 0 }}"
+
+      - name: Zappi Jyggy Plugged In
+        value_template: "{% if value_json[1].zappi[0].sno|int(0) < value_json[1].zappi[1].sno|int(0) %}{{ 'off' if value_json[1].zappi[0].pst == 'A' else 'on' }}{% else %}{{ 'off' if value_json[1].zappi[1].pst == 'A' else 'on' }}{% endif %}"
+        device_class: plug
+
+      - name: Zappi Paddy Plugged In
+        value_template: "{% if value_json[1].zappi[0].sno|int(0) > value_json[1].zappi[1].sno|int(0) %}{{ 'off' if value_json[1].zappi[0].pst == 'A' else 'on' }}{% else %}{{ 'off' if value_json[1].zappi[1].pst == 'A' else 'on' }}{% endif %}"
+        device_class: plug
+
+      - name: Zappi Order Jyggy First
+        value_template: "{{ value_json[1].zappi[0].sno|int(0) < value_json[1].zappi[1].sno|int(0) }}"
+        
+    sensor:
+
+      - name: Zappi Jyggy Serial
+        value_template: "{{ value_json[1].zappi[0].sno if value_json[1].zappi[0].sno|int < value_json[1].zappi[1].sno|int else value_json[1].zappi[1].sno }}"
+
+      - name: Zappi Jyggy Last Online
+        value_template: "{{ value_json[1].zappi[0].dat + ' ' + value_json[1].zappi[0].tim if value_json[1].zappi[0].sno|int < value_json[1].zappi[1].sno|int else value_json[1].zappi[1].dat + ' ' + value_json[1].zappi[1].tim  }}"
+
+      - name: Zappi Jyggy Fwv
+        value_template: "{{ value_json[1].zappi[0].fwv if value_json[1].zappi[0].sno|int < value_json[1].zappi[1].sno|int else value_json[1].zappi[1].fwv }}"
+        
+      - name: Zappi Jyggy Mode
+        value_template: "{% set mapper = {0:'zero',1:'Fast',2:'Eco',3:'Eco+',4:'Stopped'} %}{{ mapper[value_json[1].zappi[0].zmo] if value_json[1].zappi[0].sno|int < value_json[1].zappi[1].sno|int else mapper[value_json[1].zappi[1].zmo] }}"
+
+      - name: Zappi Jyggy Status
+        value_template: "{% set mapper = {'A':'EV Disconnected','B1':'EV Connected','B2':'Waiting for EV','C1':'EV Ready to Charge','C2':'Charging','F':'F'} %}{{ mapper[value_json[1].zappi[0].pst] if value_json[1].zappi[0].sno|int < value_json[1].zappi[1].sno|int else mapper[value_json[1].zappi[1].pst]}}"
+
+      - name: Zappi Jyggy Power
+        value_template: "{% if value_json[1].zappi[0].sno|int < value_json[1].zappi[1].sno|int %}{{ (value_json[1].zappi[0].div / 1000)|round(1) if value_json[1].zappi[0].pst == 'C2' else 0 }}{% else %}{{ (value_json[1].zappi[1].div / 1000)|round(1) if value_json[1].zappi[1].pst == 'C2' else 0 }}{% endif %}"
+        unit_of_measurement: 'kW'
+        device_class: power    
+
+      - name: Zappi Paddy Serial
+        value_template: "{{ value_json[1].zappi[0].sno if value_json[1].zappi[0].sno|int > value_json[1].zappi[1].sno|int  else value_json[1].zappi[1].sno }}"
+
+      - name: Zappi Paddy Last Online
+        value_template: "{{ value_json[1].zappi[0].dat + ' ' + value_json[1].zappi[0].tim if value_json[1].zappi[0].sno|int > value_json[1].zappi[1].sno|int else value_json[1].zappi[1].dat + ' ' + value_json[1].zappi[1].tim  }}"
+
+      - name: Zappi Paddy Fwv
+        value_template: "{{ value_json[1].zappi[0].fwv if value_json[1].zappi[0].sno|int > value_json[1].zappi[1].sno|int else value_json[1].zappi[1].fwv }}"
+          
+      - name: Zappi Paddy Mode
+        value_template: "{% set mapper = {0:'zero',1:'Fast',2:'Eco',3:'Eco+',4:'Stopped'} %}{{ mapper[value_json[1].zappi[0].zmo] if value_json[1].zappi[0].sno|int > value_json[1].zappi[1].sno|int else mapper[value_json[1].zappi[1].zmo] }}"
+              
+      - name: Zappi Paddy Status
+        value_template: "{% set mapper = {'A':'EV Disconnected','B1':'EV Connected','B2':'Waiting for EV','C1':'EV Ready to Charge','C2':'Charging','F':'F'} %}{{ mapper[value_json[1].zappi[0].pst] if value_json[1].zappi[0].sno|int > value_json[1].zappi[1].sno|int else mapper[value_json[1].zappi[1].pst]}}"
+
+      - name: Zappi Paddy Power
+        value_template: "{% if value_json[1].zappi[0].sno|int > value_json[1].zappi[1].sno|int %}{{ (value_json[1].zappi[0].div / 1000)|round(1) if value_json[1].zappi[0].pst == 'C2' else 0 }}{% else %}{{ (value_json[1].zappi[1].div / 1000)|round(1) if value_json[1].zappi[1].pst == 'C2' else 0 }}{% endif %}"
+        unit_of_measurement: 'kW'
+        device_class: power  
+        
+      - name: Zappi Cars
+        value_template: "{{ ((value_json[1].zappi[1].div / 1000)|round(1) if value_json[1].zappi[1].pst == 'C2' else 0) + ((value_json[1].zappi[0].div/1000.0 )|round(1) if value_json[1].zappi[0].pst == 'C2' else 0) }}"
+        unit_of_measurement: 'kW'
+        device_class: power   
+        
+      - name: Zappi Jyggy Grid
+        value_template: "{{ (value_json[1].zappi[1].grd / 1000)|round(1) }}"
+        unit_of_measurement: 'kW'
+        device_class: power   
+
+      - name: Zappi jyggy Grid Export
+        value_template: "{{ (value_json[1].zappi[1].grd / -1000)|round(1) if  (value_json[1].zappi[1].grd < -75.0) else 0 }}"
+        unit_of_measurement: 'kW'
+        device_class: power   
+
+      - name: Zappi Jyggy Grid Import
+        value_template: "{{ (value_json[1].zappi[1].grd / 1000)|round(1) if (value_json[1].zappi[1].grd > 75.0) else 0 }}"
+        unit_of_measurement: 'kW'
+        device_class: power       
+        
+      - name: Eddi FwV
+        value_template: "{{ value_json[0].eddi[0].fwv }}"
+
+      - name: Eddi Last Online
+        value_template: "{{ value_json[0].eddi[0].dat + ' ' + value_json[0].eddi[0].tim }}"
+
+      - name: Eddi Water Temp
+        value_template: "{{ (value_json[0].eddi[0].tp1 ) if (value_json[0].eddi[0].tp1 > 10 and value_json[0].eddi[0].tp1 < 105) else unavailable }}"
+        unit_of_measurement: '°C'
+        device_class: temperature   
+
+      - name: Eddi Status
+        value_template: "{% set eddi_map = {1:'off',2:'???',3:'on',4:'on',5:'reached',6:'stopped'} %}{{eddi_map[value_json[0].eddi[0].sta] }}"
+    
+      - name: Eddi Power
+        value_template: "{{ (value_json[0].eddi[0].div / 1000)|round(1) if value_json[0].eddi[0].sta in [3,4] else 0}}"
+        unit_of_measurement: 'kW'
+        device_class: power   
+        
+      - name: myEnergi ASN
+        value_template: "{{ value_json[3].asn }}"
+          
+      - name: myEnergi Fwv
+        value_template: "{{ value_json[3].fwv }}"          
+          
+      - name: Harvi   
+        value_template: "{{ value_json[2].harvi[0].dat != unavailable }}"
+        json_attributes_path: '$[2].harvi[0]'
+        json_attributes:
+          - dat       # Date (UTC)
+          - ectp2     # Solar CT Value
+          - ectp3     # Powerwall CT Value
+          - tim       # Time (UTC)        
+          
+#      - name: Eddi
+#        value_template:  "{{ value_json[0].eddi[0].dat != unavailable }}"
+#        json_attributes_path: '$[0].eddi[0]'
+#        json_attributes:
+#          - bsm       # Boost Mode (1 = Boosting)
+#          - che       # Charge Added kWh
+#          - cmt       # Last command success - counts down 1 - 10 when command sent, then 254 - success, 253 - failure, 255 - never received any comamnds
+#          - dat       # Date (UTC)
+#          - tim       # Time (UTC)
+#          - vol       # voltage out # 2339 ? divide by 10 ? 
+          
+#      - name: Zappi Jyggy
+#        value_template: "{{ value_json[1].zappi[1].dat != unavailable }}"
+#        json_attributes_path: '$[1].zappi[0]'
+#        json_attributes:
+#          - che       # Charge Added / KWh Diverted (This Session)
+#          - cmt       # Last command success - counts down 1 - 10 when command sent, then 254 - success, 253 - failure, 255 - never received any comamnds
+#          - dat       # Date (UTC)
+#          - frq       # Grid Frequency
+#          - gen       # Current Solar/Generation Power W
+#          - lck       # Lock Status (4 bits : 1st digit - ? : 2nd digit - 1 unlocked, 0 locked)
+#          - mgl       # Minimum Green Level
+#          - pri       # Priority 
+#          - sta       # Zappi Status (1: Paused, 2: DSR, 3: Diverting, 4: Boosting, 5: Charge Complete)
+#          - tim       # Time (UTC)
+#          - vol       # Grid Voltage
+#          - sno
+
+#      - name: "Zappi Paddy"
+#        value_template: "{{ value_json[1].zappi[0].dat != unavailable }}"
+#        json_attributes_path: '$[1].zappi[1]'
+#        json_attributes:
+#          - che       # Charge Added / KWh Diverted (This Session)
+#          - cmt       # Last command success - counts down 1 - 10 when command sent, then 254 - success, 253 - failure, 255 - never received any comamnds
+#          - dat       # Date (UTC)
+#          - lck       # Lock Status (4 bits : 1st digit - ? : 2nd digit - 1 unlocked, 0 locked)
+#          - mgl       # Minimum Green Level
+#          - pri       # Priority 
+#          - sta       # Zappi Status (1: Paused, 2: DSR, 3: Diverting, 4: Boosting, 5: Charge Complete)
+#          - tim       # Time (UTC)          
+#          - sno

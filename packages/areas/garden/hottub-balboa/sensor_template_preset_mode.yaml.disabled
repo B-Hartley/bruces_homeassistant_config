@@ -1,0 +1,6 @@
+template:
+  sensor:
+    - name: "HotTub Preset Mode"
+      unique_id: hottub_preset_mode
+      availability: "{{ states('binary_sensor.bwa_wi_fi_module') }}"
+      state: "{{ state_attr('climate.spa_climate','preset_mode') }}"

@@ -1,0 +1,6 @@
+template:
+  binary_sensor:
+    - name: "Hottub Online"
+      state: "{{ (now() | as_timestamp - states('sensor.hottub_status') | as_timestamp ) < 2000.0 }}"
+
+

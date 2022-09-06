@@ -1,0 +1,8 @@
+type: alarm-panel
+entity: alarm_control_panel.texecom
+states:
+  - arm_night
+  - arm_home
+  - arm_away
+name: Intruder Alarm
+

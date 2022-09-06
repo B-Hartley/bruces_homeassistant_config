@@ -1,0 +1,7 @@
+template:
+  sensor:
+    - name: "Washing Machine Power"
+      unique_id: washing_machine_power
+      unit_of_measurement: 'W'
+      state: "{{ state_attr('switch.washing_machine', 'current_power_w')   }}"
+      device_class: power

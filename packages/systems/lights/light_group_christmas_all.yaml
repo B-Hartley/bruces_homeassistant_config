@@ -1,0 +1,20 @@
+light:           
+  - platform: group
+    unique_id: light_group_christmas_all
+    name: Christmas All
+    entities:
+      - light.conservatory_tree
+      - light.conservatory_presents
+      - light.back_bush
+      - light.landing_curtain
+      - light.bar_curtain
+      - light.bedroom_curtain
+      - light.double_bush
+      - light.front_bush
+      - light.light_tree
+      - light.lounge_curtain
+      - light.porch_icicles      
+      - light.lounge_tree   
+      - light.bar_tree
+      - light.guest_left_curtain
+      - light.guest_right_curtain

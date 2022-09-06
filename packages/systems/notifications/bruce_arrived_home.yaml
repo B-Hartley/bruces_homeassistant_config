@@ -1,0 +1,14 @@
+automation:
+    - id: bruce_arrived
+      alias: Bruce Arrived Home
+      mode: single
+      trigger:
+        - platform: state
+          entity_id: person.bruce_hartley
+          to: home
+      action:
+        - service: telegram_bot.send_message
+          data:
+            target: !secret telegram_chat_id_sarah
+            message: Bruce has arrived home
+        - delay: 00:05:00

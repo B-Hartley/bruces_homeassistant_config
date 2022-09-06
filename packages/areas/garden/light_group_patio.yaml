@@ -1,0 +1,11 @@
+light:           
+  - platform: group
+    unique_id: light_group_patio
+    name: Patio Lights
+    entities:
+    - light.patio_light
+    - light.patio_gazebo
+    - light.patio_gazebo_wall
+    - light.patio_garage
+    - light.back_door
+    - light.shed_outside_lights

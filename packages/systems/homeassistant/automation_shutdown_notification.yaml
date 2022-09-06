@@ -1,0 +1,24 @@
+automation:
+  - id: system_shutdown_notication
+    alias: system_shutdown_notification
+    mode: single
+
+    description: >
+      Send notification on Home Assistant stop
+    
+    trigger:
+      - platform: homeassistant
+        id: "shutdown"
+        event: shutdown
+        
+    action:
+      - service: telegram_bot.send_message
+        data:
+          chat_id: !secret telegram_chat_id_bruce
+          message: Home Assistant is shutting down... Bye!
+      - delay: 10
+      - service: telegram_bot.delete_message
+        data:
+          chat_id: !secret telegram_chat_id_bruce
+          message_id: last
+    

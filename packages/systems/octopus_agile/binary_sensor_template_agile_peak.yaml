@@ -1,0 +1,6 @@
+template:
+  binary_sensor:
+    - name: "Agile Peak"
+      unique_id: agile_peak
+      availability: "{{ is_state('input_boolean.go_tariff','off') and states('sensor.import_price')|is_number }}"
+      state: "{{ is_state('input_boolean.go_tariff','off') and (( states('sensor.import_price')|float(35) >= 30.0)  or (now()>today_at('16:00') and now()<today_at('19:00'))) }}"

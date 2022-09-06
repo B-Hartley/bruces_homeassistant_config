@@ -1,0 +1,104 @@
+automation:
+- alias: scenes_from_dimmer
+  trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      command: 'on'
+  - platform: event
+    event_type: zha_event
+    event_data:
+      command: 'off_with_effect'
+  action:
+    service: script.turn_on
+    entity_id: script.dimmer_scene
+    data:
+      variables:
+        dimmer: "{{ trigger.event.data.device_ieee | regex_replace(find=':', replace='', ignorecase=False) }}"
+        
+script:
+  dimmer_scene:
+    sequence:
+    - service: input_number.increment
+      data: 
+        entity_id: "input_number.{{ dimmer }}_scene"
+    - service: input_text.set_value
+      data: 
+        entity_id: input_text.temp_which_dimmer
+        value: "{{ dimmer }}"
+    - service: input_text.set_value
+      data:
+        entity_id: input_text.temp_dimmer_command
+        value: "scene.{{ dimmer }}_{{ states('input_number.' +  dimmer  + '_scene') | int }}"
+    - service: scene.turn_on
+      data:
+        entity_id: "scene.{{ dimmer }}_{{ states('input_number.' +  dimmer  + '_scene') | int }}"
+#   - service_template: "{% if trigger.event.data.command == 'on' %}light.turn_on{% elif trigger.event.data.command == 'off_with_effect' %}light.turn_off{% endif %}"
+#      data:
+#        entity_id: "{% if trigger.event.data.device_ieee == '00:17:88:01:04:f0:dc:66' %}light.drum_room{% endif %}"
+    
+        
+
+
+#{
+#    "event_type": "zha_event",
+#    "data": {
+#        "device_ieee": "00:17:88:01:08:07:18:e0",
+#        "unique_id": "00:17:88:01:08:07:18:e0:2:0xfc00",
+#        "endpoint_id": 2,
+#        "cluster_id": 64512,
+#        "command": "on_press",   [ up_press | down_press ]
+#        "args": {
+#            "button": "on",  [up | down]
+#            "press_type": "press",
+#            "command_id": 0,
+#            "args": [
+#                1,
+#                3145728,
+#                0,
+#                33,
+#                0,
+#                0
+#            ]
+#        }
+#    },
+
+
+#        "device_ieee": "00:17:88:01:08:07:18:e0",
+#        "unique_id": "00:17:88:01:08:07:18:e0:1:0x0006",
+#        "endpoint_id": 1,
+#        "cluster_id": 6,
+#        "command": "on",  
+#        "args": []
+
+#        "device_ieee": "00:17:88:01:04:f0:dc:66",
+#        "unique_id": "00:17:88:01:04:f0:dc:66:1:0x0008",
+#        "endpoint_id": 1,
+#        "cluster_id": 8,
+#        "command": "step",
+#        "args": [
+#            0,  [ 0 is up, 1 is down]
+#            30,
+#            9
+#        ]
+
+
+#        "device_ieee": "00:17:88:01:08:07:18:e0",
+#        "unique_id": "00:17:88:01:08:07:18:e0:2:0xfc00",
+#        "endpoint_id": 2,
+#        "cluster_id": 64512,
+#        "command": "on_short_release",  [ down_short_release | up_short_release ]
+#        "args": {
+#            "button": "on",
+#            "press_type": "short_release",
+#            "command_id": 0,
+#            "args": [
+#                1,
+#                3145728,
+#                2,
+#                33,
+#                0,
+#                0
+#            ]
+#        }
+#    },

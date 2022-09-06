@@ -1,0 +1,27 @@
+shell_command:
+  eddi_boost: "curl --digest -u {{myenergi_serial}}:{{myenergi_password}} -H 'accept: application/json' -H 'content-type: application/json' --compressed 'https://s18.myenergi.net/cgi-eddi-boost-E{{eddi_serial}}-{{boost_mode}}-{{heater}}-{{boost_duration}}'"
+
+# Doesn't seem to work with duration > 60 ?
+        
+#cgi-eddi-boost-EID-BoostOn-HeaterNo-DurationMinutes
+#
+#Action
+#Set the boost mode on the EDDI
+#
+#Inputs
+#EID
+#Letter “E” followed by the Serial No of the EDDI
+#
+#BoostOn
+#0=No action
+#1=Boost off
+#10=Start manual boost
+#
+#HeaterNo
+#1=Heater 1
+#2=Heater 2
+#11=Relay 1 (If fitted)
+#12=Relay 2 (If fitted)
+#
+#DurationMinutes
+#Number of minutes boost is to run.

@@ -1,0 +1,9 @@
+template:
+  sensor:          
+    - name: "Powerwall Charging"
+      unique_id: powerwall_charging
+      availability: "{{ states('binary_sensor.powerwall_connected_to_tesla') != 'Unavailable' }}"
+      state: "{{ ((states('sensor.powerwall_battery_now')|float(0) / -1)|round(1)) if states('sensor.powerwall_battery_now')|float(0) < -0.05 else 0.0 }}"
+      unit_of_measurement: 'kW'
+      icon: mdi:battery
+      device_class: power  

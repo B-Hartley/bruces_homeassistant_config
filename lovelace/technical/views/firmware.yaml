@@ -1,0 +1,29 @@
+title: Firmware
+path: firmware
+icon: 'mdi:alpha-v'
+badges: []
+cards:
+  - type: entities
+    entities:
+      - entity: sensor.solaredge_firmware
+        name: Inverter
+    title: SolarEdge Firmware Versions   
+  - type: entities
+    entities:
+      - entity: sensor.zappi_jyggy_fwv
+        name: Zappi - Jyggy
+      - entity: sensor.zappi_paddy_fwv
+        name: Zappi - Paddy
+      - entity: sensor.myenergi_fwv
+        name: myEnergi Hub
+#      - entity: sensor.harvi_fwv
+#        name: Harvi
+      - entity: sensor.eddi_fwv
+        name: Eddi
+    title: MyEnergi Firmware Versions
+  - type: entities
+    entities:
+      - entity: sensor.myenergi_asn
+        name: myEnergi ASN
+
+   

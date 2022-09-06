@@ -1,0 +1,4 @@
+utility_meter:
+  daily_electric_export:
+    source: sensor.export_meter
+    cycle: daily

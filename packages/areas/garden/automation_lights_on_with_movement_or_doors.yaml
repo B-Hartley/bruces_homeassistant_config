@@ -1,0 +1,129 @@
+automation:
+  - id: garden_lights_on_with_motion
+    alias: 'Garden Lights on with motion or gate'
+    mode: restart
+
+    description: >-
+      Garden Lights on in sections based on movement
+
+    trigger: 
+      - platform: state
+        id: "back door"
+        entity_id: 
+          - binary_sensor.back_door         
+          - binary_sensor.back_gate_door 
+        to: 'on' 
+      - platform: state
+        id: "conservatory door"
+        entity_id: binary_sensor.conservatory_door    
+        to: 'on'   
+      - platform: state
+        id: "patio movement"
+        entity_id: binary_sensor.patio_sensor_motion     
+        to: 'on'        
+      - platform: state
+        id: "garage movement"
+        entity_id: binary_sensor.patio_garage_sensor_motion
+        to: 'on'
+      - platform: state
+        id: "person bins"
+        entity_id: sensor.bins_detected_object
+        to: person
+      - platform: state
+        id: "person gazebo"
+        entity_id: sensor.gazebo_detected_object
+        to: person       
+      - platform: state
+        id: "person patio"
+        entity_id: sensor.patio_detected_object
+        to: person
+        
+
+    condition:
+      - condition: state
+        entity_id: binary_sensor.light_outside
+        state: 'off'
+      - condition: state
+        entity_id: input_boolean.patio_lights_manually_on
+        state: 'off'
+
+    action:
+      - choose:
+          - conditions: 
+            - or:
+                - condition: trigger
+                  id: "back door"
+                - condition: trigger
+                  id: "person bins"                  
+            sequence:
+              - service: light.turn_on
+                target:
+                  entity_id: 
+                    - light.back_door
+                    - light.patio_light
+              - delay: 00:02:00
+              - service: light.turn_off
+                target:
+                  entity_id: 
+                   - light.patio_lights   
+                   - light.back_door
+                   - light.shed_outside_lights
+                 
+          - conditions: 
+            - or:
+                - condition: trigger
+                  id: "conservatory door"
+                - condition: trigger
+                  id: "person patio"    
+                - condition: trigger
+                  id: "patio movement"                    
+            sequence:
+              - service: light.turn_on
+                target:
+                  entity_id: 
+                    - light.garden_colour
+                    - light.patio_light
+              - delay: 00:02:00
+              - service: light.turn_off
+                target:
+                  entity_id: 
+                   - light.patio_lights   
+                   - light.back_door
+                   - light.shed_outside_lights
+   
+          - conditions: 
+              - condition: trigger
+                id: "person gazebo"           
+            sequence:
+              - service: light.turn_on
+                target:
+                  entity_id: 
+  #                  - light.garden_colour
+                    - light.patio_gazebo
+                    - light.patio_gazebo_wall
+                    - light.shed_outside_lights
+              - delay: 00:02:00
+              - service: light.turn_off
+                target:
+                  entity_id: 
+                   - light.patio_lights   
+                   - light.back_door
+                   - light.shed_outside_lights
+     
+          - conditions: 
+              - condition: trigger
+                id: "garage movement"   
+            sequence:
+              - service: light.turn_on
+                target:
+                  entity_id: 
+                    - light.shed_outside_lights
+                    - light.patio_garage
+              - delay: 00:02:00
+              - service: light.turn_off
+                target:
+                  entity_id: 
+                   - light.patio_lights   
+                   - light.back_door
+                   - light.shed_outside_lights
+             

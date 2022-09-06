@@ -1,0 +1,17 @@
+sensor:
+  - platform: command_line
+    unique_id: nuc_cpu_temp
+    name: NUC CPU Temperature
+    command: "cat /sys/devices/virtual/thermal/thermal_zone2/temp"
+    value_template: "{{ value|multiply(0.001)|round(2,'',0) }}"
+    unit_of_measurement: '°C'
+#  - platform: command_line
+#    name: NUC zone 1
+#    command: "cat /sys/devices/virtual/thermal/thermal_zone1/temp"
+#    value_template: '{{ value|multiply(0.001)|round(2) }}'
+#    unit_of_measurement: '°C'    
+#  - platform: command_line
+#    name: NUC zone 3
+#    command: "cat /sys/devices/virtual/thermal/thermal_zone1/temp"
+#    value_template: '{{ value|multiply(0.001)|round(2) }}'
+#    unit_of_measurement: '°C'      

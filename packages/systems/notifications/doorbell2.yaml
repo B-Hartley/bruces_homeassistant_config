@@ -1,0 +1,31 @@
+automation:
+    # Door bell has rung
+    - id: doorbell_has_rung_tv
+      alias: Doorbell has rung TV
+      trigger:
+        platform: state
+        entity_id: binary_sensor.doorbell_doorbell
+        from: "off"
+        to: "on"
+      
+      condition:
+        condition: state
+        entity_id: media_player.lounge_tv
+        state: 'on'
+        
+      variables:
+        pic_file: "{{ 'doorbell_' + now().strftime('%d%m%y%H%M%S') }}"          
+          
+      action:
+        - service: camera.snapshot
+          target:
+            entity_id: camera.doorbell_medium
+          data:
+            filename: "/config/www/cam_snaps/{{ pic_file }}.jpg"
+              
+        - service: notify.loungetv
+          data:
+            message: "Doorbell has rung !"
+            data:
+              image:
+                url: "http://192.168.11.124:8123/local/cam_snaps/{{ pic_file }}.jpg"

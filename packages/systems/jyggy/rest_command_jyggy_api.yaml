@@ -1,0 +1,4 @@
+rest_command:
+  jyggy_api:
+    url: "https://www.teslafi.com/feed.php?token={{ teslafi_token }}&command={{ jyggy_command }}"
+

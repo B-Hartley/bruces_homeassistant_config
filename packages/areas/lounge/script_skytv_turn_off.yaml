@@ -1,0 +1,30 @@
+script:
+    skytv_turn_off:
+      alias: End TV in the Lounge
+      sequence:
+        - service: light.turn_off
+          target:
+            entity_id: light.lounge_ambilight            
+        - service: media_player.turn_off
+          target:
+            entity_id: 
+              - media_player.lounge_amp
+              - media_player.lounge_skyq
+              - media_player.lounge_android
+        - service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.watching_skytv
+        - service: remote.turn_off
+          target:
+            entity_id: remote.lounge_appletv
+        - service: media_player.turn_off
+          target:
+            entity_id: media_player.lounge_appletv     
+#         - service: remote.send_command
+#          target: 
+#            entity_id: remote.lounge_tv
+#          data:
+#            command: PowerOff          
+        - service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.lounge_ambilight_required

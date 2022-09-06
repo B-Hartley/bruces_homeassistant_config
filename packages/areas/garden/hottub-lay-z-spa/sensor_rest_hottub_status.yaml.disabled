@@ -1,0 +1,36 @@
+sensor:
+  - platform: rest
+    name: hottub_status
+    resource: "https://mobileapi.lay-z-spa.co.uk/v1/gizwits/status"
+    headers:
+      Content-Type: application/x-www-form-urlencoded
+    method: POST
+    payload: !secret hottub_api_did
+    value_template: "{{ value_json.data.attr.power }}"    
+    json_attributes_path: "$.data.attr"
+    json_attributes:
+      - system_err2
+      - wave_appm_min
+      - heat_timer_min
+      - heat_power
+      - earth
+      - wave_timer_min
+      - system_err6
+      - system_err7
+      - system_err4
+      - system_err5
+      - heat_temp_reach
+      - system_err3
+      - system_err1
+      - system_err8
+      - system_err9
+      - filter_timer_min
+      - heat_appm_min
+      - power
+      - temp_set_unit
+      - filter_appm_min
+      - temp_now
+      - wave_power
+      - locked
+      - filter_power
+      - temp_set

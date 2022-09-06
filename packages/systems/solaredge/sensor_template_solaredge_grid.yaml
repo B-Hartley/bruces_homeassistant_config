@@ -1,0 +1,10 @@
+template:
+  sensor:
+    - name: "Solaredge Grid"
+      unique_id: solaredge_grid
+      unit_of_measurement: "kW"
+      availability: "{{ states('sensor.solaredge_mb_m1_ac_power')|is_number }}"
+      device_class: power
+      icon: "mdi:transmission-tower"
+      state: "{{ ((states('sensor.solaredge_mb_m1_ac_power')|float(0))/1000.0 )|round(1,'',0) }}"
+

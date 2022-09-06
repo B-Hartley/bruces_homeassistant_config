@@ -1,0 +1,12 @@
+card:
+  show_state: false
+  type: glance
+entities:
+  - entity: binary_sensor.kitchen_sink_water_leak
+    name: Kitchen Sink
+  - entity: binary_sensor.pending_system_alerts
+    name: Water Supply Problem
+state_filter:
+  - 'on'     
+show_empty: false
+type: entity-filter

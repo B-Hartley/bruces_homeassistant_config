@@ -1,0 +1,47 @@
+automation:
+  - id: powerwall_powercut_actions
+    alias: 'Powerwall: Turn off high loads and announce powercut'
+    mode: single
+
+    description: >
+      Powercut handling
+    
+    trigger:
+      - platform: state
+        id: 'grid_off'
+        entity_id: binary_sensor.grid_status
+        to: 'off'
+      - platform: state
+        id: 'supply_off'
+        entity_id: binary_sensor.grid_status
+        to: 'off'
+        
+    action:
+      - service: logbook.log
+        data:
+          name: Powercut !
+          entity_id: binary_sensor.grid_status
+          message: Powercut !
+      - service: telegram_bot.send_message
+        data:
+          target: !secret telegram_chat_id_bruce_and_sarah
+          title: There is a powercut!
+          message: "HotTub and Car Chargers switched off. Powerwall capacity is {{ states('sensor.powerwall_charge_corrected') }}%"
+      - service: script.zappi_mode_paddy
+        data:
+          mode: 'Stopped'
+      - service: script.zappi_mode_jyggy
+        data:
+          mode: 'Stopped'
+      - service: logbook.log
+        data:
+          domain: switch
+          entity_id: climate.spa_thermostat
+          name: "Hot Tub"
+          message: "Heating off for power cut"
+      - service: climate.set_temperature
+        target:
+          entity_id: climate.spa_thermostat
+        data: 
+          temperature: 28          
+          

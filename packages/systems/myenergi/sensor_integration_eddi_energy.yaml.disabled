@@ -1,0 +1,4 @@
+sensor:
+  - platform: integration
+    name: "Eddi Energy"
+    source: sensor.eddi_power    

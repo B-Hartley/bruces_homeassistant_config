@@ -1,0 +1,13 @@
+template:
+  sensor:
+    - name: "Washing Machine State"
+      unique_id: washing_machine_state
+      availability: "{{ states('sensor.washing_machine_current_consumption')|is_number }}"
+      state: >
+          {% if states('sensor.washing_machine_current_consumption')|float>700.00 %}Heating{% 
+          elif states('sensor.washing_machine_current_consumption')|float>190.00 %}Fast-Spin{% 
+          elif states('sensor.washing_machine_current_consumption')|float>90.00 %}Spin{% 
+          elif states('sensor.washing_machine_current_consumption')|float>5.70 %}Washing{%           
+          elif states('sensor.washing_machine_current_consumption')|float>0.35 %}Standby{% 
+          else %}Off{% endif %}
+        

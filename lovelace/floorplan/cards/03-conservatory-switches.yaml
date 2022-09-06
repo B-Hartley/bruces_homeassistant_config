@@ -1,0 +1,38 @@
+type: conditional
+#view_layout:
+#  position: sidebar
+conditions:
+  - entity: input_boolean.floorplan_show_conservatory_switches
+    state: "on"
+card:
+ type: entities
+ entities:
+  - entity: light.conservatory_left
+    hide_state: true
+    name: Left
+    type: 'custom:slider-entity-row'
+  - entity: light.conservatory_right
+    hide_state: true
+    name: Right
+    type: 'custom:slider-entity-row'    
+  - entity: light.conservatory_lamp
+    hide_state: true
+    name: Lamp
+    type: 'custom:slider-entity-row'
+  - entity: light.conservatory_fan_light
+    hide_state: true
+    name: Fan Light
+    type: 'custom:slider-entity-row'     
+  - entity: light.conservatory_table_lamp
+    hide_state: true
+    name: Table Lamp
+    type: 'custom:slider-entity-row'
+  - entity: light.conservatory_wall_light
+    hide_state: true
+    name: Wall Light
+    type: 'custom:slider-entity-row'      
+  - entity: input_boolean.floorplan_show_conservatory_switches
+    name: Show These Switches    
+
+
+  

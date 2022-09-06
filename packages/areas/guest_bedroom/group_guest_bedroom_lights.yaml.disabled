@@ -1,0 +1,6 @@
+group:
+  guest_bedroom_lights_group:
+    name: Guest Bedroom Lights Group
+    entities:
+    - light.guest_bedroom_light
+    - light.guest_bedroom_bedside

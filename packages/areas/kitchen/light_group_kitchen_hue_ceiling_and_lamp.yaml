@@ -1,0 +1,12 @@
+light:          
+  - platform: group
+    unique_id: light_group_kitchen_hue_and_lamp
+    name: Kitchen Hue Ceiling and Lamp
+    entities:
+    - light.kitchen_1
+    - light.kitchen_2
+    - light.kitchen_3
+    - light.kitchen_4
+    - light.kitchen_5 
+    - light.kitchen_ceiling_4
+    - light.kitchen_floor_lamp

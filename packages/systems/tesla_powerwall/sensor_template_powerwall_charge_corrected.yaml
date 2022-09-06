@@ -1,0 +1,8 @@
+template:
+  sensor:
+    - name: "Powerwall Charge Corrected"
+      unique_id: powerwall_charge_corrected
+      availability: "{{ states('binary_sensor.powerwall_connected_to_tesla') != 'Unavailable' }}"
+      unit_of_measurement: '%'
+      state: "{{ ((states('sensor.powerwall_charge')|float(0) * 1.05) - 5.0 )|int(0)  }}"
+      device_class: battery

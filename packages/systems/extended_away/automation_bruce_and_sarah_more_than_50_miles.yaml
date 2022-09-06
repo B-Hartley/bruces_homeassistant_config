@@ -1,0 +1,41 @@
+automation:
+  - id: bruce_and_sarah_more_than_50_miles
+    alias: 'Bruce and Sarah more than 50 miles away'
+    
+    description: >
+      should we switch the heating off
+      
+    trigger:
+      - platform: numeric_state
+        id: "far"
+        entity_id: 
+          - sensor.bruce_iphone_waze_distance
+          - sensor.sarah_iphone_waze_distance
+        above: 50
+        
+    condition:
+      - condition: state
+        entity_id: input_boolean.extended_away
+        state: 'off'
+      - condition: numeric_state
+        entity_id: sensor.bruce_iphone_waze_distance
+        above: 50
+      - condition: numeric_state
+        entity_id: sensor.sarah_iphone_waze_distance
+        above: 50
+        
+    action:
+      - service: automation.turn_on
+        target:
+          entity_id: automation.bruce_and_sarah_less_than_50_miles_away
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.extended_away
+      - service: telegram_bot.send_message
+        data:
+          target: !secret telegram_chat_id_bruce_and_sarah
+          title: Going Away?
+          message: "Bruce & sarah are more than 50 miles from home, turn the heating off?"
+
+
+# Add keyboard and option to turn heating off

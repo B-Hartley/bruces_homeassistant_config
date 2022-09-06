@@ -1,0 +1,18 @@
+image_processing:
+  - platform: platerecognizer
+    api_token: !secret plate_recogniser_api
+    regions:
+      - gb
+    watched_plates:
+      - !secret plate_sarah
+      - !secret plate_bruce
+      - !secret plate_terri
+      - !secret plate_moira
+      - !secret plate_jinty      
+      - !secret plate_neighbour1
+    save_file_folder: /config/platerecogniser/
+    save_timestamped_file: True
+    detection_rule: strict
+    always_save_latest_file: True
+    source:
+      - entity_id: camera.doorbell_medium

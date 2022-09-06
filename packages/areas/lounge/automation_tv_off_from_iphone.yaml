@@ -1,0 +1,16 @@
+automation:
+  - id: tv_off_from_iphone
+    alias: Action Turn TV Off
+    
+    description: >
+      IOS action to turn off TV
+
+    trigger:
+      - platform: event
+        id: "tv"
+        event_type: ios.action_fired
+        event_data:
+          actionName: 'tv_off'
+          
+    action:
+      - service: script.skytv_turn_off

@@ -1,0 +1,16 @@
+automation:
+  - id: daily_backup
+    alias: 'Daily Backup'
+    
+    description: >
+      Daily Backup
+      
+    trigger:
+      - platform: time
+        id: "0300"
+        at: 03:00:00
+        
+    action:
+    - service: hassio.backup_full
+      data:
+        name: Automated Backup {{ now().strftime('%Y-%m-%d') }}

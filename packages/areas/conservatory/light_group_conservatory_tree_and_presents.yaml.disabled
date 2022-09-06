@@ -1,0 +1,8 @@
+light:          
+  - platform: group
+    unique_id: conservatory_tree_and_presents
+    name: Conservatory Tree and Presents
+    entities:
+      - light.conservatory_tree
+      - light.conservatory_icicles
+      - light.conservatory_presents

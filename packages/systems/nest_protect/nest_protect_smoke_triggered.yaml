@@ -1,0 +1,30 @@
+automation:
+  # Smoke trigger - Critical Notication
+  - id: smoke_alarm_triggered
+    alias: Smoke Alarm
+    description: Smoke alarm
+    trigger:
+      - entity_id: 
+          - binary_sensor.nest_protect_downstairs_smoke_status
+          - binary_sensor.nest_protect_garage_smoke_status
+          - binary_sensor.nest_protect_loft_smoke_status
+          - binary_sensor.nest_protect_kates_smoke_status
+          - binary_sensor.nest_protect_stairs_smoke_status
+        platform: state
+        to: "on"
+    action:
+    - service: notify.bruce_and_sarah_phones
+      data:
+        title: Smoke Alarm Triggered"
+        message: The smoke alarm is going off!
+        data:
+          push:
+            sound:
+              name: default
+              critical: 1
+              volume: 1.0
+    - service: persistent_notification.create
+      data:
+        title: "Smoke Alarm Triggered"
+        message: "The smoke alarm is going off!"
+        notification_id: Smoke

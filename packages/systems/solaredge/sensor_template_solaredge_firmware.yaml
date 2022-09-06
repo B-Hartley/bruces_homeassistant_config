@@ -1,0 +1,5 @@
+template:
+  sensor:
+    - name: "Solaredge Firmware"
+      unique_id: solaredge_firmware
+      state: "{{ state_attr('sensor.solaredge_inverters','inverters')[0].cpuVersion }}"

@@ -1,0 +1,7 @@
+light:
+  - platform: group
+    unique_id: bar_bar_group
+    name: Bar Bar
+    entities:
+    - light.bar_shelves
+    - light.bar_worktop

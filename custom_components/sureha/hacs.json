@@ -1,0 +1,10 @@
+{
+    "name": "SureHA",
+    "documentation": "https://github.com/benleb/sureha",
+    "content_in_root": true,
+    "render_readme": true,
+    "domains": [
+        "binary_sensor",
+        "sensor"
+    ]
+}

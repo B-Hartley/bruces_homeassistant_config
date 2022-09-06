@@ -1,0 +1,7 @@
+mqtt:
+  sensor:
+    - name: "Gas Daily"
+      state_topic: !secret smart_hild_state_topic
+      unit_of_measurement: 'kWh'
+      value_template: "{{ (value_json['gasMtr']['0702']['0C']['01']|int(base=16)  * value_json['gasMtr']['0702']['03']['01']|int(base=16) / value_json['gasMtr']['0702']['03']['02']|int(base=16))|int }}"
+      icon: 'mdi:fire'

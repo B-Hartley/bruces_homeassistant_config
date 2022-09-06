@@ -1,0 +1,83 @@
+automation:
+  - id: unifi_protect_person_detected_doorbell
+    alias: Send message when person detected doorbell
+    mode: single
+    
+    description: >
+      record and send a video when person seen
+      
+    trigger:  
+      - platform: state
+        id: 'person'
+        entity_id:  sensor.doorbell_detected_object
+        to: person
+        
+    variables:
+      pic_file: "{{ 'doorbell_' + now().strftime('%d%m%H%M') }}"    
+      pic_folder: "/config/www/cam_snaps/"      
+      base_url: !secret base_url
+      
+    action:
+      - alias: "send photo by telegram"        
+        service: telegram_bot.send_photo
+        data:
+          caption: >
+            {% if ((as_timestamp(now()) - as_timestamp(states.binary_sensor.front_door.last_changed))<60) %}
+            Someone has just left, the door is {{ 'open' if is_state('binary_sensor.front_door','on') else 'closed' }}
+            {% else %}
+            I have seen a person on the doorbell camera.
+            {% endif %}
+          url: "{{ base_url + ((state_attr('sensor.doorbell_detected_object','event_thumbnail') or '/x'))}}"
+          message_tag: object_detected_doorbell                  
+          target: !secret telegram_chat_id_bruce
+          
+      - alias: "record camera to mp4"               
+        service: camera.record
+        target:
+          entity_id: camera.doorbell_medium       
+        data:
+          duration: 10
+          filename: "{{ pic_folder + pic_file }}.mp4"    
+          
+      - alias: "Wait for Event to End"
+        wait_for_trigger:
+          - platform: state
+            entity_id: sensor.doorbell_detected_object
+            to: "none"
+            
+      - alias: "delete Telegram message"                 
+        service: telegram_bot.delete_message
+        data:
+          message_id: "{{ states('input_text.object_detected_doorbell_message_id') }}"
+          chat_id: !secret telegram_chat_id_bruce
+
+      - alias: "send photo by telegram"               
+        service: telegram_bot.send_photo
+        data:
+          caption: >
+            {% if ((as_timestamp(now()) - as_timestamp(states.binary_sensor.front_door.last_changed))<60) %}
+            Someone has just left, the door is {{ 'open' if is_state('binary_sensor.front_door','on') else 'closed' }}
+            {% else %}
+            I have seen a person on the doorbell camera.
+            {% endif %}
+          url: "{{ base_url + (wait.trigger.from_state.attributes.event_thumbnail or '/x') }}"
+          message_tag: object_detected_doorbell                  
+          target: !secret telegram_chat_id_bruce         
+
+      - alias: "wait for video file to be written"                
+        wait_template: "{{ pic_file in states.sensor.cam_snaps.attributes.file_list }}"
+        timeout: '00:00:20'
+
+      - alias: "Edit telegram message to add keyboard"          
+        service: telegram_bot.edit_caption
+        data:
+          message_id: "{{ states('input_text.object_detected_doorbell_message_id') }}"
+          chat_id: !secret telegram_chat_id_bruce  
+          caption: >
+            {% if ((as_timestamp(now()) - as_timestamp(states.binary_sensor.front_door.last_changed))<60) %}
+            Someone has just left, the door is {{ 'open' if is_state('binary_sensor.front_door','on') else 'closed' }}
+            {% else %}
+            I have seen a person on the doorbell camera.
+            {% endif %}
+          inline_keyboard:
+            - "Video:/vdd {{pic_file}}, OK:/remove_keyboard"                   

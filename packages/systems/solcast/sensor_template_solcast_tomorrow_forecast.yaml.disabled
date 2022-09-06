@@ -1,0 +1,7 @@
+template:
+  sensor:
+    - name: "Solcast Forecast Tomorrow"
+      unique_id: solcast_forecast_tomorrow
+      unit_of_measurement: 'kWh'            
+      device_class: energy
+      state: "{{ states('sensor.solcast_forecast_tomorrow') | round(1) }}"    

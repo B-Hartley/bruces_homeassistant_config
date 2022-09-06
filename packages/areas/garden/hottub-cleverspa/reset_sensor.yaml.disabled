@@ -1,0 +1,21 @@
+# I haven't had this tub, but this was code from a forum showing similar calls for the CleverSpa tub
+
+sensor:
+  - platform: rest
+    name: hottub_status
+    resource: "https://api.gizwits.com/app/devdata/***my did***/latest"  
+    # xxxxxxxxxxxx is the did from the bindings sensor
+    headers:
+      Content-Type: application/json
+      X-Gizwits-Application-Id: 805cc6a3f41b48aeae471e2fcb6ebc73
+    method: GET
+    value_template: "{% if value_json.attr.Temperature_setup > 0%}online{% else %}offline{%endif%}"    
+    json_attributes_path: "$.attr"
+    json_attributes:
+      - Heater
+      - 03
+      - Undercooling
+      - Current_temperature
+      - Filter
+      - Temperature_setup
+      - Superheat

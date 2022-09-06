@@ -1,0 +1,5 @@
+sensor:
+  - platform: integration
+    name: "Powerwall Charging Energy"
+    source: sensor.powerwall_charging
+    round: 1

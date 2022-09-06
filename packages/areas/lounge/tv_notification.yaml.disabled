@@ -1,0 +1,4 @@
+notify:
+  - platform: nfandroidtv
+    name: loungeTV
+    host: !secret lounge_tv_ip

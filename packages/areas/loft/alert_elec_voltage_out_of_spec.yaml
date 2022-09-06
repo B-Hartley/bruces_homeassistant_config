@@ -1,0 +1,21 @@
+alert:
+  alert_elec_voltage_out_of_spec:
+    name: Electricity Voltage Not in Spec
+    done_message: Electricity voltage is now OK
+    entity_id: binary_sensor.elec_voltage_out_of_spec
+    state: 'on'
+    repeat:
+      - 1    
+      - 2      
+      - 10
+      - 20
+      - 30
+      - 60
+      - 120
+      - 240
+      - 480
+      - 960
+    can_acknowledge: true
+    skip_first: false
+    notifiers:
+      - telegram_bruce

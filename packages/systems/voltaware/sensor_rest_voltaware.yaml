@@ -1,0 +1,93 @@
+rest:
+  - resource: !secret voltaware_resource
+#  -  resource: http://192.168.xxx.xxx/getmeterdata    
+    scan_interval: 20
+    timeout: 10
+    headers:
+      User-Agent: Home Assistant
+      Content-Type: application/json
+      Accept: application/json
+    
+    sensor:
+      - name: Voltaware
+        value_template:  "{{ value_json.time|replace(', ','T')}}+00:00"
+
+      - name: Voltaware V
+        value_template: "{{ value_json.channels[0].V / 1000 }}"
+        unit_of_measurement: 'V'
+        device_class: voltage   
+        
+      - name: Voltaware I
+        value_template: "{{ value_json.channels[0].I / 1000 }}"
+        unit_of_measurement: 'A'
+        device_class: current 
+
+      - name: Voltaware Active Net
+        value_template: "{{ value_json.channels[0].active_net / 1000 }}"
+        unit_of_measurement: 'Wh'
+        device_class: energy
+
+      - name: Voltaware Active Imp
+        value_template: "{{ value_json.channels[0].active_imp / 1000 }}"
+        unit_of_measurement: 'Wh'
+        device_class: energy
+
+      - name: Voltaware Active Exp
+        value_template: "{{ value_json.channels[0].active_exp / 1000 }}"
+        unit_of_measurement: 'Wh'
+        device_class: energy
+
+      - name: Voltaware Reactive Net
+        value_template: "{{ value_json.channels[0].reactive_net / 1000 }}"
+        unit_of_measurement: 'varh'
+
+      - name: Voltaware Reactive Imp
+        value_template: "{{ value_json.channels[0].reactive_imp / 1000 }}"
+        unit_of_measurement: 'varh'
+
+      - name: Voltaware Reactive Exp
+        value_template: "{{ value_json.channels[0].reactive_exp / 1000 }}"
+        unit_of_measurement: 'varh'
+
+      - name: Voltaware Phase
+        value_template: "{{ value_json.channels[0].phase / 1000 }}"
+        unit_of_measurement: '°'
+
+      - name: Voltaware Frequency
+        value_template: "{{ value_json.channels[0].frequency / 1000 }}"
+        unit_of_measurement: 'Hz'
+
+      - name: Voltaware Active Power
+        value_template: "{{ value_json.channels[0].active_power / 1000 }}"
+        unit_of_measurement: 'W'
+        device_class: power      
+    
+      - name: Voltaware Reactive Power
+        value_template: "{{ value_json.channels[0].reactive_power / 1000 }}"
+        unit_of_measurement: 'VAR'
+        
+      - name: Floorplan Voltaware Home Load
+        value_template: "{{ (value_json.channels[0].active_power / 1000)|round(1) }}"
+        unit_of_measurement: 'kW'
+        device_class: power
+                   
+      - name: Voltaware Home Load
+        unit_of_measurement: 'kW'
+        value_template: "{{ (( value_json.channels[0].i * value_json.channels[0].v ) / 1000)|round(2) }}"
+
+#    value_template:  "{{ value_json.time|replace(', ','T')}}+00:00"
+#    json_attributes_path: '$.channels[0]'
+#    json_attributes:
+#      - V                  # Voltage (V)
+#      - I                  # Current (A)
+#      - active_net         # net Active Energy - P (Wh)
+#      - active_imp         # consumed energy - P (Wh)
+#      - active_exp         # produced energy - P (Wh)
+#      - reactive_net       # net reactive energy - Q (varh)
+#      - reactive_imp       # consumed energy - Q (varh)     
+#      - reactive_exp       # produced energy - Q (varh)      
+#      - phase              # phase shift (degrees)
+#      - frequency          # frequency (Hz)
+#      - active_power       # P (W)
+#      - reactive_power     # Q (VAR)
+

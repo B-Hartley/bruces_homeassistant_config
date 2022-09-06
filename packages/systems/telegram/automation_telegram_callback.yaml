@@ -1,0 +1,849 @@
+automation:
+  - id: telegram_callback
+    alias: 'Process Telegram Callbacks'
+    
+    description: >
+      Call Back Handling
+      
+    trigger:
+      - platform: event
+        id: 'callback'
+        event_type: telegram_callback
+        
+    variables:
+      base_url: !secret base_url    
+      
+    action:
+      - choose:
+                 
+          - alias: "== /Remove_Keyboard"
+            conditions: "{{ trigger.event.data.command == '/remove_keyboard' }}"
+            sequence:
+              - alias: "Send callback response"
+                service: telegram_bot.answer_callback_query
+                data:
+                  message: "OK"
+                  callback_query_id: '{{ trigger.event.data.id }}'                    
+              - service: telegram_bot.edit_replymarkup
+                data:
+                  message_id: "{{ trigger.event.data.message.message_id }}"
+                  chat_id: "{{ trigger.event.data.chat_id }}"
+                  inline_keyboard: []
+
+          - alias: "== /HRT_Done"
+            conditions: "{{ trigger.event.data.command == '/hrt_done' }}"
+            sequence:     
+              - alias: "Send callback response"
+                service: telegram_bot.answer_callback_query
+                data:
+                  message: "OK - HRT Done"    
+                  callback_query_id: '{{ trigger.event.data.id }}'                    
+              - service: input_button.press
+                target: 
+                  entity_id: input_button.hrt_last_used
+              - service: counter.increment
+                target: 
+                  entity_id: counter.hrt_squirts_used
+                  
+          - alias: "== /chlorine_added"
+            conditions: "{{ trigger.event.data.command == '/chlorine_added' }}"
+            sequence:     
+              - alias: "Send callback response"
+                service: telegram_bot.answer_callback_query
+                data:
+                  message: "OK"    
+                  callback_query_id: '{{ trigger.event.data.id }}'                    
+              - service: input_button.press
+                target: 
+                  entity_id: input_button.hottub_chlorine_tablet         
+              - service: telegram_bot.edit_message
+                data:
+                  message_id: "{{ trigger.event.data.message.message_id }}"
+                  chat_id: "{{ trigger.event.data.chat_id }}"
+                  message: >
+                    Chlorine Tablet {{iif((as_timestamp(now())-as_timestamp(states('input_button.hottub_chlorine_tablet')))/86400>3,'needs to be','has been')}} added to hot tub
+                    
+                    Last tablet: {{ ((as_timestamp(now())-as_timestamp(states('input_button.hottub_chlorine_tablet')))/86400)|int }} days ago
+                  
+          - alias: "== /solar_refresh"
+            conditions: "{{ trigger.event.data.command == '/solar_refresh' }}"
+            sequence:
+              - alias: "Send callback response"
+                service: telegram_bot.answer_callback_query
+                data:
+                  message: "OK"
+                  callback_query_id: '{{ trigger.event.data.id }}'                    
+              - service: telegram_bot.edit_message
+                data:
+                  message_id: "{{ trigger.event.data.message.message_id }}"
+                  chat_id: "{{ trigger.event.data.chat_id }}"                
+                  message: >
+                    Solar Power Now: {{ states('sensor.solar_production')}} kW
+                    
+                    Today's Production: {{ states('sensor.solar_energy_daily_kwh') }} kWh
+                    
+                    Today's Forecast: {{ states('sensor.solcast_forecast_today') }} kWh
+                  inline_keyboard:
+                    - 'Refresh:/solar_refresh, OK:/remove_keyboard'
+
+            # Send video file based on name in callback
+          - conditions: "{{ trigger.event.data.command == '/vdd' }}"
+            sequence:
+              - service: telegram_bot.delete_message
+                data:
+                  message_id: "{{ trigger.event.data.message.message_id }}"
+                  chat_id: "{{ trigger.event.data.chat_id }}"       
+              - service: telegram_bot.answer_callback_query
+                data:
+                  message: "Sending video from {{ trigger.event.data.args }}.mp4"
+                  callback_query_id: '{{ trigger.event.data.id }}'    
+              - service: telegram_bot.send_video
+                data:
+                  file: "/config/www/cam_snaps/{{ trigger.event.data.args }}.mp4"    
+                  caption: "{% set callback_datetime = trigger.event.data.args.split('_')[1] %}{{ trigger.event.data.args.split('_')[0]|title }} - {{ callback_datetime[0:2] }}/{{ callback_datetime[2:4] }} {{ callback_datetime[4:6] }}:{{ callback_datetime[6:8] }}"
+                  target: "{{ trigger.event.data.chat_id }}"     
+                  
+#            # Send video file based on name in callback
+#          - conditions: "{{ trigger.event.data.command[0:5] == '/vdd_' }}"
+#            sequence:
+#              - service: telegram_bot.delete_message
+#                data:
+#                  message_id: "{{ trigger.event.data.message.message_id }}"
+#                  chat_id: "{{ trigger.event.data.chat_id }}"       
+#              - service: telegram_bot.answer_callback_query
+#                data:
+#                  message: "Sending video from {{ trigger.event.data.command[5:] }}.mp4"
+#                  callback_query_id: '{{ trigger.event.data.id }}'    
+#              - service: telegram_bot.send_video
+#                data:
+#                  file: "/config/www/cam_snaps/{{ trigger.event.data.command[5:] }}.mp4"    
+#                  caption: "{% set callback_datetime = trigger.event.data.command[5:].split('_')[1] %}{{ trigger.event.data.command[5:].split('_')[0]|title }} - {{ callback_datetime[0:2] }}/{{ callback_datetime[2:4] }} {{ callback_datetime[4:6] }}:{{ callback_datetime[6:8] }}"
+#                  target: "{{ trigger.event.data.chat_id }}"      
+
+            #Empty House Arm Away
+          - conditions: "{{ trigger.event.data.command == '/empty_house_arm_away' }}"
+            sequence:
+              - alias: "Send callback response"
+                service: telegram_bot.answer_callback_query
+                data:
+                  message: "OK"
+                  callback_query_id: '{{ trigger.event.data.id }}'                    
+              - service: telegram_bot.edit_message
+                data:
+                  message_id: "{{ trigger.event.data.message.message_id }}"
+                  chat_id: "{{ trigger.event.data.chat_id }}"                
+                  message: "Alarm Arming....."
+                  inline_keyboard: []  
+              - service: alarm_control_panel.alarm_arm_away
+                data:
+                  entity_id: alarm_control_panel.texecom
+                  code: !secret alarm_code
+              - service: telegram_bot.answer_callback_query
+                data:
+                  message: "Alarm set to Armed Away"
+                  callback_query_id: '{{ trigger.event.data.id }}'                 
+              - wait_for_trigger:
+                  - platform: state
+                    entity_id: alarm_control_panel.texecom
+                    to: "armed_away"
+                timeout: 00:00:20
+              - service: telegram_bot.edit_message
+                data:
+                  message_id: "{{ trigger.event.data.message.message_id }}"
+                  chat_id: "{{ trigger.event.data.chat_id }}"     
+                  title: "Everyone is Out"                  
+                  message: >
+                    {% if is_state('alarm_control_panel.texecom','disarmed') %}Alarm is not set
+                    
+                    {% endif %}{% if is_state('fan.bedroom_fan','on') %}Bedroom Fan is on
+                    
+                    {% endif %}{% if is_state('fan.conservatory_fan','on') %}Conservatory Fan is on
+                    
+                    {% endif %}{% if is_state('light.downstairs','on') %}Lights are on downstairs
+                    
+                    {% endif %}{% if is_state('light.outside','on') %}Lights are on Outside
+                    
+                    {% endif %}{% if is_state('light.upstairs','on') %}Lights are on upstairs
+                    
+                    {% endif %}{% if is_state('input_boolean.watching_skytv','on') %}TV on in lounge
+                    
+                    {% endif %}{% if is_state('media_player.kitchen_sonos','playing') %}SONOS playing in the kitchen
+                    
+                    {% endif %}{% if is_state('media_player.sophies_sonos','playing') %}SONOS playing in Sophie bedroom
+                    
+                    {% endif %}{% if is_state('media_player.kates_sonos','playing') %}SONOS playing in Kate bedroom
+                    
+                    {% endif %}{% if is_state('media_player.lounge_sonos','playing') %}SONOS playing in the Lounge
+                    
+                    {% endif %}{% if is_state('media_player.bar_sonos','playing') %}SONOS playing in the Bar
+                    
+                    {% endif %}{% if is_state('binary_sensor.front_door','on') %}conservatory door is open
+                    
+                    {% endif %}{% if is_state('binary_sensor.front_door','on') %}front door is open
+                    
+                    {% endif %}{% if is_state('binary_sensor.back_gate_door','on') %}back gate is open
+                    
+                    {% endif %}{% if is_state('binary_sensor.back_door','on') %}back door is open
+                    
+                    {% endif %}{% if is_state('binary_sensor.under_stairs_door','on') %}under stairs door is open
+                    
+                    {% endif %}{% if is_state('binary_sensor.master_bedroom_door','off') %}master bedroom door is closed
+                    
+                    {% endif %}{% if is_state('binary_sensor.lounge_door','on') %}lounge door is open
+                    
+                    {% endif %}{% if is_state('binary_sensor.bar_door','off') %}bar door is closed
+                    
+                    {% endif %}{% if is_state('binary_sensor.sophies_bedroom_door','on') %}Sophie's door is open
+                    
+                    {% endif %}{% if is_state('binary_sensor.kates_bedroom_door','on') %}Kate's door is open
+                    
+                    {% endif %}{% if is_state('binary_sensor.guest_bedroom_door','on') %}Guest's door is open
+                    
+                    {% endif %}{% if is_state('binary_sensor.downstairs_toilet_door','off') %}Downstairs Loo door is closed
+                    
+                    {% endif %}{% if is_state('binary_sensor.main_bathroom_door','off') %}Bathroom door is closed
+                    
+                    {% endif %}
+                    
+                  inline_keyboard: >
+                    [{% if is_state('alarm_control_panel.texecom','disarmed') %}[['Arm Alarm', '/empty_house_arm_away']], {% endif 
+                    %}{% if is_state('fan.bedroom_fan','on') or is_state('fan.conservatory_fan','on') %}[['Fans Off', '/fans_off']], {% endif 
+                    %}{% if is_state('light.downstairs','on') or is_state('light.outside','on') or is_state('light.upstairs','on')  %}[['Lights Off', '/lights_off']], {% endif 
+                    %} [['OK', '/remove_keyboard']]]
+
+
+            #Fans Off
+          - conditions: "{{ trigger.event.data.command == '/fans_off' }}"
+            sequence:
+              - service: telegram_bot.answer_callback_query
+                data:
+                  message: "Turning off fans..."
+                  callback_query_id: '{{ trigger.event.data.id }}'     
+              - service: fan.turn_off
+                entity_id: 
+                  - fan.conservatory_fan
+                  - fan.master_bedroom_fan
+              - delay: 2
+              - service: telegram_bot.edit_message
+                data:
+                  message_id: "{{ trigger.event.data.message.message_id }}"
+                  chat_id: "{{ trigger.event.data.chat_id }}"      
+                  title: "Everyone is Out"                  
+                  message: >
+                    {% if is_state('alarm_control_panel.texecom','disarmed') %}Alarm is not set
+                    
+                    {% endif %}{% if is_state('fan.bedroom_fan','on') %}Bedroom Fan is on
+                    
+                    {% endif %}{% if is_state('fan.conservatory_fan','on') %}Conservatory Fan is on
+                    
+                    {% endif %}{% if is_state('light.downstairs','on') %}Lights are on downstairs
+                    
+                    {% endif %}{% if is_state('light.outside','on') %}Lights are on Outside
+                    
+                    {% endif %}{% if is_state('light.upstairs','on') %}Lights are on upstairs
+                    
+                    {% endif %}{% if is_state('input_boolean.watching_skytv','on') %}TV on in lounge
+                    
+                    {% endif %}{% if is_state('media_player.kitchen_sonos','playing') %}SONOS playing in the kitchen
+                    
+                    {% endif %}{% if is_state('media_player.sophies_sonos','playing') %}SONOS playing in Sophie bedroom
+                    
+                    {% endif %}{% if is_state('media_player.kates_sonos','playing') %}SONOS playing in Kate bedroom
+                    
+                    {% endif %}{% if is_state('media_player.lounge_sonos','playing') %}SONOS playing in the Lounge
+                    
+                    {% endif %}{% if is_state('media_player.bar_sonos','playing') %}SONOS playing in the Bar
+                    
+                    {% endif %}{% if is_state('binary_sensor.front_door','on') %}conservatory door is open
+                    
+                    {% endif %}{% if is_state('binary_sensor.front_door','on') %}front door is open
+                    
+                    {% endif %}{% if is_state('binary_sensor.back_gate_door','on') %}back gate is open
+                    
+                    {% endif %}{% if is_state('binary_sensor.back_door','on') %}back door is open
+                    
+                    {% endif %}{% if is_state('binary_sensor.under_stairs_door','on') %}under stairs door is open
+                    
+                    {% endif %}{% if is_state('binary_sensor.master_bedroom_door','off') %}master bedroom door is closed
+                    
+                    {% endif %}{% if is_state('binary_sensor.lounge_door','on') %}lounge door is open
+                    
+                    {% endif %}{% if is_state('binary_sensor.bar_door','off') %}bar door is closed
+                    
+                    {% endif %}{% if is_state('binary_sensor.sophies_bedroom_door','on') %}Sophie's door is open
+                    
+                    {% endif %}{% if is_state('binary_sensor.kates_bedroom_door','on') %}Kate's door is open
+                    
+                    {% endif %}{% if is_state('binary_sensor.guest_bedroom_door','on') %}Guest's door is open
+                    
+                    {% endif %}{% if is_state('binary_sensor.downstairs_toilet_door','off') %}Downstairs Loo door is closed
+                    
+                    {% endif %}{% if is_state('binary_sensor.main_bathroom_door','off') %}Bathroom door is closed
+                    
+                    {% endif %}
+                    
+                  inline_keyboard: >
+                    [{% if is_state('alarm_control_panel.texecom','disarmed') %}[['Arm Alarm', '/arm_away']], {% endif 
+                    %}{% if is_state('fan.bedroom_fan','on') or is_state('fan.conservatory_fan','on') %}[['Fans Off', '/fans_off']], {% endif 
+                    %}{% if is_state('light.downstairs','on') or is_state('light.outside','on') or is_state('light.upstairs','on')  %}[['Lights Off', '/lights_off']], {% endif 
+                    %} [['OK', '/remove_keyboard']]]
+                       
+            #Lights Off
+          - conditions: "{{ trigger.event.data.command == '/lights_off' }}"
+            sequence:
+              - service: telegram_bot.answer_callback_query
+                data:
+                  message: "Turning off lights..."
+                  callback_query_id: '{{ trigger.event.data.id }}'       
+              - service: light.turn_off
+                entity_id: 
+                  - light.outside
+                  - light.downstairs
+                  - light.upstairs     
+              - delay: 2                
+              - service: telegram_bot.edit_message
+                data:
+                  message_id: "{{ trigger.event.data.message.message_id }}"
+                  chat_id: "{{ trigger.event.data.chat_id }}"      
+                  title: "Everyone is Out"                  
+                  message: >
+                    {% if is_state('alarm_control_panel.texecom','disarmed') %}Alarm is not set
+                    
+                    {% endif %}{% if is_state('fan.bedroom_fan','on') %}Bedroom Fan is on
+                    
+                    {% endif %}{% if is_state('fan.conservatory_fan','on') %}Conservatory Fan is on
+                    
+                    {% endif %}{% if is_state('light.downstairs','on') %}Lights are on downstairs
+                    
+                    {% endif %}{% if is_state('light.outside','on') %}Lights are on Outside
+                    
+                    {% endif %}{% if is_state('light.upstairs','on') %}Lights are on upstairs
+                    
+                    {% endif %}{% if is_state('input_boolean.watching_skytv','on') %}TV on in lounge
+                    
+                    {% endif %}{% if is_state('media_player.kitchen_sonos','playing') %}SONOS playing in the kitchen
+                    
+                    {% endif %}{% if is_state('media_player.sophies_sonos','playing') %}SONOS playing in Sophie bedroom
+                    
+                    {% endif %}{% if is_state('media_player.kates_sonos','playing') %}SONOS playing in Kate bedroom
+                    
+                    {% endif %}{% if is_state('media_player.lounge_sonos','playing') %}SONOS playing in the Lounge
+                    
+                    {% endif %}{% if is_state('media_player.bar_sonos','playing') %}SONOS playing in the Bar
+                    
+                    {% endif %}{% if is_state('binary_sensor.front_door','on') %}conservatory door is open
+                    
+                    {% endif %}{% if is_state('binary_sensor.front_door','on') %}front door is open
+                    
+                    {% endif %}{% if is_state('binary_sensor.back_gate_door','on') %}back gate is open
+                    
+                    {% endif %}{% if is_state('binary_sensor.back_door','on') %}back door is open
+                    
+                    {% endif %}{% if is_state('binary_sensor.under_stairs_door','on') %}under stairs door is open
+                    
+                    {% endif %}{% if is_state('binary_sensor.master_bedroom_door','off') %}master bedroom door is closed
+                    
+                    {% endif %}{% if is_state('binary_sensor.lounge_door','on') %}lounge door is open
+                    
+                    {% endif %}{% if is_state('binary_sensor.bar_door','off') %}bar door is closed
+                    
+                    {% endif %}{% if is_state('binary_sensor.sophies_bedroom_door','on') %}Sophie's door is open
+                    
+                    {% endif %}{% if is_state('binary_sensor.kates_bedroom_door','on') %}Kate's door is open
+                    
+                    {% endif %}{% if is_state('binary_sensor.guest_bedroom_door','on') %}Guest's door is open
+                    
+                    {% endif %}{% if is_state('binary_sensor.downstairs_toilet_door','off') %}Downstairs Loo door is closed
+                    
+                    {% endif %}{% if is_state('binary_sensor.main_bathroom_door','off') %}Bathroom door is closed
+                    
+                    {% endif %}
+                    
+                  inline_keyboard: >
+                    [{% if is_state('alarm_control_panel.texecom','disarmed') %}[['Arm Alarm', '/arm_away']], {% endif 
+                    %}{% if is_state('fan.bedroom_fan','on') or is_state('fan.conservatory_fan','on') %}[['Fans Off', '/fans_off']], {% endif 
+                    %}{% if is_state('light.downstairs','on') or is_state('light.outside','on') or is_state('light.upstairs','on')  %}[['Lights Off', '/lights_off']], {% endif 
+                    %} [['OK', '/remove_keyboard']]]
+
+            #littertray_detail
+          - conditions: "{{ trigger.event.data.command == '/littertray_detail' }}"
+            sequence:
+              - service: telegram_bot.answer_callback_query
+                data:
+                  message: "Refreshing..."
+                  callback_query_id: '{{ trigger.event.data.id }}'                     
+              - service: telegram_bot.edit_message
+                data:
+                  message_id: "{{ trigger.event.data.message.message_id }}"
+                  chat_id: "{{ trigger.event.data.chat_id }}"                
+                  title: "Litter Tray Usage"
+                  message: >
+                    Utility: {{ states('sensor.littertray_utility_usage') }}%
+                    
+                    Downstairs Loo: {{ states('sensor.littertray_downstairs_usage') }}%
+                    
+                    Main Bathroom: {{ states('sensor.littertray_shower_usage') }}%
+                    
+                    Drum Room: {{ states('sensor.littertray_drum_usage') }}%
+                  inline_keyboard: []
+
+            # cars
+          - conditions: "{{ trigger.event.data.text.lower() == '/cars'  }}"
+            sequence:
+              - alias: "Send callback response"
+                service: telegram_bot.answer_callback_query
+                data:
+                  message: "OK"
+                  callback_query_id: '{{ trigger.event.data.id }}'                    
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"
+                  message: >
+                    Paddy ({{ states('sensor.wn70pdy_battery_level') }}%) is {% if states('sensor.zappi_paddy_mode') != 'Stopped' %}Charging ({{ states('sensor.zappi_paddy_mode') }}) @ {{ states('sensor.zappi_paddy_power') }}kW{% elif is_state('sensor.zappi_jyggy_status','EV Connected') %}Plugged in{% elif is_state('device_tracker.vf1ag000366115079_location','Home') %}unplugged{% else %}not at home{% endif %}
+                    Jyggy ({{ states('sensor.jyggy_battery_level') }}%) is {% if states('sensor.zappi_jyggy_mode') != 'Stopped' %}Charging ({{ states('sensor.zappi_jyggy_mode') }}) @ {{ states('sensor.zappi_jyggy_power') }}kW{% elif is_state('sensor.zappi_jyggy_status','EV Connected') %}Plugged in{% elif is_state('sensor.jyggy_location','Home')%}unplugged{% else %}not at home{% endif %}
+                  inline_keyboard:
+                    - 'Paddy:/paddy, Jyggy:/jyggy'
+                    - 'Refresh:/cars_refresh, OK:/remove_keyboard' 
+                    
+            #cars_refresh
+          - conditions: "{{ trigger.event.data.command == '/cars_refresh' }}"
+            sequence:
+              - service: telegram_bot.answer_callback_query
+                data:
+                  message: "Refreshing..."
+                  callback_query_id: '{{ trigger.event.data.id }}'                     
+              - service: telegram_bot.edit_message
+                data:
+                  message_id: "{{ trigger.event.data.message.message_id }}"
+                  chat_id: "{{ trigger.event.data.chat_id }}"                
+                  message: >
+                    Paddy ({{ states('sensor.wn70pdy_battery_level') }}%) is {% if states('sensor.zappi_paddy_mode') != 'Stopped' %}Charging ({{ states('sensor.zappi_paddy_mode') }}) @ {{ states('sensor.zappi_paddy_power') }}kW{% elif is_state('sensor.zappi_jyggy_status','EV Connected') %}Plugged in{% elif is_state('device_tracker.vf1ag000366115079_location','Home') %}unplugged{% else %}not at home{% endif %}
+                    Jyggy ({{ states('sensor.jyggy_battery_level') }}%) is {% if states('sensor.zappi_jyggy_mode') != 'Stopped' %}Charging ({{ states('sensor.zappi_jyggy_mode') }}) @ {{ states('sensor.zappi_jyggy_power') }}kW{% elif is_state('sensor.zappi_jyggy_status','EV Connected') %}Plugged in{% elif is_state('sensor.jyggy_location','Home')%}unplugged{% else %}not at home{% endif %}
+                  inline_keyboard:
+                    - 'Paddy:/paddy, Jyggy:/jyggy'
+                    - 'Refresh:/cars_refresh, OK:/remove_keyboard'                   
+
+            #paddy_refresh
+          - conditions: "{{ trigger.event.data.command == '/paddy_refresh' }}"
+            sequence:
+              - service: telegram_bot.answer_callback_query
+                data:
+                  message: "Refreshing..."
+                  callback_query_id: '{{ trigger.event.data.id }}'                     
+              - service: telegram_bot.edit_message
+                data:
+                  message_id: "{{ trigger.event.data.message.message_id }}"
+                  chat_id: "{{ trigger.event.data.chat_id }}"                
+                  message: "Paddy ({{ states('sensor.wn70pdy_battery_level') }}%) is {% if states('sensor.zappi_paddy_mode') != 'Stopped' %}Charging ({{ states('sensor.zappi_paddy_mode') }}) @ {{ states('sensor.zappi_paddy_power') }}kW{% elif is_state('sensor.zappi_jyggy_status','EV Connected') %}Plugged in{% elif is_state('device_tracker.vf1ag000366115079_location','Home') %}unplugged{% else %}not at home{% endif %}"
+                  inline_keyboard:
+                    - 'Fast:/paddy_fast, Eco+:/paddy_ecoplus'
+                    - 'Eco:/paddy_eco, Stop:/paddy_stop' 
+                    - 'Refresh:/paddy_refresh, OK:/remove_keyboard'                    
+            #paddy_ 
+          - conditions: "{{ trigger.event.data.command[0:7] == '/paddy_' }}"
+            sequence:
+              - alias: "Send callback response"
+                service: telegram_bot.answer_callback_query
+                data:
+                  message: "OK"
+                  callback_query_id: '{{ trigger.event.data.id }}'                    
+              - service: script.zappi_mode_paddy
+                data:
+                  mode: "{{ trigger.event.data.command[7:] }}"
+              - service: telegram_bot.answer_callback_query
+                data:
+                  message: "Paddy Charge Mode set to {{ trigger.event.data.command[7:] }}"
+                  callback_query_id: '{{ trigger.event.data.id }}'                     
+              - wait_for_trigger:
+                  - platform: state
+                    entity_id: sensor.zappi_paddy
+                timeout: 00:00:45
+              - service: telegram_bot.edit_message
+                data:
+                  message_id: "{{ trigger.event.data.message.message_id }}"
+                  chat_id: "{{ trigger.event.data.chat_id }}"                
+                  message: "Paddy ({{ states('sensor.wn70pdy_battery_level') }}%) is {% if states('sensor.zappi_paddy_mode') != 'Stopped' %}Charging ({{ states('sensor.zappi_paddy_mode') }}) @ {{ states('sensor.zappi_paddy_power') }}kW{% elif is_state('sensor.zappi_jyggy_status','EV Connected') %}Plugged in{% elif is_state('device_tracker.vf1ag000366115079_location','Home') %}unplugged{% else %}not at home{% endif %}"
+                  inline_keyboard:
+                    - 'Fast:/paddy_fast, Eco+:/paddy_ecoplus'
+                    - 'Eco:/paddy_eco, Stop:/paddy_stop' 
+                    - 'Refresh:paddy_refresh, OK:/remove_keyboard'  
+
+            #jyggy_refresh
+          - conditions: "{{ trigger.event.data.command == '/jyggy_refresh' }}"
+            sequence:
+              - service: telegram_bot.answer_callback_query
+                data:
+                  message: "Refreshing......"
+                  callback_query_id: '{{ trigger.event.data.id }}'                     
+              - service: telegram_bot.edit_message
+                data:
+                  message_id: "{{ trigger.event.data.message.message_id }}"
+                  chat_id: "{{ trigger.event.data.chat_id }}"                
+                  message: "Jyggy ({{ states('sensor.jyggy_battery_level') }}%) is {% if states('sensor.zappi_jyggy_mode') != 'Stopped' %}Charging ({{ states('sensor.zappi_jyggy_mode') }}) @ {{ states('sensor.zappi_jyggy_power') }}kW{% elif is_state('sensor.zappi_jyggy_status','EV Connected') %}Plugged in{% elif is_state('sensor.jyggy_location','Home')%}unplugged{% else %}not at home{% endif %}"
+                  inline_keyboard:
+                    - 'Fast:/jyggy_fast, Eco+:/jyggy_ecoplus'
+                    - 'Eco:/jyggy_eco, Stop:/jyggy_stop' 
+                    - 'Refresh:/jyggy_refresh, OK:/remove_keyboard'                        
+                    
+            #jyggy_ 
+          - conditions: "{{ trigger.event.data.command[0:7] == '/jyggy_' }}"
+            sequence:
+              - alias: "Send callback response"
+                service: telegram_bot.answer_callback_query
+                data:
+                  message: "OK"
+                  callback_query_id: '{{ trigger.event.data.id }}'                    
+              - service: script.zappi_mode_jyggy
+                data:
+                  mode: "{{ trigger.event.data.command[7:] }}"
+              - service: telegram_bot.answer_callback_query
+                data:
+                  message: "Jyggy Charge Mode set to {{ trigger.event.data.command[7:] }}"
+                  callback_query_id: '{{ trigger.event.data.id }}'                     
+              - wait_for_trigger:
+                  - platform: state
+                    entity_id: sensor.zappi_jyggy
+                timeout: 00:00:45
+              - service: telegram_bot.edit_message
+                data:
+                  message_id: "{{ trigger.event.data.message.message_id }}"
+                  chat_id: "{{ trigger.event.data.chat_id }}"                
+                  message: "Jyggy ({{ states('sensor.jyggy_battery_level') }}%) is {% if states('sensor.zappi_jyggy_mode') != 'Stopped' %}Charging ({{ states('sensor.zappi_jyggy_mode') }}) @ {{ states('sensor.zappi_jyggy_power') }}kW{% elif is_state('sensor.zappi_jyggy_status','EV Connected') %}Plugged in{% elif is_state('sensor.jyggy_location','Home')%}unplugged{% else %}not at home{% endif %}"
+                  inline_keyboard:
+                    - 'Fast:/jyggy_fast, Eco+:/jyggy_ecoplus'
+                    - 'Eco:/jyggy_eco, Stop:/jyggy_stop' 
+                    - 'Refresh:/jyggy_refresh, OK:/remove_keyboard'                        
+                    
+            #Alarm /arm_away /arm_night /arm_home 
+          - conditions: "{{ trigger.event.data.command in ('/arm_away','/arm_night','/arm_home') }}"
+            sequence:
+              - alias: "Send callback response"
+                service: telegram_bot.answer_callback_query
+                data:
+                  message: "Alarm arming....."
+                  callback_query_id: '{{ trigger.event.data.id }}'                    
+              - service: telegram_bot.edit_message
+                data:
+                  message_id: "{{ trigger.event.data.message.message_id }}"
+                  chat_id: "{{ trigger.event.data.chat_id }}"                
+                  message: "Alarm Arming....."
+                  inline_keyboard:
+                    - 'Disarm:/disarm'
+                    - 'OK:/remove_keyboard'                
+              - service: alarm_control_panel.alarm_{{trigger.event.data.command[1:]}}
+                data:
+                  entity_id: alarm_control_panel.texecom
+                  code: !secret alarm_code
+              - service: telegram_bot.answer_callback_query
+                data:
+                  message: "Alarm set to {{ trigger.event.data.command[1:].replace('_',' ')}}"
+                  callback_query_id: '{{ trigger.event.data.id }}'    
+              - wait_for_trigger:
+                  - platform: state
+                    entity_id: alarm_control_panel.texecom
+                    to: "{{ trigger.event.data.command.replace('arm_','armed_') }}"
+                timeout: 00:00:20
+              - service: telegram_bot.edit_message
+                data:
+                  message_id: "{{ trigger.event.data.message.message_id }}"
+                  chat_id: "{{ trigger.event.data.chat_id }}"                
+                  message: >
+                    Alarm currently {{ states('alarm_control_panel.texecom').replace('_',' ') }}
+                    
+                    Which Alarm Status do you want?
+                  inline_keyboard:
+                    - 'Disarm:/disarm'
+                    - 'OK:/remove_keyboard'  
+
+            #Alarm /disarm 
+          - conditions: "{{ trigger.event.data.command == ('/disarm') }}"
+            sequence:
+              - alias: "Send callback response"
+                service: telegram_bot.answer_callback_query
+                data:
+                  message: "Alarm disarming....."
+                  callback_query_id: '{{ trigger.event.data.id }}'                    
+              - service: telegram_bot.edit_message
+                data:
+                  message_id: "{{ trigger.event.data.message.message_id }}"
+                  chat_id: "{{ trigger.event.data.chat_id }}"                
+                  message: "Alarm Disarming....."                   
+              - service: alarm_control_panel.alarm_{{trigger.event.data.command[1:]}}
+                data:
+                  entity_id: alarm_control_panel.texecom
+                  code: !secret alarm_code
+              - service: telegram_bot.answer_callback_query
+                data:
+                  message: "Alarm set to {{ trigger.event.data.command[1:].replace('_',' ')}}"
+                  callback_query_id: '{{ trigger.event.data.id }}'    
+              - wait_for_trigger:
+                  - platform: state
+                    entity_id: alarm_control_panel.texecom
+                    to: disarmed
+                timeout: 00:00:20
+              - service: telegram_bot.edit_message
+                data:
+                  message_id: "{{ trigger.event.data.message.message_id }}"
+                  chat_id: "{{ trigger.event.data.chat_id }}"                
+                  message: >
+                    Alarm currently disarmed.
+                    
+                    Which Alarm Status do you want?
+                  inline_keyboard:
+                    - 'Arm:/arm_away'
+                    - 'Home:/arm_home, Night:/arm_night'
+                    - 'OK:/remove_keyboard'
+
+            #Water On
+          - conditions: "{{ trigger.event.data.command == '/water_on' }}"
+            sequence:
+              - alias: "Send callback response"
+                service: telegram_bot.answer_callback_query
+                data:
+                  message: "OK"
+                  callback_query_id: '{{ trigger.event.data.id }}'                    
+              - service: switch.turn_on
+                target:
+                  entity_id: switch.shutoff_valve
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"                
+                  message: "Water turned {{ states('switch.shutoff_valve') }}"
+                  inline_keyboard:
+                    - 'Turn Off:/water_off'
+                    - 'OK:/remove_keyboard'  
+  
+              #Water Off
+          - conditions: "{{ trigger.event.data.command == '/water_off' }}"
+            sequence:
+              - alias: "Send callback response"
+                service: telegram_bot.answer_callback_query
+                data:
+                  message: "OK"
+                  callback_query_id: '{{ trigger.event.data.id }}'                    
+              - service: switch.turn_off
+                target:
+                  entity_id: switch.shutoff_valve
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"                
+                  message: "Water turned {{ states('switch.shutoff_valve') }}"
+                  inline_keyboard:
+                    - 'Turn On:/water_on'
+                    - 'OK:/remove_keyboard'  
+                    
+            #Water Alert /clear_water_alert
+          - conditions: "{{ trigger.event.data.command == '/clear_water_alert' }}"
+            sequence:
+              - service: telegram_bot.answer_callback_query
+                data:
+                  message: "Water Alert cleared"
+                  callback_query_id: '{{ trigger.event.data.id }}'        
+              - service: input_boolean.turn_off
+                target:
+                  entity_id: input_boolean.water_alert
+              - service: telegram_bot.edit_replymarkup
+                data:
+                  message_id: "{{ trigger.event.data.message.message_id }}"
+                  chat_id: "{{ trigger.event.data.chat_id }}"
+                  inline_keyboard: []
+                    
+            #Clear Movement Alert /clear_movement_alert
+          - conditions: "{{ trigger.event.data.command == '/clear_movement_alert' }}"
+            sequence:
+              - service: telegram_bot.answer_callback_query
+                data:
+                  message: "Movement Alert cleared"
+                  callback_query_id: '{{ trigger.event.data.id }}'        
+              - service: input_boolean.turn_off
+                target:
+                  entity_id:
+                    - input_boolean.garage_motion_detected
+                    - input_boolean.house_motion_detected
+       
+                  
+            #Reminder Message /30m /1h /3h 
+          - conditions: "{{ trigger.event.data.command in ('/30m','/1h','/3h') }}"
+            sequence:          
+              - service: telegram_bot.answer_callback_query
+                data:
+                  callback_query_id: '{{ trigger.event.data.id }}'
+                  message: "OK, reminding you in {% if trigger.event.data.command == '/3h'%}3 hours{% elif trigger.event.data.command == '/1h'%}1 hour{% elif trigger.event.data.command == '/30m'%}30 minutes{% endif %}"
+              - service: telegram_bot.edit_replymarkup
+                data:
+                  message_id: '{{ trigger.event.data.message.message_id }}'
+                  chat_id: '{{ trigger.event.data.user_id }}'
+                  inline_keyboard: []
+              - delay: "{% if trigger.event.data.command == '/3h'%}03:00:00{% elif trigger.event.data.command == '/1h'%}01:00:00{% elif trigger.event.data.command == '/30m'%}00:30:00{% endif %}"
+              - service: notify.telegram_bruce
+                data:
+                  message: '{{ trigger.event.data.message.text }}'
+                  data:
+                    inline_keyboard:
+                      - '30 Minutes:/30m, 1 Hour:/1h, 3 Hours:/3h'
+                      - 'No reminder:/removekeyboard'            
+
+
+            #HotTub Schedule /tub_sched_on /tub_sched_off
+          - conditions: "{{ trigger.event.data.command[0:11] == '/tub_sched_' }}"
+            sequence:        
+              - alias: "Send callback response"
+                service: telegram_bot.answer_callback_query
+                data:
+                  message: "OK"
+                  callback_query_id: '{{ trigger.event.data.id }}'                    
+              - service:  "input_boolean.turn_{{ trigger.event.data.command[11:] }}"
+                entity_id: input_boolean.hottub_scheduled
+              - service: telegram_bot.answer_callback_query
+                data:
+                  message: "HotTub schedule turned {{ trigger.event.data.command[11:] }}"
+                  callback_query_id: '{{ trigger.event.data.id }}'
+              - service: telegram_bot.edit_message
+                data:
+                  message: >
+                    Hottub is {{ states('sensor.hottub_summary') }} at {{ states('input_number.hottub_water_temp')|int(0) }}°C.  
+                    
+                    Schedule {{ states('input_boolean.hottub_scheduled') }}: {{ states('input_number.hottub_water_target')|int(0) }}°C by {{ states('input_datetime.hottub_ready_by') }}
+                  message_id: "{{ trigger.event.data.message.message_id }}"
+                  chat_id: "{{ trigger.event.data.chat_id }}"
+                  inline_keyboard:
+                    - 'Set Time:/tub_set_time, Schedule On:/tub_sched_on'
+                    - 'Set Temp:/tub_set_temp, Schedule Off:/tub_sched_off' 
+                    - 'OK:/remove_keyboard'
+
+            #HotTub /tub_set_time
+          - conditions: "{{ trigger.event.data.command == '/tub_set_time' }}"
+            sequence:          
+              - service: telegram_bot.answer_callback_query
+                data:
+                  message: "What time?"
+                  callback_query_id: '{{ trigger.event.data.id }}'
+              - service: telegram_bot.edit_message
+                data:
+                  message: >
+                    Hottub is {{ states('sensor.hottub_summary') }} at {{ states('input_number.hottub_water_temp')|int(0) }}°C.  
+                    
+                    Schedule {{ states('input_boolean.hottub_scheduled') }}: {{ states('input_number.hottub_water_target')|int(0) }}°C by {{ states('input_datetime.hottub_ready_by') }}
+                  message_id: "{{ trigger.event.data.message.message_id }}"
+                  chat_id: "{{ trigger.event.data.chat_id }}"
+                  inline_keyboard:
+                    - '08:00:/tub_time_08, 19:00:/tub_time_19'
+                    - '16:00:/tub_time_16, 20:00:/tub_time_20'
+                    - 'OK:/remove_keyboard'
+                    
+            #HotTub Time /tub_time_08 etc.
+          - conditions: "{{ trigger.event.data.command[0:10] == '/tub_time_' }}"
+            sequence:     
+              - alias: "Send callback response"
+                service: telegram_bot.answer_callback_query
+                data:
+                  message: "OK"
+                  callback_query_id: '{{ trigger.event.data.id }}'                    
+              - service:  input_datetime.set_datetime
+                data:
+                  entity_id: input_datetime.hottub_ready_by
+                  time: "{{ trigger.event.data.command[10:] }}:00"
+              - service: telegram_bot.answer_callback_query
+                data:
+                  message: "Hot Tub Time set to {{ trigger.event.data.command[10:] }}:00"
+                  callback_query_id: '{{ trigger.event.data.id }}'
+              - service: telegram_bot.edit_message
+                data:
+                  message_id: "{{ trigger.event.data.message.message_id }}"
+                  chat_id: "{{ trigger.event.data.chat_id }}"
+                  message: >
+                    Hottub temperature is {{ states('input_number.hottub_water_temp')|int(0) }}°C.  
+                    
+                    Schedule {{ states('input_boolean.hottub_scheduled') }}: {{ states('input_number.hottub_water_target')|int(0) }}°C by {{ states('input_datetime.hottub_ready_by') }}
+                  inline_keyboard:
+                    - 'Set Time:/tub_set_time, Schedule On:/tub_sched_on'
+                    - 'Set Temp:/tub_set_temp, Schedule Off:/tub_sched_off' 
+                    - 'OK:/remove_keyboard'
+
+            #HotTub /tub_set_temp
+          - conditions: "{{ trigger.event.data.command == '/tub_set_temp' }}"
+            sequence:          
+              - service: telegram_bot.answer_callback_query
+                data:
+                  message: "What temperature?"
+                  callback_query_id: '{{ trigger.event.data.id }}'
+              - service: telegram_bot.edit_message
+                data:
+                  message: >
+                    Hottub is {{ states('sensor.hottub_summary') }} at {{ states('input_number.hottub_water_temp')|int(0) }}°C.  
+                    
+                    Schedule {{ states('input_boolean.hottub_scheduled') }}: {{ states('input_number.hottub_water_target')|int(0) }}°C by {{ states('input_datetime.hottub_ready_by') }}
+                  message_id: "{{ trigger.event.data.message.message_id }}"
+                  chat_id: "{{ trigger.event.data.chat_id }}"
+                  inline_keyboard:
+                    - '34°C:/tub_temp_34, 38°C:/tub_temp_38'
+                    - '36°C:/tub_temp_36, 40°C:/tub_temp_40'
+                    - 'OK:/remove_keyboard'
+                    
+            #HotTub Time /tub_temp_38 etc.
+          - conditions: "{{ trigger.event.data.command[0:10] == '/tub_temp_' }}"
+            sequence:      
+              - alias: "Send callback response"
+                service: telegram_bot.answer_callback_query
+                data:
+                  message: "OK"
+                  callback_query_id: '{{ trigger.event.data.id }}'                    
+              - service:  input_number.set_value
+                data:
+                  entity_id: input_number.hottub_water_target
+                  value: "{{ trigger.event.data.command[10:] }}"
+              - service: telegram_bot.answer_callback_query
+                data:
+                  message: "Hot Tub Temperature set to {{ trigger.event.data.command[10:] }}°C"
+                  callback_query_id: '{{ trigger.event.data.id }}'
+              - service: telegram_bot.edit_message
+                data:
+                  message: >
+                    Hottub is {{ states('sensor.hottub_summary') }} at {{ states('input_number.hottub_water_temp')|int(0) }}°C.  
+                    
+                    Schedule {{ states('input_boolean.hottub_scheduled') }}: {{ states('input_number.hottub_water_target')|int(0) }}°C by {{ states('input_datetime.hottub_ready_by') }}
+                  message_id: "{{ trigger.event.data.message.message_id }}"
+                  chat_id: "{{ trigger.event.data.chat_id }}"
+                  inline_keyboard:
+                    - 'Set Time:/tub_set_time, Schedule On:/tub_sched_on'
+                    - 'Set Temp:/tub_set_temp, Schedule Off:/tub_sched_off' 
+                    - 'OK:/remove_keyboard'
+
+            #Video from camera /video
+          - conditions: "{{ trigger.event.data.command == '/video' }}"
+            sequence:
+              - service: telegram_bot.answer_callback_query
+                data:
+                  message: "Which Camera?"
+                  callback_query_id: '{{ trigger.event.data.id }}'                    
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"
+                  message: "Which camera do you want to see?"
+                  inline_keyboard:
+                    - 'Drive:/video_drive, Bins:/video_bins'
+                    - 'Patio:/video_patio, Gazebo:/video_gazebo' 
+                    - 'Hall:/video_hall, Lounge:/video_lounge'
+                    - 'Kitchen 1:/video_kitchen, Kitchen 2:/video_kitchen_2'             
+                    - 'Bar:/video_bar, Landing:/video_landing'                         
+                    - 'OK:/remove_keyboard'
+
+            #video from camera video_bins video_ etc.
+#          - conditions: "{{ trigger.event.data.command[0:7] == '/video_' }}"
+#            sequence:          
+# 
+# Handled seperately due to need for variables ???
+
+            #still from camera still_bins video_ etc.
+          - conditions: "{{ trigger.event.data.command[0:7] == '/still_' }}"
+            sequence:    
+              - alias: "Send callback response"
+                service: telegram_bot.answer_callback_query
+                data:
+                  message: "OK"
+                  callback_query_id: '{{ trigger.event.data.id }}'                    
+              - service: telegram_bot.send_photo
+                data:
+                  caption: "{{ trigger.event.data.command[7:] + ' @ ' + now().strftime('%d/%m %H:%M') }}"
+                  url: "{{ base_url + state_attr('camera.' + trigger.event.data.command[7:] + '_medium','entity_picture') }}"
+                  target: "{{ trigger.event.data.chat_id }}"

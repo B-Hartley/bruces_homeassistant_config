@@ -1,0 +1,23 @@
+automation:
+- id: repack_recorder_database
+  alias: system_recorder_repack
+  mode: single
+  
+  description: >
+    Repack recorder database
+    Is this relevant for MariaDB ?
+  
+  trigger:
+    - platform: time
+      id: "0555"
+      at: '05:55:00'
+      
+  condition:
+    - condition: time
+      weekday:
+        - sun
+        
+  action:
+    - service: recorder.purge
+      data:
+        repack: true

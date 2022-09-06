@@ -1,0 +1,388 @@
+icon: 'mdi:silverware-fork-knife'
+path: kitchen
+title: Kitchen
+badges:
+  - entity: sensor.kitchen_rad_current_temperature
+    name: Near Utility
+  - entity: sensor.kitchen_tall_rad_current_temperature
+    name: Tall
+  - entity: sensor.conservatory_rad_current_temperature
+    name: Dining
+  - entity: sensor.hall_rad_current_temperature
+    name: Hall
+  - entity: sensor.downstairs_loo_rad_current_temperature
+    name: Loo
+  - entity: switch.hive_water_boost
+    name: Hot Water Boost
+cards:
+  - cards:
+      - cards:
+          - entity: light.hall_light
+            hold_action:
+              action: more-info
+            icon: 'hue:ceiling-still'
+            name: Hall
+            show_icon: true
+            show_name: true
+            state:
+              - value: 'on'              
+                styles:
+                  card:
+                    - -webkit-box-shadow: 0px 0px 9px 3px var(--button-card-light-color)
+                    - box-shadow: 0px 0px 9px 3px var(--button-card-light-color)  
+            tap_action:
+              action: toggle
+              haptic: success
+            type: 'custom:button-card'
+          - entity: light.downstairs_toilet_light
+            hold_action:
+              action: more-info
+            icon: 'hue:single-spot'
+            name: Downstairs Loo
+            show_icon: true
+            show_name: true
+            state:
+              - value: 'on'              
+                styles:
+                  card:
+                    - -webkit-box-shadow: 0px 0px 9px 3px var(--button-card-light-color)
+                    - box-shadow: 0px 0px 9px 3px var(--button-card-light-color)  
+            tap_action:
+              action: toggle
+              haptic: success
+            type: 'custom:button-card'
+          - entity: light.utility_light
+            hold_action:
+              action: more-info
+            icon: 'hue:ceiling-still'
+            name: Utility
+            show_icon: true
+            show_name: true
+            state:
+              - value: 'on'              
+                styles:
+                  card:
+                    - -webkit-box-shadow: 0px 0px 9px 3px var(--button-card-light-color)
+                    - box-shadow: 0px 0px 9px 3px var(--button-card-light-color)  
+            tap_action:
+              action: toggle
+              haptic: success
+            type: 'custom:button-card'
+        type: horizontal-stack
+      - cards:
+          - entity: light.patio_gazebo
+            hold_action:
+              action: more-info
+            icon: 'hue:bulb-classic'
+            name: Gazebo
+            show_icon: true
+            show_name: true
+            state:
+              - value: 'on'              
+                styles:
+                  card:
+                    - -webkit-box-shadow: 0px 0px 9px 3px var(--button-card-light-color)
+                    - box-shadow: 0px 0px 9px 3px var(--button-card-light-color)  
+            tap_action:
+              action: toggle
+              haptic: success
+            type: 'custom:button-card'
+          - entity: light.patio_gazebo_wall
+            hold_action:
+              action: more-info
+            icon: 'hue:amarant'
+            name: Wall
+            show_icon: true
+            show_name: true
+            state:
+              - value: 'on'              
+                styles:
+                  card:
+                    - -webkit-box-shadow: 0px 0px 9px 3px var(--button-card-light-color)
+                    - box-shadow: 0px 0px 9px 3px var(--button-card-light-color)  
+            tap_action:
+              action: toggle
+              haptic: success
+            type: 'custom:button-card'
+          - entity: light.patio_light
+            hold_action:
+              action: more-info
+            icon: 'hue:wall-econic-lantern'
+            name: Light
+            show_icon: true
+            show_name: true
+            state:
+              - value: 'on'              
+                styles:
+                  card:
+                    - -webkit-box-shadow: 0px 0px 9px 3px var(--button-card-light-color)
+                    - box-shadow: 0px 0px 9px 3px var(--button-card-light-color)  
+            tap_action:
+              action: toggle
+              haptic: success
+            type: 'custom:button-card'
+        title: Patio
+        type: horizontal-stack
+      - cards:
+          - cards:
+              - entity: light.kitchen_ceiling_1
+                hold_action:
+                  action: more-info
+                icon: 'hue:bulb-spot'
+                name: Ceiling 1
+                show_icon: true
+                show_name: true
+                state:
+                  - value: 'on'              
+                    styles:
+                      card:
+                        - -webkit-box-shadow: 0px 0px 9px 3px var(--button-card-light-color)
+                        - box-shadow: 0px 0px 9px 3px var(--button-card-light-color)  
+                tap_action:
+                  action: toggle
+                  haptic: success
+                type: 'custom:button-card'
+              - entity: light.kitchen_ceiling_2
+                hold_action:
+                  action: more-info
+                icon: 'hue:bulb-spot'
+                name: Ceiling 2
+                show_icon: true
+                show_name: true
+                state:
+                  - value: 'on'              
+                    styles:
+                      card:
+                        - -webkit-box-shadow: 0px 0px 9px 3px var(--button-card-light-color)
+                        - box-shadow: 0px 0px 9px 3px var(--button-card-light-color)  
+                tap_action:
+                  action: toggle
+                  haptic: success
+                type: 'custom:button-card'
+              - entity: light.kitchen_ceiling_3
+                hold_action:
+                  action: more-info
+                icon: 'hue:bulb-spot'
+                name: Ceiling 3
+                show_icon: true
+                show_name: true
+                state:
+                  - value: 'on'              
+                    styles:
+                      card:
+                        - -webkit-box-shadow: 0px 0px 9px 3px var(--button-card-light-color)
+                        - box-shadow: 0px 0px 9px 3px var(--button-card-light-color)  
+                tap_action:
+                  action: toggle
+                  haptic: success
+                type: 'custom:button-card'
+            type: horizontal-stack
+          - cards:
+              - entity: light.kitchen_kickboard
+                hold_action:
+                  action: more-info
+                icon: 'hue:bulb-spot'
+                name: Kickboard
+                show_icon: true
+                show_name: true
+                state:
+                  - value: 'on'              
+                    styles:
+                      card:
+                        - -webkit-box-shadow: 0px 0px 9px 3px var(--button-card-light-color)
+                        - box-shadow: 0px 0px 9px 3px var(--button-card-light-color)  
+                tap_action:
+                  action: toggle
+                  haptic: success
+                type: 'custom:button-card'
+              - entity: light.kitchen_hue_ceiling
+                hold_action:
+                  action: more-info
+                icon: 'hue:bulb-spot'
+                name: Disco
+                show_icon: true
+                show_name: true
+                state:
+                  - value: 'on'              
+                    styles:
+                      card:
+                        - -webkit-box-shadow: 0px 0px 9px 3px var(--button-card-light-color)
+                        - box-shadow: 0px 0px 9px 3px var(--button-card-light-color)  
+                tap_action:
+                  action: toggle
+                  haptic: success
+                type: 'custom:button-card'
+              - entity: light.kitchen_cupboard
+                hold_action:
+                  action: more-info
+                icon: 'hue:bulb-spot'
+                name: Cupboard
+                show_icon: true
+                show_name: true
+                state:
+                  - value: 'on'              
+                    styles:
+                      card:
+                        - -webkit-box-shadow: 0px 0px 9px 3px var(--button-card-light-color)
+                        - box-shadow: 0px 0px 9px 3px var(--button-card-light-color)  
+                tap_action:
+                  action: toggle
+                  haptic: success
+                type: 'custom:button-card'
+            type: horizontal-stack
+        title: Kitchen
+        type: vertical-stack
+      - cards:
+          - cards:
+              - entity: light.conservatory_left
+                hold_action:
+                  action: more-info
+                icon: 'hue:lightstrip'
+                name: Strip Left
+                show_icon: true
+                show_name: true
+                state:
+                  - value: 'on'              
+                    styles:
+                      card:
+                        - -webkit-box-shadow: 0px 0px 9px 3px var(--button-card-light-color)
+                        - box-shadow: 0px 0px 9px 3px var(--button-card-light-color)  
+                tap_action:
+                  action: toggle
+                  haptic: success
+                type: 'custom:button-card'
+              - entity: light.kitchen_floor_lamp
+                hold_action:
+                  action: more-info
+                icon: 'hue:signe'
+                name: Kitchen Floor Lamp
+                show_icon: true
+                show_name: true
+                state:
+                  - value: 'on'              
+                    styles:
+                      card:
+                        - -webkit-box-shadow: 0px 0px 9px 3px var(--button-card-light-color)
+                        - box-shadow: 0px 0px 9px 3px var(--button-card-light-color)  
+                tap_action:
+                  action: toggle
+                  haptic: success
+                type: 'custom:button-card'
+              - entity: light.conservatory_right
+                hold_action:
+                  action: more-info
+                icon: 'hue:lightstrip'
+                name: Strip Right
+                show_icon: true
+                show_name: true
+                state:
+                  - value: 'on'              
+                    styles:
+                      card:
+                        - -webkit-box-shadow: 0px 0px 9px 3px var(--button-card-light-color)
+                        - box-shadow: 0px 0px 9px 3px var(--button-card-light-color)  
+                tap_action:
+                  action: toggle
+                  haptic: success
+                type: 'custom:button-card'
+            type: horizontal-stack
+          - cards:
+              - entity: light.conservatory_lamp
+                hold_action:
+                  action: more-info
+                icon: 'hue:bulb-classic'
+                name: Lamp
+                show_icon: true
+                show_name: true
+                state:
+                  - value: 'on'              
+                    styles:
+                      card:
+                        - -webkit-box-shadow: 0px 0px 9px 3px var(--button-card-light-color)
+                        - box-shadow: 0px 0px 9px 3px var(--button-card-light-color)  
+                tap_action:
+                  action: toggle
+                  haptic: success
+                type: 'custom:button-card'
+              - entity: light.conservatory_fan_light
+                hold_action:
+                  action: more-info
+                icon: 'hue:recessed-ceiling'
+                name: Fan Light
+                show_icon: true
+                show_name: true
+                state:
+                  - value: 'on'              
+                    styles:
+                      card:
+                        - -webkit-box-shadow: 0px 0px 9px 3px var(--button-card-light-color)
+                        - box-shadow: 0px 0px 9px 3px var(--button-card-light-color)  
+                tap_action:
+                  action: toggle
+                  haptic: success
+                type: 'custom:button-card'
+              - entity: light.conservatory_wall_light
+                hold_action:
+                  action: more-info
+                icon: 'hue:liane'
+                name: Wall Light
+                show_icon: true
+                show_name: true
+                state:
+                  - value: 'on'              
+                    styles:
+                      card:
+                        - -webkit-box-shadow: 0px 0px 9px 3px var(--button-card-light-color)
+                        - box-shadow: 0px 0px 9px 3px var(--button-card-light-color)  
+                tap_action:
+                  action: toggle
+                  haptic: success
+                type: 'custom:button-card'
+            type: horizontal-stack
+        title: Conservatory
+        type: vertical-stack
+      - entities:
+          - customTheme: false
+            entity: fan.conservatory_fan
+            name: Fan
+            type: 'custom:fan-percent-button-row'
+        show_header_toggle: false
+        type: entities
+    type: vertical-stack
+  - artwork: full-cover-fit
+    entity: media_player.kitchen_sonos
+    hide:
+      power: true
+    shortcuts:
+      buttons:
+        - id: BBC Radio 1 England
+          image: /local/bbc-r1.png
+          name: Radio 1
+          type: source
+        - id: BBC Radio 2
+          image: /local/bbc-r2.png
+          name: Radio 2
+          type: source
+        - id: 'spotify:playlist:37i9dQZF1DWY4lFlS4Pnso'
+          name: Hot Hits UK
+          type: playlist
+      columns: 4
+    speaker_group:
+      entities:
+        - entity_id: media_player.lounge_sonos
+          name: Lounge
+        - entity_id: media_player.landing_sonos
+          name: Landing
+        - entity_id: media_player.kates_sonos
+          name: Kate
+        - entity_id: media_player.sophies_sonos
+          name: Sophie
+        - entity_id: media_player.master_bed_sonos
+          name: Master Bedroom
+        - entity_id: media_player.bar_sonos
+          name: Bar
+      platform: sonos
+      show_group_count: true
+    type: 'custom:mini-media-player'
+  - entity: media_player.kitchen_apple_tv
+    type: media-control

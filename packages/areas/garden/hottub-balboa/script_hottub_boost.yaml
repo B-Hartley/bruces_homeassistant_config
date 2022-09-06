@@ -1,0 +1,16 @@
+script:
+  hottub_boost_heater:
+    alias: 'Set Temperature to 40 then back to target'
+  
+    description: >
+      Set to 40, then back to target to ensure heating
+
+    sequence:
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.hottub_boost        
+      - delay: 60
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.hottub_boost          
+      

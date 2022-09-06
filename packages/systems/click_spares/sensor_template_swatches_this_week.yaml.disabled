@@ -1,0 +1,5 @@
+template:
+  sensor:
+    - name: "Swatches This Week"
+      availability: "{{ states('sensor.click_stats') }}"
+      state: "{{ state_attr('sensor.click_stats','ThisWeeksDespatches_Swatches') | int }}"

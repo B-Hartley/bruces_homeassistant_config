@@ -1,0 +1,4 @@
+utility_meter:
+  daily_electric_import:
+    source: sensor.import_meter_kw
+    cycle: daily

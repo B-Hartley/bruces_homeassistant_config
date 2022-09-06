@@ -1,0 +1,32 @@
+automation:
+  - id: chlorine_tablet_reminder
+    alias: 'Remind when Chlorine Tablet not changed in 3 days'
+    mode: restart
+    
+    description: >
+      Telegram notifcation when Chlorine Tablet not changed in 3 days
+      
+    trigger:
+      - platform: time
+        id: "time"
+        at: 
+          - '07:30:00'
+          - '12:30:00'
+          - '17:30:00'
+          - '19:30:00'  
+
+    condition:
+      - condition: template
+        value_template: "{{ (as_timestamp(now())-as_timestamp(states('input_button.hottub_chlorine_tablet')))/86400>3 }}"
+
+    action:
+      - service: telegram_bot.send_message
+        data:
+          target: !secret telegram_chat_id_bruce
+          message: >
+            Chlorine Tablet needs to be added to hot tub
+            
+            Last tablet: {{ ((as_timestamp(now())-as_timestamp(states('input_button.hottub_chlorine_tablet')))/86400)|int }} days ago
+          inline_keyboard:
+            - 'Tablet Added:/chlorine_added'
+            - 'OK:/remove_keyboard'              

@@ -1,0 +1,17 @@
+light:
+  - platform: template
+    lights:
+      conservatory_presents:
+        friendly_name: "Conservatory Presents"
+        unique_id: light_conservatory_presents
+        value_template: "{{ states('switch.conservatory_presents') }}"
+        turn_on:
+          service: switch.turn_on
+          entity_id: switch.conservatory_presents
+        turn_off:
+          service: switch.turn_off
+          entity_id: switch.conservatory_presents
+        set_level:
+          service: "switch.turn_{{ 'off' if brightness == 0 else 'on' }}"
+          entity_id: switch.conservatory_presents
+

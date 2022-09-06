@@ -1,0 +1,40 @@
+automation:
+  - id: washing_machine_finish_notification
+    alias: 'Washing Machine Finish Notification'
+    mode: single 
+    description: >
+      Notify when washing machine finished
+      
+    trigger:
+    # Final spin for at least 5 minutes
+      - platform: state
+        entity_id: sensor.washing_machine_state
+        to: 'Fast-Spin'
+        for: 300
+
+    action:
+
+      - alias: "Wait for switch back to Standby"
+        wait_for_trigger:
+          - platform: state
+            entity_id: sensor.washing_machine_state
+            to: 'Standby'
+
+      - service: telegram_bot.send_message
+        data:
+          target: !secret telegram_chat_id_bruce_and_sarah     
+          message: "Washing machine has finished"
+
+      - alias: "Wait for switch back to Off"
+        wait_for_trigger:
+          - platform: state
+            entity_id: sensor.washing_machine_state
+            to: 'Off'
+            
+      - service: telegram_bot.send_message
+        data:
+          target: !secret telegram_chat_id_bruce_and_sarah     
+          message: >
+            Washing machine has been emptied
+            
+            (Switched Off)

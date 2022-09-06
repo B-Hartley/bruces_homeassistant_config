@@ -1,0 +1,18 @@
+light:
+  - platform: template
+    lights:
+      lounge_tree:
+        friendly_name: "Lounge Tree"
+        unique_id: light_lounge_tree
+		# handled unknown / unavailable in the switch state ?
+        value_template: "{{ states('switch.lounge_tree') }}"
+        turn_on:
+          service: switch.turn_on
+          entity_id: switch.lounge_tree
+        turn_off:
+          service: switch.turn_off
+          entity_id: switch.lounge_tree
+        set_level:
+          service: "switch.turn_{{ 'off' if brightness == 0 else 'on' }}"
+          entity_id: switch.lounge_tree
+

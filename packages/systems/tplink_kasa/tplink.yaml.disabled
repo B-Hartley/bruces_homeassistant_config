@@ -1,0 +1,7 @@
+tplink:
+  discovery: false
+  switch:
+    - host: !secret tplink_kasa1_ip
+#    - host: !secret tplink_kasa2_ip 
+
+

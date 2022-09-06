@@ -1,0 +1,20 @@
+switch:
+  - platform: template
+    switches:
+      hive_water_boost:
+        unique_id: hive_water_boost
+        value_template: "{{ is_state('sensor.hotwater_boost', 'ON') }}"
+        turn_on:
+          service: hive.boost_hot_water
+          target:
+            entity_id: "water_heater.hot_water"
+          data:
+            time_period: "00:30:00"
+            on_off: "on"
+        turn_off:
+          service: hive.boost_hot_water
+          target:
+            entity_id: "water_heater.hot_water"
+          data:
+            time_period: "00:00:00"            
+            on_off: "off"

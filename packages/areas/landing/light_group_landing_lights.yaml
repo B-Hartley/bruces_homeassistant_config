@@ -1,0 +1,7 @@
+light:          
+  - platform: group
+    unique_id: light_group_landing
+    name: Landing Lights
+    entities:
+# hue group    
+    - light.landing

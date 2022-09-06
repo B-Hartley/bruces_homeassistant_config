@@ -1,0 +1,10 @@
+entities:
+  - entity: sensor.click_stats
+    icon: 'mdi:package-variant-closed'
+    name: Spares
+  - entity: sensor.swatches_this_week
+    icon: 'mdi:palette-swatch'
+    name: swatches
+show_header_toggle: false
+title: Click Spares This Week
+type: entities

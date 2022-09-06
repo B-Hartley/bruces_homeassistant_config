@@ -1,0 +1,9 @@
+light:          
+  - platform: group
+    unique_id: light_group_front_and_drive
+    name: Front Door and Drive
+    entities:
+    - light.front_door_1
+    - light.front_door_2
+    - light.drive_1
+    - light.drive_2

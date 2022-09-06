@@ -1,0 +1,8 @@
+rest_command:
+  # on for 3 hours, off for 4 at 36
+  # 0, 0, 0 for cancel schedule
+  hottub_set_schedule: 
+    method: POST
+    content_type: "application/x-www-form-urlencoded"
+    url: "https://mobileapi.lay-z-spa.co.uk/v1/gizwits/set_schedule"
+    payload: "{{ hottub_api_did }}&heat_in={{ hottub_heat_in | int | string }}&duration={{ hottub_duration | int | string }}&temperature={{ hottub_temp | int | string }}"

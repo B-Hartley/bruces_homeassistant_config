@@ -1,0 +1,6 @@
+light:          
+  - platform: group
+    unique_id: light_group_utility
+    name: Utility Lights
+    entities:
+    - light.utility_light

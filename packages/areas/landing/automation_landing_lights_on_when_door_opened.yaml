@@ -1,0 +1,58 @@
+automation:
+  - id: landing_lights_when_landing_door_opened
+    alias: 'Landing Lights on from landing doors'
+    mode: restart
+    
+    description: >
+      Landing Lights on for 10 minutes when landing Door Opened
+
+    trigger:
+      - platform: state
+        id: "door"
+        entity_id: 
+          - binary_sensor.guest_bedroom_door
+          - binary_sensor.kates_bedroom_door
+          - binary_sensor.main_bathroom_door
+          - binary_sensor.master_bedroom_door
+          - binary_sensor.drum_room_door
+          - binary_sensor.landing
+        from: 'off'
+        to: 'on'
+        
+    condition:
+      - condition: state
+        entity_id: binary_sensor.light_outside
+        state: 'off'
+      - condition: state
+        entity_id: light.landing_light_3
+        state: 'off'
+      - or:
+          - condition: state
+            entity_id: light.landing_light_1
+            state: 'off'
+          - condition: state
+            entity_id: light.landing_light_1
+            attribute: brightness
+            state: 10     
+            
+    action:
+      - service: light.turn_on
+        target:
+          entity_id: 
+            - light.landing_light_1
+            - light.landing_light_2
+        data:
+          brightness: 10
+      - delay: 00:09:40
+      - service: light.turn_off
+        target:
+          entity_id:
+            - light.landing_light_1
+            - light.landing_light_2                  
+        data:
+          transition: 20
+
+
+# Turn on landing lights low for 10 mins.
+# Not if already on at a different brightness.
+# Not if it is daylight            

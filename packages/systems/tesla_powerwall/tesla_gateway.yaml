@@ -1,0 +1,5 @@
+tesla_gateway:
+  username: !secret tesla_gateway_username
+  password: !secret tesla_gateway_password
+#  access_token: !secret tesla_gateway_access_token
+#  refresh_token: !secret tesla_gateway_refresh_token

@@ -1,0 +1,11 @@
+device_tracker:
+  - platform: icloud3
+
+# Using FMF without 2FA  
+    #username: !secret fmf_username
+    #password: !secret fmf_password
+    config_ic3_file_name: /ic3_config/ic3_config.yaml
+ #For Family Sharing with 2FA
+    username: !secret iphone_username
+    password: !secret iphone_password    
+  

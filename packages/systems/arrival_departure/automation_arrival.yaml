@@ -1,0 +1,48 @@
+automation:
+    - id: turn_on_lights_when_arrive_home
+      alias: 'Turn on the lights when somone arrives home'
+
+      description: >
+        Turn on lights when arrive home if dark
+        
+      trigger:
+        - platform: state
+          id: "arrival"
+          entity_id: 
+            - person.jyggy
+            - person.paddy            
+            - person.bruce_hartley
+            - person.sarah_hartley
+            - person.sophie_hartley
+            - person.kate_hartley
+          to: home
+        - platform: state
+          id: "door"
+          entity_id: binary_sensor.front_door
+          to: 'on'
+          
+      condition:
+        - condition: state
+          entity_id: binary_sensor.light_outside
+          state: 'off'
+        - condition: state
+          entity_id: 
+            - input_boolean.bruce_is_asleep
+            - input_boolean.sarah_is_asleep
+          state: 'off'
+        - condition: template
+          value_template: "{{ states('alarm_control_panel.texecom') != 'armed_night' }}"
+          
+      action:
+          - service: light.turn_on
+            target:
+              entity_id: 
+                - light.patio
+                - light.drive
+          - delay: 00:02:00
+          - service: light.turn_off
+            target:
+              entity_id: 
+                - light.patio
+                - light.drive
+     

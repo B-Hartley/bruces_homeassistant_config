@@ -1,0 +1,13 @@
+light:
+  - platform: group
+    unique_id: bar_ceiling_group
+    name: Bar Ceiling
+    entities:
+    - light.bar_ceiling_1
+    - light.bar_ceiling_2
+    - light.bar_ceiling_3
+    - light.bar_ceiling_4
+    - light.bar_ceiling_5
+    - light.bar_ceiling_6
+    - light.bar_ceiling_7
+    - light.bar_ceiling_8

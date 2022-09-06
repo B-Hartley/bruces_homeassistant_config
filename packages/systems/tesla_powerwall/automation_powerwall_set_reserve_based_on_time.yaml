@@ -1,0 +1,201 @@
+automation:
+  - id: powerwall_set_reserve_and_mode_based_on_time
+    alias: 'Powerwall: Set reserve level and mode'
+    mode: queued
+    
+    description: >
+      Set powerwall reserve and mode
+    
+    trigger:
+      - platform: time
+        id: 'time'
+        at: 
+          - '06:30:05'
+          - '14:00:05'        
+          - '15:00:05'        
+          - '15:59:55'  
+      - platform: numeric_state
+        id: 'below25'
+        entity_id: sensor.powerwall_charge_corrected
+        below: 25        
+      - platform: numeric_state
+        id: 'above25'
+        entity_id: sensor.powerwall_charge_corrected
+        above: 25
+      - platform: numeric_state
+        id: 'above50'      
+        entity_id: sensor.powerwall_charge_corrected
+        above: 50     
+      - platform: numeric_state
+        id: 'below45'            
+        entity_id: sensor.powerwall_charge_corrected
+        below: 45     
+      - platform: state
+        id: 'states'
+        entity_id: 
+          - binary_sensor.go_cheap
+          - binary_sensor.power_hour
+          - binary_sensor.agile_peak
+          - binary_sensor.agile_plunge
+          - input_number.overnight_powerwall_max_charge
+          - binary_sensor.powerwall_at_or_below_max_charge_cost_and_charge_limit
+          - sensor.zappi_jyggy_mode
+          - sensor.zappi_paddy_mode
+      - platform: homeassistant
+        id: 'start'
+        event: start
+      - platform: event
+        id: 'reload'
+        event_type: automation_reloaded   
+        
+    action:
+      choose:
+        # Charging as Power Hour / plunge / price low
+        - conditions:
+          - condition: state
+            entity_id: 
+              - binary_sensor.power_hour
+              - binary_sensor.agile_plunge
+              - binary_sensor.powerwall_at_or_below_max_charge_cost_and_charge_limit
+            match: any  
+            state: 'on'
+          sequence:
+            - service: tesla_gateway.set_operation
+              data:
+                real_mode: backup
+
+        # 1% Reserve for Peak Agile Pricing                
+        - conditions:
+            condition: state
+            entity_id: binary_sensor.agile_peak
+            state: 'on'
+          sequence:
+            - service: input_number.set_value
+              target:
+                entity_id: input_number.powerwall_reserve_requested
+              data:
+                value: 1
+            - service: tesla_gateway.set_operation
+              data:
+                real_mode: self_consumption
+                backup_reserve_percent: 1
+
+        # Preventing too much usage Overnight when cars charging         
+        - conditions:
+            - condition: state
+              entity_id: binary_sensor.powerwall_at_or_below_max_charge_cost_and_charge_limit
+              state: 'off'        
+            - condition: state
+              entity_id: sensor.solaredge_status_text
+              state: 'Sleep'   
+            - condition: state
+              entity_id: input_boolean.freeze_power_when_cars_charging
+              state: 'on'
+            - condition: state
+              entity_id: 
+                - sensor.zappi_jyggy_mode
+                - sensor.zappi_paddy_mode
+              match: any
+              state: Fast      
+          sequence:
+            - service: tesla_gateway.set_operation
+              data:
+                real_mode: self_consumption
+                backup_reserve_percent: "{{ states('sensor.powerwall_charge')|int(0) }}"
+#            - delay: 5
+            - service: input_number.set_value
+              target:
+                entity_id: input_number.powerwall_reserve_requested              
+              data:
+                value: "{{ states('sensor.powerwall_charge')|int(0)  }}"
+#            - service: tesla_gateway.set_reserve
+#              data:
+#                backup_reserve_percent: "{{ states('sensor.powerwall_charge')|int(0) }}"
+
+        # Ensure we have at least 25% by 04:30 on Go
+        - conditions:
+            - condition: state
+              entity_id: binary_sensor.go_cheap
+              state: 'on'
+          sequence:
+            - service: tesla_gateway.set_operation
+              data:
+                real_mode: self_consumption
+                backup_reserve_percent: 25
+            - service: input_number.set_value
+              target:
+                entity_id: input_number.powerwall_reserve_requested              
+              data:
+                value: 25
+                
+        # Preventing too much usage Overnight between charges           
+        - conditions:
+            - condition: state
+              entity_id: input_boolean.go_tariff
+              state: 'off'        
+            - condition: state
+              entity_id: binary_sensor.powerwall_at_or_below_max_charge_cost_and_charge_limit
+              state: 'off'        
+            - condition: time
+              after: '00:00:00'
+              before: '06:30:00'  
+          sequence:
+            - service: tesla_gateway.set_operation
+              data:
+                real_mode: self_consumption
+                backup_reserve_percent: "{{ [ states('sensor.powerwall_charge')|int(0) , states('input_number.overnight_powerwall_max_charge')|int(0)]|min }}"
+            - service: input_number.set_value
+              target:
+                entity_id: input_number.powerwall_reserve_requested              
+              data:
+                value: "{{ [ states('sensor.powerwall_charge')|int(0) , states('input_number.overnight_powerwall_max_charge')|int(0)]|min }}"
+#            - service: tesla_gateway.set_reserve
+#              data:
+#                backup_reserve_percent: "{{ [ states('sensor.powerwall_charge')|int(0) , states('input_number.overnight_powerwall_max_charge')|int(0)]|min }}"
+
+        # Ensure we have 25% by 15:00 on Agile
+        - conditions:
+            - condition: state
+              entity_id: input_boolean.go_tariff
+              state: 'off'
+            - condition: time
+              after: '14:00:00'
+              before: '14:59:59'  
+            - condition: numeric_state
+              entity_id: sensor.powerwall_charge
+              below: 25
+          sequence:
+            - service: tesla_gateway.set_operation
+              data:
+                real_mode: backup
+                
+        # Ensure we have 50% by 16:00 on Agile
+        - conditions:
+            - condition: state
+              entity_id: input_boolean.go_tariff
+              state: 'off'        
+            - condition: time
+              after: '15:00:00'
+              before: '15:59:30'  
+            - condition: numeric_state
+              entity_id: sensor.powerwall_charge
+              below: 50            
+          sequence:
+            - service: tesla_gateway.set_operation
+              data:
+                real_mode: backup
+              
+   # Set low reserve to make charge available for peak                
+      default:
+        - service: input_number.set_value
+          target:
+            entity_id: input_number.powerwall_reserve_requested          
+          data:
+            value: "{{ [ states('sensor.powerwall_charge')|int(0) , 5]|min }}"
+        - service: tesla_gateway.set_operation
+          data:
+            real_mode: self_consumption   
+            backup_reserve_percent: "{{ [ states('sensor.powerwall_charge')|int(0) , 5]|min }}"            
+#        - service: tesla_gateway.set_reserve
+#          data:
+#            backup_reserve_percent: "{{ [ states('sensor.powerwall_charge')|int(0) , 5]|min }}"

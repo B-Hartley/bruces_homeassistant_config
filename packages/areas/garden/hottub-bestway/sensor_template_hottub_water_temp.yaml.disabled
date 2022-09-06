@@ -1,0 +1,5 @@
+template:
+  sensor:
+    - name: "Hottub Water Temp"
+      unit_of_measurement: '°C'        
+      state: "{{ states('input_number.hottub_water_temp') | int }}"

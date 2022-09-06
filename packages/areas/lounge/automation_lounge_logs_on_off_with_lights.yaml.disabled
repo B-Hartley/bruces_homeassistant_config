@@ -1,0 +1,24 @@
+automation:
+  - id: logs_change_when_lights_change
+    alias: 'Turn off - on logs when lounge lights off - on'
+	
+	description: >
+	  Switch logs lights with lounge lights
+	  
+    trigger: 
+      - platform: state
+	    id: "off"
+        entity_id: light.lounge
+        to: 'on'
+        from: 'off'
+      - platform: state
+	    id: "on"
+        entity_id: light.lounge
+        to: 'off'
+        from: 'on'
+		
+    action:
+      - service: light.turn_{{ trigger.to_state.state }}
+	    target:
+          entity_id: light.log_burner
+        

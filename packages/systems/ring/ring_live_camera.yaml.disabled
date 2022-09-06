@@ -1,0 +1,5 @@
+camera:
+  - platform: generic
+    name: Ring Livestream
+    stream_source: http://192.168.11.124:3000/public/stream.m3u8
+    still_image_url: http://192.168.11.124:3000/public/stream.m3u8

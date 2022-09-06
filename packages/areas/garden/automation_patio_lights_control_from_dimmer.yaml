@@ -1,0 +1,51 @@
+automation:
+  - id: dimmer_control_patio_lights
+    alias: 'Dimmer Control of Patio Lights'
+    mode: restart
+
+    description: >-
+      patio lights on and off with dimmer control
+
+    trigger:
+      - platform: event
+        id: "dimmer on"
+        event_type: hue_event
+        event_data:
+          id: "patio_switch"
+          event: 1002
+      - platform: event
+        id: "dimmer off"
+        event_type: hue_event
+        event_data:
+          id: "patio_switch"
+          event: 4000
+      - platform: state
+        id: "light off"
+        entity_id: light.patio_lights
+        to: 'off'    
+
+    action:
+      - choose:
+          - conditions: 
+              - condition: trigger
+                id: "light off"
+            sequence:
+              - service: input_boolean.turn_off
+                target:
+                  entity_id: input_boolean.patio_lights_manually_on       
+
+          - conditions: 
+              - condition: trigger
+                id: "dimmer on"          
+            sequence:          
+              - service: input_boolean.turn_on
+                target:
+                  entity_id: input_boolean.patio_lights_manually_on
+                  
+          - conditions: 
+              - condition: trigger
+                id: "dimmer off" 
+            sequence:          
+              - service: input_boolean.turn_off
+                target:
+                  entity_id: input_boolean.patio_light_manually_on

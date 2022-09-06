@@ -1,0 +1,144 @@
+icon: 'mdi:cctv'
+panel: true
+path: cctv
+title: CCTV
+visible:
+  - user: 86df00251766415c9acf21b3b3e51496
+  - user: 1de5d8e2c14c47939a8174d6e4147f31
+badges: []
+cards:
+  - type: grid
+    columns: 2
+    square: false
+    cards:
+      - aspect_ratio: 969
+        camera_image: camera.hall_medium
+        entity: camera.hall_medium
+        name: Hall
+        show_name: false
+        show_state: false
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace-cctvcameras/Hall
+        type: picture-entity
+      - aspect_ratio: 969
+        camera_image: camera.lounge_medium
+        entity: camera.lounge_medium
+        name: Lounge
+        show_name: false
+        show_state: false
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace-cctvcameras/Lounge
+        type: picture-entity
+      - aspect_ratio: 969
+        camera_image: camera.whiteacres_kitchen
+        entity: camera.kitchen_medium
+        name: Kitchen
+        show_name: false
+        show_state: false
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace-cctvcameras/kitchen
+        type: picture-entity
+      - aspect_ratio: 969
+        camera_image: camera.kitchen_2_medium
+        entity: camera.kitchen_2_medium
+        name: Kitchen
+        show_name: false
+        show_state: false
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace-cctvcameras/kitchen
+        type: picture-entity
+      - aspect_ratio: 969
+        camera_image: camera.landing_medium
+        entity: camera.landing_medium
+        name: Landing
+        show_name: false
+        show_state: false
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace-cctvcameras/Landing
+        type: picture-entity
+      - camera_image: camera.studio
+        entity: camera.bar_medium
+        name: Bar
+        show_name: false
+        show_state: false
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace-cctvcameras/studio
+        type: picture-entity
+      - aspect_ratio: 969
+        camera_image: camera.drive_medium
+        entity: camera.drive_medium
+        name: Drive
+        show_name: false
+        show_state: false
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace-cctvcameras/drive
+        type: picture-entity
+      - aspect_ratio: 969
+        camera_image: camera.bins_medium
+        entity: camera.bins_medium
+        name: Bins
+        show_name: false
+        show_state: false
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace-cctvcameras/bins
+        type: picture-entity
+      - aspect_ratio: 969
+        camera_image: camera.patio_medium
+        entity: camera.patio_medium
+        name: Patio
+        show_name: false
+        show_state: false
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace-cctvcameras/patio
+        type: picture-entity
+      - aspect_ratio: 969
+        camera_image: camera.gazebo_medium
+        entity: camera.gazebo_medium
+        name: Gazebo
+        show_name: false
+        show_state: false
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace-cctvcameras/gazebo
+        type: picture-entity
+      - aspect_ratio: 969
+        camera_image: camera.doorbell_medium
+        entity: camera.doorbell_medium
+        name: Front Door
+        show_name: false
+        show_state: false
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace-cctvcameras/frontdoor
+        type: picture-entity        
+      - icon: 'mdi:menu'
+        show_icon: true
+        show_name: false
+        styles:
+          card:
+            - height: 90px
+        tap_action:
+          action: navigate
+          haptic: success
+          navigation_path: /lovelace-switchboard/menu
+        type: 'custom:button-card'
+      - icon: 'mdi:menu'
+        show_icon: true
+        show_name: false
+        styles:
+          card:
+            - height: 90px
+        tap_action:
+          action: navigate
+          haptic: success
+          navigation_path: /lovelace-switchboard/menu
+        type: 'custom:button-card'

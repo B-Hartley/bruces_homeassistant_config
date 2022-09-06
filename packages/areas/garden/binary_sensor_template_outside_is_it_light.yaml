@@ -1,0 +1,7 @@
+template:
+  binary_sensor:
+    - name: "Light Outside"
+      unique_id: light_outside
+      availability: "{{ states('sensor.outside_light')|is_number }}" 
+      state: "{{ states('sensor.outside_light')|int(0) > 120 }}"      
+      device_class: light

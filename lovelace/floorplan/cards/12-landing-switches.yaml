@@ -1,0 +1,26 @@
+type: conditional
+#view_layout:
+#  position: sidebar
+conditions:
+  - entity: input_boolean.floorplan_show_landing_switches
+    state: "on"
+card:
+ type: entities
+ entities:
+  - entity: light.landing_light_1
+    hide_state: true
+    name: Landing 1
+    type: 'custom:slider-entity-row'
+  - entity: light.landing_light_2
+    hide_state: true
+    name: Landing 2
+    type: 'custom:slider-entity-row'
+  - entity: light.landing_light_3
+    hide_state: true
+    name: Landing 3
+    type: 'custom:slider-entity-row'    
+  - entity: input_boolean.floorplan_show_landing_switches
+    name: Show These Switches    
+
+
+  

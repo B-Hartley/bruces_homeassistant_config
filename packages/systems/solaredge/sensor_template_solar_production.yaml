@@ -1,0 +1,8 @@
+template:
+  sensor:
+    - name: "Solar Production"
+      unique_id: solar_production
+      unit_of_measurement: 'kW'
+      availability: "{{ states('sensor.solaredge_mb_ac_power')|is_number }}"
+      state: "{{ ((states('sensor.solaredge_mb_ac_power')|float(0))/1000.0)|round(1,'',0) }}"     
+      device_class: power

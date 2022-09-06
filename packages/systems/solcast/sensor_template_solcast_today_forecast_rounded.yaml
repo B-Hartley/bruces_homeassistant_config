@@ -1,0 +1,8 @@
+template:
+  - sensor:
+      - name: "Solcast Forecast Today Rounded"
+        unique_id: solcast_forecast_today_rounded
+        unit_of_measurement: 'kWh'   
+        availability: "{{ states('sensor.solcast_forecast_today')|is_number and states('sensor.solaredge_energy_today_kwh')|is_number }}"        
+        device_class: energy
+        state: "{{ (states('sensor.solaredge_energy_today_kwh')|float(0) + states('sensor.solcast_forecast_remaining_today')|float(0))|round(1,'',0) }}"    

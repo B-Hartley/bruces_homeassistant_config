@@ -1,0 +1,6 @@
+image_processing:
+  - platform: google_vision
+    api_key_file: /config/Google_API_key.json
+    save_file_folder: /config/www/
+    source:
+      - entity_id: camera.drive

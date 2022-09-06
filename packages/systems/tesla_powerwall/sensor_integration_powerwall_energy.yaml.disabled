@@ -1,0 +1,4 @@
+sensor:
+  - platform: integration
+    name: "Powerwall Energy"
+    source: sensor.powerwall_battery_now_inverted

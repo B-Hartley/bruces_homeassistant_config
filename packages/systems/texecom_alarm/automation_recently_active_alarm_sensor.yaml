@@ -1,0 +1,30 @@
+automation:
+  - id: alarm_recently_active_sensor
+    alias: 'Alarm: recently active'
+    mode: restart
+    
+    description: >
+      Update with last triggered sensor
+      
+    trigger:
+      - platform: state
+        id: 'motion'
+        entity_id: 
+          - binary_sensor.back_door
+          - binary_sensor.front_door
+          - binary_sensor.kitchen
+          - binary_sensor.landing
+          - binary_sensor.lounge
+          - binary_sensor.pa_hall
+          - binary_sensor.pa_masterbed
+          - binary_sensor.shed_garage
+          - binary_sensor.bar
+        from: 'off'
+        to: 'on'
+        
+    action:
+      - service: input_text.set_value
+        target:
+          entity_id: input_text.recently_active_alarm_sensor
+        data:
+          value: "{{ trigger.from_state.name }}"

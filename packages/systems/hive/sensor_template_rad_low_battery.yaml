@@ -1,0 +1,72 @@
+template:
+  - binary_sensor:
+      - name: "Whitacres Low Battery"
+        unique_id: whitacres_low_battery
+        state: "{{ states('sensor.whiteacres_battery_level')|float(0) < 20.0 }}"  
+        device_class: battery
+      - name: "Lounge Rad Low Battery"
+        unique_id: lounge_rad_low_battery
+        state: "{{ states('sensor.lounge_rad_battery_level')|float(0) < 20.0 }}"
+        device_class: battery
+      - name: "Lounge Bay Rad Low Battery"
+        unique_id: lounge_bay_rad_low_battery
+        state: "{{ states('sensor.lounge_bay_rad_battery_level')|float(0) < 20.0 }}"
+        device_class: battery
+      - name: "Hall Rad Low Battery"
+        unique_id: hall_rad_low_battery
+        state: "{{ states('sensor.hall_rad_battery_level')|float(0) < 20.0 }}"
+        device_class: battery
+      - name: "Conservatory Rad Low Battery"
+        unique_id: conservatory_rad_low_battery
+        state: "{{ states('sensor.conservatory_rad_battery_level')|float(0) < 20.0 }}"   
+        device_class: battery
+      - name: "Kitchen Rad Low Battery"
+        unique_id: kitchen_rad_low_battery
+        state: "{{ states('sensor.kitchen_rad_battery_level')|float(0) < 20.0 }}"
+        device_class: battery
+      - name: "Kitchen Tall rad Low_battery"
+        unique_id: kitchen_tall_rad_low_battery
+        state: "{{ states('sensor.kitchen_tall_rad_battery_level')|float(0) < 20.0 }}"
+        device_class: battery
+      - name: "Downstairs Loo rad Low Battery"
+        unique_id: downstairs_loo_rad_low_battery
+        state: "{{ states('sensor.downstairs_loo_rad_battery_level')|float(0) < 20.0 }}"  
+        device_class: battery
+      - name: "Bar Rad Low Battery"
+        unique_id: bar_rad_low_battery
+        state: "{{ states('sensor.bar_rad_battery_level')|float(0) < 20.0 }}"
+        device_class: battery
+      - name: "Drum room Rad Low Battery"
+        unique_id: drum_room_rad_low_battery
+        state: "{{ states('sensor.drum_room_rad_battery_level')|float(0) < 20.0 }}"
+        device_class: battery
+      - name: "Sophie's Bedroom Rad Low Battery"
+        unique_id: sophies_bedroom_rad_low_battery
+        state: "{{ states('sensor.sophies_bedroom_rad_battery_level')|float(0) < 20.0 }}"   
+        device_class: battery 
+      - name: "Kate's Bedroom Rad Low Battery"
+        unique_id: kates_bedroom_rad_low_battery
+        state: "{{ states('sensor.kates_bedroom_rad_battery_level')|float(0) < 20.0 }}"  
+        device_class: battery
+      - name: "Kate's Bathroom Rad Low Battery"
+        unique_id: kates_bathroom_rad_low_battery
+        state: "{{ states('sensor.kates_bathroom_rad_battery_level')|float(0) < 20.0 }}"  
+        device_class: battery
+      - name: "Guest Bedroom Rad Low Battery"
+        unique_id: guest_bedroom_rad_low_battery
+        state: "{{ states('sensor.guest_bedroom_rad_battery_level')|float(0) < 20.0 }}" 
+        device_class: battery
+      - name: "Master Bedroom Rad Low Battery"
+        unique_id: master_bedroom_rad_low_battery
+        state: "{{ states('sensor.master_bedroom_rad_battery_level')|float(0) < 20.0 }}" 
+        device_class: battery
+      - name: "Landing 1 Rad Low Battery"
+        unique_id: landing_1_rad_low_battery
+        state: "{{ states('sensor.landing_1_rad_battery_level')|float(0) < 20.0 }}"    
+        device_class: battery
+      - name: "Landing 2 Rad Low Battery"
+        unique_id: landing_2_rad_low_battery
+        state: "{{ states('sensor.landing_2_rad_battery_level')|float(0) < 20.0 }}" 
+        device_class: battery
+     
+

@@ -1,0 +1,5 @@
+template:
+  sensor:
+    - name: "Hottub Price"
+      availability: "{{ states('binary_sensor.hottub_online') }}"
+      state: "{% if is_state('sensor.hottub_summary','heating') %}{{ states('sensor.octopus_agile_current_rate') | float * 2 }}{% else %}0{% endif %}"

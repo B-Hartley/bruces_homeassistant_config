@@ -1,0 +1,35 @@
+automation:
+  - id: new_car_on_driveway
+    alias: New cars in driveway
+    mode: single
+    
+    description: >
+      Keep a list of cars on drive
+
+    variables:
+      ignored_plates: '{{ [] }}'
+      old_plates: '{{ states(''input_text.current_cars_on_drive'').split('','') | list }}'
+      updated_plates: '{{ state_attr(trigger.event.data.entity_id, ''vehicles'') | map(attribute=''plate'') | list }}'
+      new_plates: '{{ updated_plates | reject(''in'', old_plates) | reject(''in'', ignored_plates) | list }}'
+  
+    trigger:
+      - platform: event
+        event_type: platerecognizer.vehicle_detected
+    
+    action:
+      - choose:
+          - conditions: "{{ trigger.event.data.confidence > 0.8 }}"
+            sequence:
+              - service: input_text.set_value
+                data:
+                  value: '{{ updated_plates | join('','') }}'
+                entity_id: input_text.current_cars_on_drive
+              - choose:
+                - conditions:
+                  - condition: template
+                    value_template: '{{ new_plates|length > 0 }}'
+                  sequence:
+                    - service: telegram_bot.send_message
+                      data:
+                        target: !secret telegram_chat_id_bruce         
+                        message: "{{ 'A new car on driveway! Plate: ' + (new_plates | join(', ')) }}"

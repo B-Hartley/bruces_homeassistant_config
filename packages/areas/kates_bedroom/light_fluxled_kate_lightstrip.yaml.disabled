@@ -1,0 +1,7 @@
+light:
+  - platform: flux_led
+    devices:
+      # Would ideally conceal IP address in secrets file, but doesn't seem possible.
+      192.168.21.161:
+        name: Kate Lightstrip
+        mode: "rgb"

@@ -1,0 +1,9 @@
+mqtt:
+  binary_sensor:
+    - unique_id: kate_mqtt_room  
+      name: Kate Mqtt Room
+      state_topic: espresense/rooms/kate/status
+      json_attributes_topic: espresense/rooms/kate/telemetry
+      payload_on: online
+      payload_off: offline
+      device_class: connectivity

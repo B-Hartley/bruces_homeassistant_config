@@ -1,0 +1,11 @@
+template:
+  sensor:
+    - name: "Solaredge Energy Today kWh"
+      unique_id: solaredge_energy_today_kwh
+      availability: "{{ states('sensor.solar_energy_daily_kwh')|is_number }}"          
+      state: "{{ states('sensor.solar_energy_daily_kwh')|round(1,'',0) }}"
+      unit_of_measurement: 'kWh'
+      device_class: energy      
+      state_class: total     
+      icon: mdi:solar-power      
+

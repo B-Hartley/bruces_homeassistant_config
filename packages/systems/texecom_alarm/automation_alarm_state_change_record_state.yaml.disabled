@@ -1,0 +1,65 @@
+automation:
+  - id: alarm_state_changed_update_drop_down
+    alias: Alarm State Changed Update DropDown
+    mode: queued
+	
+    description: >
+	  Alarm State Changed Update Dropdown
+
+    trigger:
+      - platform: homeassistant
+	    id: 'start'
+        event: start
+      - platform: event
+	    id: 'reload'
+        event_type: automation_reloaded           
+      - platform: state
+	    id: 'arming'
+        entity_id: alarm_control_panel.full_set
+		from: 'disarmed'
+		to: 'pending'
+      - platform: state
+	    id: 'disarming'
+        entity_id: alarm_control_panel.full_set
+		from: 
+		  - 'armed_home'
+		  - 'armed_away'
+		  - 'armed_night'
+		to: 'pending'		
+      - platform: state
+	    id: 'alarm'
+        entity_id: alarm_control_panel.full_set
+		
+    action:
+      - choose:
+          - conditions: 
+		      - condition: trigger
+			    id: 'arming'
+            sequence:
+              - service: input_select.select_option
+                target:
+                  entity_id: input_select.burglar_alarm_status
+                data:
+                  option: 'Pending Arm'
+				  
+          - conditions: 
+		      - condition: trigger
+			    id: 'disarming'
+            sequence:
+              - service: input_select.select_option
+                target:
+                  entity_id: input_select.burglar_alarm_status
+                data:
+                  option: 'Pending Disarm'    
+				  
+        default:
+          - service: input_text.set_value
+            target:
+              entity_id: input_text.alarm_status_debug
+			data:
+              value: "from: {{ trigger.from_state.state }} to: {{ trigger.to_state.state }}"
+          - service: input_select.select_option
+            target:
+              entity_id: input_select.burglar_alarm_status
+            data:
+              option: "{{ states('alarm_control_panel.full_set').replace('_',' ')|title }}"

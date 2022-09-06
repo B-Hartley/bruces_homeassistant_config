@@ -1,0 +1,6 @@
+template:
+  sensor:
+    - name: "HRT Squirts Remaining"
+      availability: "{{ is_number(states('sensor.hrt_squirts_used')) }}"
+      unique_id: hrt_squirts_remaining
+      state: "{{ 76 - states('sensor.hrt_squirts_used')|int(0) }}"

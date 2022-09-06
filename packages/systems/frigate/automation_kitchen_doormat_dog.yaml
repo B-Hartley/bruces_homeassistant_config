@@ -1,0 +1,16 @@
+automation:
+  - id: kitchen_doormat_dog
+    alias: Kitchen Doormat Dog
+    description: 'notification if dog at back door'
+    use_blueprint:
+      path: hunterjm/frigate_0.10_notification.yaml
+      input:
+        camera: Kitchen
+        notify_device: 5ba0a503da759f7381a73aca352be0d1
+        base_url: https://uoni8i8bp6wr0c2tkiuteehpqh3r3em5.ui.nabu.casa/
+        update_thumbnail: true
+        zone_filter: true
+        zones:
+          - doormat
+        labels:
+          - dog

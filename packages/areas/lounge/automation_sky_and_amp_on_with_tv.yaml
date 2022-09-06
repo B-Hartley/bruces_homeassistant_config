@@ -1,0 +1,73 @@
+automation:
+  - id: tv_and_amp_onoff_with_skyq
+    alias: 'TV and Amp on Off with SkyQ'
+    mode: restart
+  
+    description: >
+      TV and Amp on and off with SkyQ
+    
+    trigger:
+      - platform: state
+        id: 'skyq_on'
+        entity_id: media_player.lounge_skyq
+        from: 'off'
+        to: 
+          - 'on'
+          - 'playing'
+          - 'paused'
+      - platform: state
+        id: 'skyq_off'
+        entity_id: media_player.lounge_skyq
+        to: 'off'  
+    
+    action:
+      - choose:
+          - conditions: 
+              - condition: trigger
+                id: 'skyq_on'
+            sequence:
+              - service: media_player.turn_on
+                target:
+                  entity_id: 
+                    - media_player.lounge_android
+                    - media_player.lounge_amp
+              - service: media_player.select_source
+                target:
+                  entity_id: media_player.lounge_amp
+                data:
+                  source: 'SkyQ'
+              - service: media_player.select_source
+                target:
+                  entity_id: media_player.lounge_tv
+                data:
+                  source: 'HDMI 4'          
+              - service: input_boolean.turn_on
+                target:
+                  entity_id: input_boolean.watching_skytv
+              - condition: time
+                after: '18:00:00'
+              - service: input_boolean.turn_on
+                target:
+                  entity_id: input_boolean.lounge_ambilight_required
+              - service: media_player.turn_on 
+                target:
+                  entity_id: media_player.lounge_tv
+              
+          - conditions: 
+              - condition: trigger
+                id: 'skyq_off' 
+            sequence:
+              - service: media_player.turn_off
+                target:
+                  entity_id: 
+                    - media_player.lounge_amp
+                    - media_player.lounge_android
+              - service: input_boolean.turn_off
+                target:
+                  entity_id: input_boolean.watching_skytv
+              - service: remote.turn_off
+                target:
+                  entity_id: remote.lounge_appletv
+              - service: input_boolean.turn_off
+                target:
+                  entity_id: input_boolean.lounge_ambilight_required

@@ -1,0 +1,7 @@
+template:
+  binary_sensor:
+    - name: "HotTub At Or Below Max Heat Cost"
+      unique_id: hottub_at_or_below_max_charge_cost
+      availability:  "{{ states('sensor.import_price')|is_number and states('binary_sensor.bwa_wi_fi_module') }}"       
+      state: "{{ states('sensor.import_price')|float(35) <= states('input_number.hottub_heat_below_x_pence')|float(0) }}"
+

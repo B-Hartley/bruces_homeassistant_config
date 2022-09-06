@@ -1,0 +1,8 @@
+template:
+  binary_sensor:
+    - name: "Powerwall At Or Below Max Charge Cost And Charge Limit"
+      unique_id: powerwall_at_or_below_max_charge_cost_and_charge_limit
+      # Allow charge to go 5% above Max Target to allow for overnight usage
+      # Don't need to, as setting the reserve stops overnight use draining battery
+      availability:  "{{  states('binary_sensor.powerwall_connected_to_tesla') != 'Unavailable' and states('sensor.import_price') not in ['unknown','unavailable','none'] or is_state('binary_sensor.go_cheap','on') }}"        
+      state: "{{ (is_state('binary_sensor.go_cheap','on') or (states('sensor.import_price')|float(35)) <= (states('input_number.powerwall_charge_below_x_pence')|float)) and (states('sensor.powerwall_charge')|float(0)) <= ((states('input_number.overnight_powerwall_max_charge')|float(0) ) ) }}"

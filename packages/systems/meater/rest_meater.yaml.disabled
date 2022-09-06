@@ -1,0 +1,200 @@
+rest:
+  - resource_template: >
+      {%- if is_state('input_boolean.meater','on') -%}
+      https://public-api.cloud.meater.com/v1/devices/
+      {%- else -%}
+      http://192.168.11.58/meater.json
+      {%- endif -%}
+    headers:
+      Authorization: !secret meater_authorization
+    
+    sensor:
+
+
+## Block 4 ##
+
+      - name: Meater 4 Meat
+        value_template: '{{ value_json.data.devices[0].temperature.internal }}'
+        device_class: temperature
+        unit_of_measurement: '°C'
+
+      - name: Meater 4 Ambient
+        value_template: '{{ value_json.data.devices[0].temperature.ambient }}'
+        device_class: temperature
+        unit_of_measurement: '°C'
+
+      - name: Meater 4 Cook
+        value_template: '{{ value_json.data.devices[0].cook.name }}'
+        json_attributes_path: "$.data.devices[0].cook"
+        json_attributes:
+          - "state"
+
+      - name: Meater 4 Target
+        value_template: '{{ value_json.data.devices[0].cook.temperature.target }}'
+        device_class: temperature
+        unit_of_measurement: '°C'
+        
+      - name: Meater 4 Peak
+        value_template: '{{ value_json.data.devices[0].cook.temperature.peak }}'
+        device_class: temperature
+        unit_of_measurement: '°C'
+        
+      - name: Meater 4 Remaining
+        value_template: '{{ value_json.data.devices[0].cook.time.remaining }}'
+        json_attributes_path: "$.data.devices[0].cook.time"
+        json_attributes:
+          - "elapsed"
+          
+      - name: Meater 4 Updated        
+        value_template: '{{ value_json.data.devices[0].updated_at }}'
+        
+
+## Block 1 ##
+
+      - name: Meater 1 Meat
+        value_template: '{{ value_json.data.devices[1].temperature.internal }}'
+        device_class: temperature
+        unit_of_measurement: '°C'
+
+      - name: Meater 1 Ambient
+        value_template: '{{ value_json.data.devices[1].temperature.ambient }}'
+        device_class: temperature
+        unit_of_measurement: '°C'
+
+      - name: Meater 1 Cook
+        value_template: '{{ value_json.data.devices[1].cook.name }}'
+        json_attributes_path: "$.data.devices[1].cook"
+        json_attributes:
+          - "state"
+
+      - name: Meater 1 Target
+        value_template: '{{ value_json.data.devices[1].cook.temperature.target }}'
+        device_class: temperature
+        unit_of_measurement: '°C'
+        
+      - name: Meater 1 Peak
+        value_template: '{{ value_json.data.devices[1].cook.temperature.peak }}'
+        device_class: temperature
+        unit_of_measurement: '°C'
+        
+      - name: Meater 1 Remaining
+        value_template: '{{ value_json.data.devices[1].cook.time.remaining }}'
+        json_attributes_path: "$.data.devices[0].cook.time"
+        json_attributes:
+          - "elapsed"
+          
+      - name: Meater 1 Updated        
+        value_template: '{{ value_json.data.devices[1].updated_at }}'
+
+
+## Block 2 ##
+
+      - name: Meater 2 Meat
+        value_template: '{{ value_json.data.devices[2].temperature.internal }}'
+        device_class: temperature
+        unit_of_measurement: '°C'
+
+      - name: Meater 2 Ambient
+        value_template: '{{ value_json.data.devices[2].temperature.ambient }}'
+        device_class: temperature
+        unit_of_measurement: '°C'
+
+      - name: Meater 2 Cook
+        value_template: '{{ value_json.data.devices[2].cook.name }}'
+        json_attributes_path: "$.data.devices[2].cook"
+        json_attributes:
+          - "state"
+
+      - name: Meater 2 Target
+        value_template: '{{ value_json.data.devices[2].cook.temperature.target }}'
+        device_class: temperature
+        unit_of_measurement: '°C'
+        
+      - name: Meater 2 Peak
+        value_template: '{{ value_json.data.devices[2].cook.temperature.peak }}'
+        device_class: temperature
+        unit_of_measurement: '°C'
+        
+      - name: Meater 2 Remaining
+        value_template: '{{ value_json.data.devices[2].cook.time.remaining }}'
+        json_attributes_path: "$.data.devices[2].cook.time"
+        json_attributes:
+          - "elapsed"
+          
+      - name: Meater 2 Updated        
+        value_template: '{{ value_json.data.devices[2].updated_at }}'
+
+
+## Block 3 ##
+
+      - name: Meater 3 Meat
+        value_template: '{{ value_json.data.devices[3].temperature.internal }}'
+        device_class: temperature
+        unit_of_measurement: '°C'
+
+      - name: Meater 3 Ambient
+        value_template: '{{ value_json.data.devices[3].temperature.ambient }}'
+        device_class: temperature
+        unit_of_measurement: '°C'
+
+      - name: Meater 3 Cook
+        value_template: '{{ value_json.data.devices[3].cook.name }}'
+        json_attributes_path: "$.data.devices[3].cook"
+        json_attributes:
+          - "state"
+
+      - name: Meater 3 Target
+        value_template: '{{ value_json.data.devices[3].cook.temperature.target }}'
+        device_class: temperature
+        unit_of_measurement: '°C'
+        
+      - name: Meater 3 Peak
+        value_template: '{{ value_json.data.devices[3].cook.temperature.peak }}'
+        device_class: temperature
+        unit_of_measurement: '°C'
+        
+      - name: Meater 3 Remaining
+        value_template: '{{ value_json.data.devices[3].cook.time.remaining }}'
+        json_attributes_path: "$.data.devices[3].cook.time"
+        json_attributes:
+          - "elapsed"
+          
+      - name: Meater 3 Updated        
+        value_template: '{{ value_json.data.devices[3].updated_at }}'        
+
+## Basic ##
+
+#      - name: Meater Meat
+#        value_template: '{{ value_json.data.devices[4].temperature.internal }}'
+#        device_class: temperature
+#        unit_of_measurement: '°C'
+
+#      - name: Meater Ambient
+#        value_template: '{{ value_json.data.devices[4].temperature.ambient }}'
+#        device_class: temperature
+#        unit_of_measurement: '°C'
+
+#      - name: Meater Cook
+#        value_template: '{{ value_json.data.devices[4].cook.name }}'
+#        json_attributes_path: "$.data.devices[4].cook"
+#        json_attributes:
+#          - "state"
+
+#      - name: Meater Target
+#        value_template: '{{ value_json.data.devices[4].cook.temperature.target }}'
+#        device_class: temperature
+#        unit_of_measurement: '°C'
+        
+#      - name: Meater Peak
+#        value_template: '{{ value_json.data.devices[4].cook.temperature.peak }}'
+#        device_class: temperature
+#        unit_of_measurement: '°C'
+        
+#      - name: Meater Remaining
+#        value_template: '{{ value_json.data.devices[4].cook.time.remaining }}'
+#        json_attributes_path: "$.data.devices[4].cook.time"
+#        json_attributes:
+#          - "elapsed"
+          
+#      - name: Meater Updated        
+#        value_template: '{{ value_json.data.devices[4].updated_at }}'

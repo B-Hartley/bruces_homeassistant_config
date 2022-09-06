@@ -1,0 +1,47 @@
+automation:
+  - id: set_kates_radiators
+    alias: 'Set kates radiators'
+    
+    description: >
+      set Kates rads from calendar
+      
+    trigger:
+      - platform: time
+        at: 
+          - '06:00:00'
+          - '13:00:00'
+      - platform: homeassistant
+        id: "start"
+        event: start
+      - platform: event
+        id: "reload"
+        event_type: automation_reloaded  
+          
+    action:
+      - choose:
+          - conditions: 
+              - condition: state
+                entity_id: calendar.kate_yarbury
+                state: 'on'          
+            sequence:
+              - service: climate.set_hvac_mode
+                target: 
+                  entity_id: 
+                    - climate.kates_bedroom_rad
+                    - climate.kates_bathroom_rad                  
+                data:
+                  hvac_mode: 'auto'
+          - conditions: 
+              - condition: time
+                after: '12:00:00'
+            sequence:
+              - service: climate.set_hvac_mode
+                target: 
+                  entity_id: 
+                    - climate.kates_bedroom_rad
+                    - climate.kates_bathroom_rad                  
+                data:
+                  hvac_mode: 'off'                  
+                  
+                  
+                  

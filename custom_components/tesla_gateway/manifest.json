@@ -1,0 +1,12 @@
+{
+  "codeowners": ["@carboncoop"],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/carboncoop/tesla-gateway-ha-component",
+  "issue_tracker": "https://github.com/carboncoop/tesla-gateway-ha-component/issues",
+  "domain": "tesla_gateway",
+  "name": "Tesla Gateway",
+  "version": "0.1.0",
+  "requirements": ["teslapy==2.3.0"],
+  "iot_class": "cloud_polling"
+}

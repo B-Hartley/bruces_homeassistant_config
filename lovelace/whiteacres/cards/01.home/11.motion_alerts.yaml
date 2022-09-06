@@ -1,0 +1,8 @@
+entities:
+  - entity: input_boolean.garage_motion_detected
+  - entity: input_boolean.house_motion_detected
+show_empty: false
+state_filter:
+  - 'on'
+title: Motion Alerts
+type: entity-filter

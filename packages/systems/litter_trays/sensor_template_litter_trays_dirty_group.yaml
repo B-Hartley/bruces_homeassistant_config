@@ -1,0 +1,11 @@
+template:
+  binary_sensor:
+    - name: "Litter Trays Dirty"
+      unique_id: litter_trays_dirty
+      device_class: problem
+      state: >
+          {% set sensors = [states.binary_sensor.littertray_utility_dirty,
+                            states.binary_sensor.littertray_shower_dirty,
+                            states.binary_sensor.littertray_downstairs_dirty,
+                            states.binary_sensor.littertray_drum_dirty] %}
+          {{ sensors|selectattr('state','eq','on')|list|count > 0 }}

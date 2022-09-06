@@ -1,0 +1,9 @@
+script:
+    'skytv_landing_turn_off':
+      alias: End TV on the Landing
+      sequence:
+      - service: media_player.turn_off
+        entity_id: media_player.landing_skyq
+      - service: media_player.turn_off
+        entity_id: media_player.samsung_ue55ju6400
+ 

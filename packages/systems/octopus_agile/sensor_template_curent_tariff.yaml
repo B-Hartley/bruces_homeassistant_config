@@ -1,0 +1,5 @@
+template:
+  sensor:
+    - name: "Octopus Current Tariff"
+      unique_id: octopus_current_tariff
+      state: "{{ 'Agile' if is_state('input_boolean.go_tariff','off') else 'Go' }}"

@@ -1,0 +1,17 @@
+automation:
+  - id: ios_action_hottub_jet2
+    alias: "HotTub Jet 2 from ios"
+
+    description: >
+      Toggle HotTub Jet 2 from ios
+      
+    trigger:
+      - platform: event
+        event_type: ios.action_fired
+        event_data:
+          actionName: 'HotTub Jet 2'
+          
+    action:
+      - service: switch.toggle
+        target:
+          entity_id: switch.pump_2

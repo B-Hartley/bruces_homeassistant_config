@@ -1,0 +1,4 @@
+utility_meter:
+    powerwall_export_daily_kwh:
+      source: sensor.powerwall_total_export
+      cycle: daily

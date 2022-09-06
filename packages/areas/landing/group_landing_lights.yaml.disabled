@@ -1,0 +1,8 @@
+group:
+  landing_lights_group:
+    name: Landing Lights Group
+    entities:
+    - light.landing_light_1
+    - light.landing_light_2
+    - light.landing_light_3
+    - light.hall_stairs_lightstrip    

@@ -1,0 +1,10 @@
+# Used for grpah to show when heating on or off
+template:
+  sensor:
+    - name: "HotTub Heating On"
+      unique_id: hottub_heating_on
+      availability: "{{ states('binary_sensor.bwa_wi_fi_module') }}"
+      state: "{{ 1 if is_state('climate.spa_thermostat','heat') else 0 }}"
+
+
+

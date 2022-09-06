@@ -1,0 +1,9 @@
+mqtt:
+  sensor:
+    - name: "Gas Meter"
+      icon: mdi:speedometer-slow
+      state_topic: !secret smart_hild_state_topic
+      unit_of_measurement: 'm³'
+      value_template: "{{ ( value_json['gasMtr']['0702']['00']['00']|int(base=16) * value_json['gasMtr']['0702']['03']['01']|int(base=16) / value_json['gasMtr']['0702']['03']['02']|int(base=16)) }}"
+      state_class: total_increasing
+      device_class: gas

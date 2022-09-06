@@ -1,0 +1,84 @@
+blueprint:
+  name: Confirm iOS Action
+  description: Get confirmation before executing an iOS action
+  domain: automation
+  input:
+    actionName:
+      name: iOS Action Name
+      description: actionName on iOS companion app (must match exactly)
+      selector:
+        text: {}
+    action:
+      name: Home Assistant action
+      description: Home Assistant action(s) to take after confirmation
+      selector:
+        action: {}
+    destructive:
+      name: Destructive
+      description: When selected, the "confirm" button is highlighted in red to indicate
+        a more serious action
+      default: false
+      selector:
+        boolean: {}
+    timeout:
+      name: Timeout
+      description: Amount of time to wait for confirmation before the automation gives
+        up
+      default: 30
+      selector:
+        number:
+          min: 0.0
+          max: 120.0
+          step: 1.0
+          unit_of_measurement: seconds
+          mode: slider
+    only_confirm_watch_actions:
+      name: Only confirm actions triggered by a watch
+      description: When selected, confirmation will be requested only for watch-triggered
+        actions, and all other actions will be carried out without confirmation. When
+        not selected, confirmation will be requested whether triggered by watch, phone,
+        or computer.
+      default: true
+      selector:
+        boolean: {}
+  source_url: https://community.home-assistant.io/t/get-confirmation-before-executing-an-ios-watchos-action/388307
+mode: restart
+trigger:
+- platform: event
+  event_type: ios.action_fired
+  event_data:
+    actionName: !input actionName
+action:
+- variables:
+    confirm: '{{ ''CONFIRM_'' ~ context.id }}'
+- choose:
+  - conditions:
+    - condition: not
+      conditions:
+      - condition: and
+        conditions:
+        - condition: template
+          value_template: !input only_confirm_watch_actions
+        - condition: template
+          value_template: '{{ trigger.event.data.triggerSource != ''watch'' }}'
+    sequence:
+    - service: notify.mobile_app_{{ trigger.event.data.sourceDeviceID }}
+      data:
+        message: Do you really want to {{ trigger.event.data.actionName }}?
+        data:
+          actions:
+          - action: '{{ confirm }}'
+            title: Confirm
+            destructive: !input destructive
+          push:
+            interruption-level: time-sensitive
+    - wait_for_trigger:
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: '{{ confirm }}'
+      timeout: !input timeout
+      continue_on_timeout: false
+    - choose:
+      default: !input action
+  default: !input action

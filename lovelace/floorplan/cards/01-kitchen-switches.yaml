@@ -1,0 +1,59 @@
+type: conditional
+#view_layout:
+#  position: sidebar
+conditions:
+  - entity: input_boolean.floorplan_show_kitchen_switches
+    state: "on"
+card:
+ type: entities
+ entities:
+  - entity: light.kitchen_ceiling_1
+    hide_state: true
+    name: Main 1
+    type: 'custom:slider-entity-row'
+  - entity: light.kitchen_ceiling_2
+    hide_state: true
+    name: Main 2
+    type: 'custom:slider-entity-row'
+  - entity: light.kitchen_ceiling_3
+    hide_state: true
+    name: Main 3
+    type: 'custom:slider-entity-row' 
+  - entity: light.kitchen_1
+    hide_state: true
+    name: Disco 1
+    type: 'custom:slider-entity-row'
+  - entity: light.kitchen_2
+    hide_state: true
+    name: Disco 2
+    type: 'custom:slider-entity-row'
+  - entity: light.kitchen_3
+    hide_state: true
+    name: Disco 3
+    type: 'custom:slider-entity-row'
+  - entity: light.kitchen_4
+    hide_state: true
+    name: Disco 4
+    type: 'custom:slider-entity-row'    
+  - entity: light.kitchen_5
+    hide_state: true
+    name: Disco 5
+    type: 'custom:slider-entity-row'       
+  - entity: light.kitchen_cupboard
+    hide_state: true
+    name: Cupboard     
+  - entity: light.kitchen_worktop
+    hide_state: true
+    name: Worktop    
+  - entity: light.kitchen_kickboard
+    hide_state: true
+    name: Kickboard   
+  - entity: light.kitchen_floor_lamp
+    hide_state: true
+    name: Floorlamp
+    type: 'custom:slider-entity-row'     
+  - entity: input_boolean.floorplan_show_kitchen_switches
+    name: Show These Switches    
+
+
+  

@@ -1,0 +1,121 @@
+card:
+  show_state: false
+  title: Connection Problems
+  type: glance
+entities:
+  - entity: binary_sensor.bwa_wi_fi_module
+    name: Hot Tub
+    state_filter: 
+      - 'off'
+  - entity: sensor.hive_hub_status
+    name: Hive Hub
+    state_filter:
+      - offline
+  - entity: sensor.whiteacres_availability
+    name: Hive Hub
+    icon: 'mdi:radiator-off'
+    state_filter:
+      - Offline
+  - entity: sensor.bar_rad_availability
+    name: Bar Rad
+    icon: 'mdi:radiator-off'
+    state_filter:
+      - Offline
+  - entity: sensor.conservatory_rad_availability
+    name: Conservatory Rad
+    icon: 'mdi:radiator-off'
+    state_filter:
+      - Offline
+  - entity: sensor.guest_bedroom_rad_availability
+    name: Guest Bedroom Rad
+    icon: 'mdi:radiator-off'
+    state_filter:
+      - Offline
+  - entity: sensor.hall_rad_availability
+    name: Hall Rad
+    icon: 'mdi:radiator-off'
+    state_filter:
+      - Offline
+  - entity: sensor.kates_bathroom_rad_availability
+    name: Kate's Bathroom Rad
+    icon: 'mdi:radiator-off'
+    state_filter:
+      - Offline
+  - entity: sensor.landing_1_rad_availability
+    name: Landing 1 Rad
+    icon: 'mdi:radiator-off'
+    state_filter:
+      - Offline
+  - entity: sensor.lounge_bay_rad_availability
+    name: Lounge Bay Rad
+    icon: 'mdi:radiator-off'
+    state_filter:
+      - Offline
+  - entity: sensor.master_bedroom_rad_availability
+    name: Master Bedroom Rad
+    icon: 'mdi:radiator-off'
+    state_filter:
+      - Offline
+  - entity: sensor.sophies_bedroom_rad_availability
+    name: Sophie's Bedroom Rad
+    icon: 'mdi:radiator-off'
+    state_filter:
+      - Offline
+  - entity: sensor.lounge_rad_availability
+    name: Lounge Rad
+    icon: 'mdi:radiator-off'
+    state_filter:
+      - Offline
+  - entity: sensor.landing_2_rad_availability
+    name: Landing 2 Rad
+    icon: 'mdi:radiator-off'
+    state_filter:
+      - Offline
+  - entity: sensor.kitchen_rad_availability
+    name: Kitchen Rad
+    icon: 'mdi:radiator-off'
+    state_filter:
+      - Offline
+  - entity: sensor.kitchen_tall_rad_availability
+    name: Kitchen Tall Rad
+    icon: 'mdi:radiator-off'
+    state_filter:
+      - Offline
+  - entity: sensor.kates_bedroom_rad_availability
+    name: Kate's Bedroom Rad
+    icon: 'mdi:radiator-off'
+    state_filter:
+      - Offline
+  - entity: sensor.drum_room_rad_availability
+    name: Drum Room Rad
+    icon: 'mdi:radiator-off'
+    state_filter:
+      - Offline
+  - entity: sensor.downstairs_loo_rad_availability
+    name: Downstairs Loo Rad
+    icon: 'mdi:radiator-off'
+    state_filter:
+      - Offline
+  - entity: binary_sensor.powerwall_connected_to_tesla
+    name: Powerwall
+    state_filter:
+      - 'off'
+  - entity: sensor.hottub_online
+    name: Hot Tub
+    state_filter:
+      - 'false'
+#  - entity: sensor.solaredge_connected_optimisers
+#    name: Solar Panels
+#    state_filter:
+#      - operator: '!='
+#        value: '41'
+  - entity: binary_sensor.feeder_grey_connectivity
+    name: Grey Feeder
+    state_filter:
+      - 'off'
+  - entity: binary_sensor.feeder_pink_connectivity
+    name: Pink Feeder
+    state_filter:
+      - 'off'
+show_empty: false
+type: entity-filter

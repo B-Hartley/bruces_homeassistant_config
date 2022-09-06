@@ -1,0 +1,4 @@
+light:
+  - platform: switch
+    name: Shed Outside Lights
+    entity_id: switch.shed_outside_lights

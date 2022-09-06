@@ -1,0 +1,8 @@
+template:
+  sensor:
+    - name: "ForecastSolar Tomorrow"
+      unique_id: forecastsolar_tomorrow
+      availability: "{{ states('sensor.energy_production_tomorrow_sw')|is_number and states('sensor.energy_production_tomorrow_se')|is_number and states('sensor.energy_production_tomorrow_nw')|is_number and states('sensor.energy_production_tomorrow_ne')|is_number }}"            
+      state: "{{ (states('sensor.energy_production_tomorrow_sw')|float(0) + states('sensor.energy_production_tomorrow_se')|float(0) + states('sensor.energy_production_tomorrow_nw')|float(0) + states('sensor.energy_production_tomorrow_ne')|float(0))|round(1) }}"      
+      unit_of_measurement: "kWh"
+      device_class: energy

@@ -1,0 +1,311 @@
+# Hue Scenes
+#Relax:
+#brightness: 145
+#color_temp: 447
+
+#Read:
+#brightness: 255
+#color_temp: 346
+
+#Concentrate:
+#brightness: 255
+#color_temp: 233
+
+#Nightlight:
+#brightness: 1
+#color_temp: 447
+
+#Energize:
+#brightness: 255
+#color_temp: 156
+
+- id: lounge_skyq_paused
+  name: Lounge_SkyQ_Paused
+  entities:
+    light.lounge_left_front:
+      state: 'on'
+      brightness: 128
+      rgb_color:
+      - 255
+      - 210
+      - 129
+    light.lounge_left_back:
+      state: 'on'
+      brightness: 128
+      rgb_color:
+      - 255
+      - 210
+      - 129
+    light.lounge_right:
+      state: 'on'
+      brightness: 128
+      rgb_color:
+      - 255
+      - 210
+      - 129
+    light.lounge_bar_cart:
+      state: 'on'
+      brightness: 128
+      rgb_color:
+      - 255
+      - 210
+      - 129
+    light.lounge_corner:
+      state: 'off'
+    light.lounge_tv_left:
+      state: 'off'
+    light.lounge_tv_right:
+      state: 'off'
+    light.lounge_lamp:
+      state: 'on'
+    #light.log_burner:
+    #  state: 'on'
+      
+- id: blue_for_nhs_lights
+  name: Blue_For_NHS_Lights
+  entities:
+    light.lounge:
+      brightness: 255
+      rgb_color:
+      - 0
+      - 0
+      - 255
+      state: 'on'
+    light.conservatory:
+      brightness: 255
+      rgb_color:
+      - 0
+      - 0
+      - 255
+      state: 'on'
+    light.kates_bedroom_light:
+      brightness: 255
+      rgb_color:
+      - 0
+      - 0
+      - 255
+      state: 'on'
+    light.sophies_bedroom_light:
+      brightness: 255
+      rgb_color:
+      - 0
+      - 0
+      - 255
+      state: 'on'
+    light.master_bedroom:
+      brightness: 255
+      rgb_color:
+      - 0
+      - 0
+      - 255
+      state: 'on'
+    light.master_bedroom_wardrobe_bars:
+      state: 'off'
+      
+- id: evening_kitchen_conservatory_bar
+  name: evening_lights
+  entities:
+    light.bar_lamp:
+      brightness: 122
+      color_temp: 396
+      friendly_name: Bar Lamp
+      max_mireds: 454
+      min_mireds: 153
+      state: 'on'
+      supported_features: 43
+    light.conservatory_fan_light:
+      state: 'off'
+    light.conservatory_lamp:
+      brightness: 118
+      color_temp: 396
+      effect: none
+      effect_list:
+      - colorloop
+      - random
+      friendly_name: Conservatory Lamp
+      max_mireds: 500
+      min_mireds: 153
+      state: 'on'
+      supported_features: 63
+    light.conservatory_left:
+      state: 'off'
+    light.conservatory_right:
+      state: 'off'
+    light.conservatory_wall_light:
+      state: 'off'
+      supported_features: 63
+    light.downstairs_toilet:
+      state: 'off'
+    light.drive:
+      state: 'off'
+    light.hall:
+      state: 'off'
+      supported_features: 43
+    light.kitchen_ceiling_1:
+      state: 'off'
+    light.kitchen_ceiling_2:
+      state: 'off'
+    light.kitchen_ceiling_3:
+      state: 'off'
+    light.kitchen_ceiling_4:
+      state: 'off'
+    light.kitchen_cupboard:
+      state: 'off'
+    light.kitchen_hue:
+      state: 'off'
+    light.kitchen_kickboard:
+      state: 'off'
+    light.kitchen_worktop:
+      state: 'on'
+    light.landing_light_1:
+      brightness: 42
+      color_temp: 396
+      friendly_name: Landing Light 1
+      max_mireds: 454
+      min_mireds: 153
+      state: 'on'
+      supported_features: 43
+    light.landing_light_2:
+      state: 'off'
+    light.landing_light_3:
+      state: 'off'
+    light.patio:
+      state: 'off'
+    light.under_stairs:
+      state: 'off'
+    light.utility:
+      state: 'off'
+      
+- id: gotobed_lights
+  name: GoToBed_Lights
+  entities:
+    light.hall_light:
+      brightness: 1
+      rgb_color:
+      - 255
+      - 207
+      - 120
+      state: 'on'
+    light.master_bedroom_wardrobe:
+      state: 'off'
+    light.conservatory:
+      state: 'off'
+    light.patio:
+      state: 'off'
+    light.utility:
+      state: 'off'
+    light.downstairs_toilet:
+      state: 'off'
+    light.studio:
+      state: 'off'
+    light.under_stairs:
+      state: 'off'
+    light.landing_light_1:
+      brightness: 42
+      color_temp: 396
+      state: 'on'
+    light.hall_stairs_lightstrip:
+      brightness: 42
+      color_temp: 396
+      state: 'on'
+    light.landing_light_2:
+      state: 'off'
+    light.landing_light_3:
+      state: 'off'
+      
+- id: gotobed_lights_bedroom
+  name: GoToBed_Lights_Bedroom
+  entities:
+    light.hall_light:
+      brightness: 1
+      rgb_color:
+      - 255
+      - 207
+      - 120
+      state: 'on'
+    light.master_bedroom_lamp:
+      state: 'on'
+      brightness: 20
+    light.master_bedroom_wall_left:
+      state: 'off'
+    light.master_bedroom_wall_right:
+      state: 'off'
+    light.master_bedroom_wardrobe:
+      state: 'off'
+    light.master_bedroom_wardrobe_light:
+      state: 'off'
+    light.conservatory:
+      state: 'off'
+    light.patio:
+      state: 'off'
+    light.utility:
+      state: 'off'
+    light.downstairs_toilet:
+      state: 'off'
+    light.studio:
+      state: 'off'
+    light.under_stairs:
+      state: 'off'
+    light.landing_light_1:
+      brightness: 42
+      color_temp: 396
+      state: 'on'
+    light.landing_light_2:
+      state: 'off'
+    light.landing_light_3:
+      state: 'off'
+    light.hall_stairs_lightstrip:
+      brightness: 42
+      color_temp: 396
+      state: 'on'      
+    light.master_bedroom_bedside_left:
+      brightness: 1
+      rgb_color:
+      - 255
+      - 207
+      - 120
+      state: 'on'
+    light.master_bedroom_bedside_right:
+      brightness: 60
+      rgb_color:
+      - 255
+      - 207
+      - 120
+      state: 'on'
+- id: get_up_hall_landing
+  name: getupdog_lights
+  entities:
+    light.hall_light:
+      brightness: 1
+      color_temp: 396
+      state: 'on'
+    light.landing_light_1:
+      brightness: 1
+      color_temp: 396
+      state: 'on'
+
+- id: '0017880104f0dc66_1'
+  name: 0017880104f0dc66_1
+  entities:
+    light.drum_room_light:
+      min_mireds: 153
+      max_mireds: 454
+      brightness: 245
+      color_temp: 447
+      friendly_name: Drum Room Light
+      supported_features: 43
+      state: 'on'
+ 
+       
+- id: '0017880104f0dc66_2'
+  name: 0017880104f0dc66_2
+  entities:
+    light.drum_room_light:
+      min_mireds: 153
+      max_mireds: 454
+      brightness: 145
+      color_temp: 447
+      friendly_name: Drum Room Light
+      supported_features: 43
+      state: 'on'
+ 

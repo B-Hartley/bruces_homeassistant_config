@@ -1,0 +1,109 @@
+person.bruce_hartley:
+  entity_picture: /local/bruce.jpg
+person.sarah_hartley:
+  entity_picture: /local/sarah.jpg
+person.sophie_hartley:
+  entity_picture: /local/sophie.jpg
+person.kate_hartley:
+  entity_picture: /local/kate.jpg
+person.jyggy:
+  entity_picture: /local/tesla.png
+device_tracker.kate_iphone:
+  entity_picture: /local/kate.jpg
+device_tracker.kate_iphone_2:
+  entity_picture: /local/kate.jpg
+device_tracker.sophie_iphone:
+  entity_picture: /local/sophie.jpg
+device_tracker.sophie_iphone_2:
+  entity_picture: /local/sophie.jpg
+device_tracker.bruce_iphone:
+  entity_picture: /local/bruce.jpg
+device_tracker.bruce_iphone_2:
+  entity_picture: /local/bruce.jpg
+device_tracker.sarah_iphone:
+  entity_picture: /local/sarah.jpg
+device_tracker.sarah_iphone_2:
+  entity_picture: /local/sarah.jpg
+sensor.bin_day_rubbish:
+  icon: mdi:trash-can
+  icon_color: black
+  friendly_name: Black Bin
+sensor.bin_day_recycling:
+  icon: mdi:recycle
+  icon_color: green
+  friendly_name: Recycling
+sensor.bin_day_garden:
+  icon: mdi:trash-can
+  icon_color: green
+  friendly_name: Green Bin
+sensor.zappi_jyggy_power:
+  icon: mdi:car-electric
+sensor.zappi_paddy_power:
+  icon: mdi:car-electric-outline  
+sensor.jyggy_odometer:
+  icon: mdi:sign-direction
+sensor.jyggy_charging_state:
+  icon: mdi:flash
+binary_sensor.jyggy_locked:
+  icon: mdi:car-door-lock
+sensor.washing_machine_total_consumption:
+  friendly_name: 'Washing Machine Energy'
+sensor.solaredge_mb_ac_voltage_ab:
+  device_class: voltage
+sensor.smart_plug_fridge_energy:
+  friendly_name: Fridge Energy  
+sensor.smart_plug_loft_energy:
+  friendly_name: Loft Energy
+sensor.smart_plug_lounge_energy:  
+  friendly_name: Lounge Energy  
+sensor.shellyem_garage_hottub_energy:
+  friendly_name: HotTub Energy  
+sensor.solaredge_mb_ac_energy_kwh:
+  friendly_name: Solaredge
+sensor.master_bedroom_environment_co2:
+  state_class: measurement
+sensor.bar_rad_current_temperature:  
+  state_class: measurement  
+sensor.conservatory_rad_current_temperature:  
+  state_class: measurement  
+sensor.downstairs_loo_rad_current_temperature:  
+  state_class: measurement  
+sensor.drum_room_rad_current_temperature:  
+  state_class: measurement  
+sensor.guest_bedroom_rad_current_temperature:  
+  state_class: measurement  
+sensor.hall_rad_current_temperature:  
+  state_class: measurement  
+sensor.kates_bathroom_rad_current_temperature:  
+  state_class: measurement  
+sensor.kates_bedroom_rad_current_temperature:  
+  state_class: measurement
+sensor.kitchen_rad_current_temperature:  
+  state_class: measurement 
+sensor.kitchen_tall_rad_current_temperature:  
+  state_class: measurement 
+sensor.landing_1_rad_current_temperature:  
+  state_class: measurement   
+sensor.landing_2_rad_current_temperature:  
+  state_class: measurement   
+sensor.lounge_bay_rad_current_temperature:  
+  state_class: measurement   
+sensor.lounge_rad_current_temperature:  
+  state_class: measurement   
+sensor.master_bedroom_rad_current_temperature:  
+  state_class: measurement
+sensor.sophies_bedroom_rad_current_temperature:  
+  state_class: measurement 
+sensor.outside_temp:  
+  state_class: measurement  
+sensor.outside_light:  
+  state_class: measurement    
+sensor.today_s_water_usage:
+  state_class: total_increasing
+sensor.water_flow_rate:
+  state_class: measurement  
+sensor.water_pressure:
+  state_class: measurement  
+sensor.water_temperature:
+  state_class: measurement  
+  

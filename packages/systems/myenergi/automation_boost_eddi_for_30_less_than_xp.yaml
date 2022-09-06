@@ -1,0 +1,27 @@
+automation:
+  - id: eddi_boost_when_below_Xp
+    alias: 'Hot Water: Turn on when below Xp'
+    
+    description: >
+      When Price is below Xp boost eddi
+      
+    trigger:
+      - platform: homeassistant
+        event: start
+      - platform: event
+        event_type: automation_reloaded       
+      - platform: state
+        entity_id: 
+          - octopusagile.rates
+          - input_number.eddi_heat_below_x_pence
+        
+    condition:
+      - condition: numeric_state
+        entity_id: sensor.octopus_agile_current_rate
+        below: input_number.eddi_heat_below_x_pence
+        
+    action:
+      - service: myenergi.myenergi_eddi_boost
+        data:
+          target: Heater 1
+          time: 30

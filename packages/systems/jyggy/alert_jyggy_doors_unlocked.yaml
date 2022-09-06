@@ -1,0 +1,24 @@
+alert:
+  jyggy_doors_unlocked:
+    name: Jyggy Doors are unlocked
+    entity_id: lock.jyggy_doors
+    state: 'unlocked'
+    repeat:
+      - 10
+      - 20
+      - 30
+    can_acknowledge: true
+    skip_first: true
+    title: '⚠️Jyggy Doors'
+    message: 'Jyggy doors have been unlocked for {{ (as_timestamp(now()) - as_timestamp(states.lock.jyggy_doors.last_updated))|int(0) //60 }} minutes.'
+    done_message: 'Jyggy doors are now locked.'
+    notifiers:
+      - alert_jyggy_doors
+    data:
+      apns_headers:
+        apns-collapse-id: 'alert_acknowledgement'
+      push:
+        category: 'alert_acknowledgement'
+        sound: 'Alert_WalkieTalkie_Haptic.caf'
+      action_data:
+        entity_id: alert.jyggy_doors_unlocked  

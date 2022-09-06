@@ -1,0 +1,32 @@
+set_brightness:
+  description: Set brightness without changing light state (only works for gen 2 lights)
+  target:
+    entity:
+      domain: light
+  fields:
+    brightness:
+      name: Brightness
+      required: true
+      description: Brightness (0 to 255)
+      example: 255
+      selector:
+        number:
+          min: 0
+          max: 255
+
+reconnect:
+  description: Force a reconnect to the Lightwave servers (only for non-public API, has no effect on public API)
+
+whdelete:
+  description: Delete a webhook registration (use this if you get "Received message for unregistered webhook" log entries, will only work on puclic API)
+  fields:
+    webhookid:
+      name: Webhook ID
+      required: true
+      selector:
+        text:
+
+update_states:
+  description: Force a read of all states of devices
+
+

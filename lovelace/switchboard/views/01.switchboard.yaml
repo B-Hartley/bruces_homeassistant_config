@@ -1,0 +1,106 @@
+title: Switchboard
+badges: []
+icon: 'mdi:remote'
+path: menu
+cards:
+  - type: grid
+    columns: 2
+    square: false
+    cards:    
+      - icon: 'mdi:currency-gbp'
+        name: Electric Costs
+        show_icon: true
+        show_name: false
+        styles:
+          card:
+            - height: 150px
+        tap_action:
+          action: navigate
+          haptic: success
+          navigation_path: /lovelace-whiteacres/eleccost
+        type: 'custom:button-card'
+      - icon: 'mdi:map'
+        show_icon: true
+        name: Cameras
+        show_name: false
+        styles:
+          card:
+            - height: 150px
+        tap_action:
+          action: navigate
+          haptic: success
+          navigation_path: /lovelace-whiteacres/map
+        type: 'custom:button-card'
+      - icon: 'mdi:hot-tub'
+        name: TV Remote
+        show_icon: true
+        show_name: false
+        styles:
+          card:
+            - height: 150px
+        tap_action:
+          action: navigate
+          haptic: success
+          navigation_path: /lovelace-whiteacres/hottub
+        type: 'custom:button-card'
+      - icon: 'mdi:car-electric'
+        show_icon: true
+        name: Cameras
+        show_name: false
+        styles:
+          card:
+            - height: 150px
+        tap_action:
+          action: navigate
+          haptic: success
+          navigation_path: /lovelace-whiteacres/cars
+        type: 'custom:button-card'
+      - icon: 'mdi:remote'
+        name: TV Remote
+        show_icon: true
+        show_name: false
+        styles:
+          card:
+            - height: 150px
+        tap_action:
+          action: navigate
+          haptic: success
+          navigation_path: /lovelace-remote
+        type: 'custom:button-card'
+      - icon: 'mdi:cctv'
+        show_icon: true
+        name: Cameras
+        show_name: false
+        styles:
+          card:
+            - height: 150px
+        tap_action:
+          action: navigate
+          haptic: success
+          navigation_path: /lovelace-cameras
+        type: 'custom:button-card'
+      - icon: 'mdi:floor-plan'
+        name: TV Remote
+        show_icon: true
+        show_name: false
+        styles:
+          card:
+            - height: 150px
+        tap_action:
+          action: navigate
+          haptic: success
+          navigation_path: /lovelace-floorplan
+        type: 'custom:button-card'
+      - icon: 'mdi:home'
+        show_icon: true
+        name: Cameras
+        show_name: false
+        styles:
+          card:
+            - height: 150px
+        tap_action:
+          action: navigate
+          haptic: success
+          navigation_path: /lovelace-whiteacres/home
+        type: 'custom:button-card'
+       

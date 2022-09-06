@@ -1,0 +1,49 @@
+automation:
+  - id: Electric blanket_off_after_an_hour
+    alias: 'Turn off Electirc blanket after an hour'
+    mode: parallel
+    
+    description: >
+      turn off Electric blanket after an hour
+    
+    trigger:
+      - platform: homeassistant
+        id: "start"
+        event: start
+      - platform: event
+        id: "reload"
+        event_type: automation_reloaded    
+      - platform: state
+        id: "blanket"
+        entity_id: 
+          - switch.electric_blanket_sarah
+          - switch.electric_blanket_bruce
+        from: 'off'
+        to: 'on'
+        for:
+          hours: 1
+          
+    condition: 
+      - condition: state
+        entity_id: 
+          - switch.electric_blanket_sarah
+          - switch.electric_blanket_bruce
+        match: any
+        state: 'on'      
+          
+    action:
+      - choose:
+          - conditions: 
+              - condition: trigger
+                id: "blanket"
+            sequence:
+              - service: switch.turn_off
+                target:
+                  entity_id: "{{ trigger.entity_id }}"
+
+        default:
+          - service: switch.turn_off
+            target:
+              entity_id: 
+                - switch.electric_blanket_sarah
+                - switch.electric_blanket_bruce              

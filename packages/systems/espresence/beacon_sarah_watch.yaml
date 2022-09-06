@@ -1,0 +1,8 @@
+sensor:
+  - platform: mqtt_room
+    #unique_id: espresence_sarah_watch  
+    device_id: !secret sarah_watch
+    name: 'EsPresence Sarah watch'
+    state_topic: 'espresense/rooms'
+    timeout: 60
+    away_timeout: 120

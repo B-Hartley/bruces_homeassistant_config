@@ -1,0 +1,17 @@
+icon: 'mdi:delete'
+panel: true
+path: bins
+title: Bins
+badges: []
+visible:
+  - user: 86df00251766415c9acf21b3b3e51496
+  - user: 1de5d8e2c14c47939a8174d6e4147f31
+cards:
+  - aspect_ratio: 50%
+    camera_image: camera.bins_medium
+    camera_view: live
+    entity: camera.bins_medium
+    name: Bins
+    show_name: false
+    show_state: false
+    type: picture-entity

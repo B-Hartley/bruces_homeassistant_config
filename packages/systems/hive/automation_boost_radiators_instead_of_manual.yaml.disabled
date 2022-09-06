@@ -1,0 +1,40 @@
+automation:
+  - id: boost_radiators_instead_of_manual
+    alias: 'if radiators are turned up - boost instead'
+    mode: queued
+	
+	description: >
+	  Override manual turn up and change into a boost
+	  
+    trigger:
+      - platform: state
+        entity_id: 
+          - climate.bar_rad
+          - climate.conservatory_rad
+          - climate.downstairs_loo_rad
+          - climate.drum_room_rad
+          - climate.guest_bedroom_rad
+          - climate.hall_rad
+          - climate.kates_bathroom_rad
+          - climate.kates_bedroom_rad
+          - climate.kitchen_rad
+          - climate.kitchen_tall_rad      
+          - climate.landing_1_rad
+          - climate.landing_2_rad
+          - climate.lounge_bay_rad
+          - climate.lounge_rad
+          - climate.master_bedroom_rad
+          - climate.sophies_bedroom_rad
+        to: heat
+		
+    action:
+      - service: climate.set_hvac_mode
+        target:
+          entity_id: "{{ trigger.entity_id }}"
+		data:
+          hvac_mode: auto
+      - service: climate.set_preset_mode
+        target:
+          entity_id: "{{ trigger.entity_id }}"
+		data:
+          preset_mode: boost

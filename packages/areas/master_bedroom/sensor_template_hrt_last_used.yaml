@@ -1,0 +1,6 @@
+template:
+  sensor:
+    - name: "HRT Last Used"
+      unique_id: hrt_last_used
+      unit_of_measurement: hours
+      state: "{{ ((as_timestamp(now()) - as_timestamp(states('input_button.hrt_last_used')))|int(0))// 3600 }}"

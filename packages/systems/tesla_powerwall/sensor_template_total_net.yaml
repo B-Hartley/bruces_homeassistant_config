@@ -1,0 +1,8 @@
+template:
+  sensor:
+    - name: "Powerwall Total Daily Net"
+      unique_id: powerwall_total_daily_net
+      availability: "{{ states('binary_sensor.powerwall_connected_to_tesla') != 'Unavailable' }}"
+      state: "{{ states('sensor.powerwall_export_daily_kwh')|float(0) - states('sensor.powerwall_import_daily_kwh')|float(0)|round(2)}}"
+      device_class: energy
+      unit_of_measurement: kWh

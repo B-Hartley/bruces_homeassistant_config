@@ -1,0 +1,5 @@
+template:
+  sensor:
+    - name: "Grid Direction"
+      unique_id: grid_direction
+      state: "{% if states('sensor.zappi_jyggy_grid_import')|float(0) > 0.15 %}import{% elif states('sensor.zappi_jyggy_grid_export')|float(0) > 0.15 %}export{% else %}off{% endif %}"            

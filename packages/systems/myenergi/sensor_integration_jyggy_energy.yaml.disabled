@@ -1,0 +1,4 @@
+sensor:
+  - platform: integration
+    name: "Zappi Jyggy Energy"
+    source: sensor.zappi_jyggy_power    

@@ -1,0 +1,11 @@
+light:          
+  - platform: group
+    unique_id: light_group_kitchen_main_plus
+    name: Kitchen Main Plus
+    entities:
+    - light.kitchen_ceiling_1
+    - light.kitchen_ceiling_2
+    - light.kitchen_ceiling_3  
+    - light.kitchen_cupboard
+    - light.kitchen_kickboard
+    - light.kitchen_worktop

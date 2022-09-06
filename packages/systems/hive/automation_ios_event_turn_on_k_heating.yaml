@@ -1,0 +1,22 @@
+automation:
+  - id: turn_on_k_heating
+    alias: Turn on Kate heating
+    
+    description: > 
+      Turn on K Heating
+      
+    trigger:
+      - platform: event
+        id: "ios notification"      
+        event_type: ios.notification_action_fired
+        event_data:
+          actionName: TURN_ON_K_HEATING
+          
+    action:      
+      - service: climate.set_hvac_mode
+        target:
+          entity_id: 
+            - climate.kates_bedroom_rad
+            - climate.kates_bathroom_rad
+        data:
+          hvac_mode: auto

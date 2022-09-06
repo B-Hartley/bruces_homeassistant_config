@@ -1,0 +1,17 @@
+# Uses the attributes HACS component to create a sensor.<camera name>_last_motion for each Camera based on that attribute.
+# Can't remember what I use it for at the moment !
+sensor:  
+  - platform: attributes
+    friendly_name: "Last Motion"
+    attribute: last_motion
+    entities:
+      - camera.hall_medium
+      - camera.lounge_medium
+      - camera.kitchen_medium
+      - camera.kitchen_2_medium
+      - camera.landing_medium
+      - camera.bar_medium
+      - camera.drive_medium
+      - camera.patio_medium
+      - camera.bins_medium
+      - camera.gazebo_medium  

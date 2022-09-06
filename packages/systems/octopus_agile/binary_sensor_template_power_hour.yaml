@@ -1,0 +1,6 @@
+template:
+  binary_sensor:
+    - name: "Power Hour"
+      unique_id: power_hour
+      state: "{{ now()|as_timestamp >= states('input_datetime.octopus_power_hour')|as_timestamp and now()|as_timestamp < states('input_datetime.octopus_power_hour')|as_timestamp+3600 }}"
+      

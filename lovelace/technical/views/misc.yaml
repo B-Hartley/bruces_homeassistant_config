@@ -1,0 +1,79 @@
+title: Misc.
+path: misc
+icon: ''
+badges: []
+cards:
+  - type: entity
+    entity: sensor.lounge_skyq_media
+    name: SkyQ
+  - type: entities
+    entities:
+      - entity: sensor.outside_temp
+        icon: 'mdi:thermometer'
+      - entity: sensor.outside_light
+        icon: 'mdi:brightness-7'
+      - entity: binary_sensor.light_outside
+  - type: entities
+    entities:
+      - entity: input_text.temp_which_dimmer
+      - entity: input_text.temp_dimmer_command
+      - entity: input_number.0017880104f0dc66_scene
+    state_color: true
+  - type: logbook
+    entities:
+      - binary_sensor.powerwall_at_or_below_max_charge_cost_and_charge_limit
+      - binary_sensor.powerwall_charging
+      - binary_sensor.powerwall_connected_to_tesla
+      - sensor.powerwall_stored_energy
+      - input_number.powerwall_reserve_requested
+      - input_number.powerwall_charge_below_x_pence
+    hours_to_show: 24
+    title: Powerwall
+#  - house_consumption_entity: sensor.floorplan_powerwall_home_load
+#    grid_consumption_entity: sensor.zappi_jyggy_grid_import
+#    grid_feed_in_entity: sensor.zappi_jyggy_grid_export
+#    solar_consumption_entity: sensor.solaredge_current_power
+#    solar_yield_entity: sensor.solaredge_current_power
+#    grid_to_battery_entity: sensor.grid_to_battery
+#    battery_charge_entity: sensor.powerwall_charge_corrected
+#    battery_charging_entity: sensor.powerwall_charging
+#    battery_consumption_entity: sensor.powerwall_discharging
+#    car_battery_entity: sensor.jyggy_battery_level
+#    car_charging_entity: sensor.zappi_jyggy_power
+#    car2_battery_entity: sensor.wn70pdy_battery_level
+#    car2_charging_entity: sensor.zappi_paddy_power
+#    type: 'custom:tesla-style-solar-power-card'
+  - type: history-graph
+    entities:
+      - entity: binary_sensor.light_outside
+    hours_to_show: 24
+    refresh_interval: 0
+  - type: entities
+    entities:
+      - entity: binary_sensor.back_door
+        name: Back Door
+      - entity: binary_sensor.front_door
+        name: Front Door
+      - entity: binary_sensor.kitchen
+        name: Kitchen Motion
+      - entity: binary_sensor.landing
+        name: Landing Motion
+      - entity: binary_sensor.lounge
+        name: Lounge Motion
+      - entity: binary_sensor.shed_garage
+        name: Shed & Garage Motion
+      - entity: binary_sensor.bar
+        name: Bar Motion
+      - entity: binary_sensor.pa_hall
+        name: PA Hall
+      - entity: binary_sensor.pa_master_bed
+        name: PA Master Bedroom
+  - type: entity
+    entity: sensor.alarm_log
+    attribute: parameter
+  - type: entity
+    entity: sensor.alarm_log
+  - type: entity
+    entity: input_text.alarm_user
+  - type: entity
+    entity: input_text.recently_active_alarm_sensor

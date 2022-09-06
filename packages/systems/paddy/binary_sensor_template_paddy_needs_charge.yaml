@@ -1,0 +1,6 @@
+template:
+  binary_sensor:
+    - name: "Paddy Needs Charge"
+      unique_id: paddy_needs_charge
+      state: "{{ states('sensor.wn70pdy_battery_level')|int(0) < states('input_number.paddy_charge_limit')|int(0) }}"
+      icon: mdi:flash

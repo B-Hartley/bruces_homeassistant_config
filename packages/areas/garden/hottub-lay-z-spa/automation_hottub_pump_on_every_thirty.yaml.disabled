@@ -1,0 +1,109 @@
+automation:
+  - id: hottub_pump_on_every_thirty
+    alias: HotTub Pump on every 30
+    mode: restart
+    variables: 
+      HoursLeft: "{{ ((as_timestamp(states.sensor.date.state + ' ' + states('input_datetime.hottub_ready_by')) - as_timestamp(now())) / 3600) }}"
+      DegreesLeft: "{{ (states('input_number.hottub_water_target') | int - states('input_number.hottub_water_temp') | int) }}"
+    trigger:
+      - platform: time_pattern
+        minutes: '/30'
+        seconds: '05'
+      - platform: homeassistant
+        event: start
+      - platform: event
+        event_type: automation_reloaded    
+      - platform: state
+        entity_id: input_boolean.hottub_scheduled   
+      - platform: state        
+        entity_id: input_datetime.hottub_ready_by       
+      - platform: state
+        entity_id: binary_sensor.hottub_at_or_below_max_heat_cost
+    action:
+      - choose:
+          # IF cheap pricing - heat
+          - conditions:
+              - condition: state
+                entity_id: binary_sensor.hottub_at_or_below_max_heat_cost
+                state: 'on' 
+            sequence:
+              - service: logbook.log
+                data:
+                  domain: switch
+                  entity_id: switch.hottub_power
+                  name: "Hot Tub"
+                  message: "Heat for low price"
+#              - service: rest_command.hottub_temp_set
+#                data: 
+#                  hottub_api_did: !secret hottub_api_did
+#                  hottub_water_target: 40
+              - service: switch.turn_on
+                entity_id: switch.hottub_heat
+
+          # ELIF scheduled and final hour - heater on
+          - conditions: >
+              {{ (HoursLeft > 0)  and (HoursLeft < 1) and is_state('input_boolean.hottub_scheduled','on') }}
+            sequence:
+              - service: logbook.log
+                data:
+                  domain: switch
+                  entity_id: switch.hottub_heat
+                  name: "Hot Tub"
+                  message: "Heat on for final hour"
+#              - service: rest_command.hottub_temp_set
+#                data: 
+#                  hottub_api_did: !secret hottub_api_did
+#                  hottub_water_target: "{{ states('input_number.hottub_water_target') | int }}"              
+              - service: switch.turn_on
+                entity_id: switch.hottub_heat
+                
+          # ELIF scheduled and needs heat - heater on
+          - conditions: >
+              {{ (HoursLeft > 0)  and (HoursLeft < DegreesLeft) and is_state('input_boolean.hottub_scheduled','on') }}
+            sequence:
+              - service: logbook.log
+                data:
+                  domain: switch
+                  entity_id: switch.hottub_heat
+                  name: "Hot Tub"
+                  message: "Heat on for schedule"
+#              - service: rest_command.hottub_temp_set
+#                data: 
+#                  hottub_api_did: !secret hottub_api_did
+#                  hottub_water_target: "{{ states('input_number.hottub_water_target') | int }}"              
+              - service: switch.turn_on
+                entity_id: switch.hottub_heat
+          # ELIF half hour 5 minutes filter
+          - conditions: >
+              {{ now().minute == 30 }}
+            sequence:
+              - service: logbook.log
+                data:
+                  domain: switch
+                  entity_id: switch.hottub_filter
+                  name: "Hot Tub"
+                  message: "Filter on"
+#              - service: rest_command.hottub_temp_set
+#                data: 
+#                  hottub_api_did: !secret hottub_api_did
+#                  hottub_water_target: "{{ states('input_number.hottub_water_target') | int}} "             
+              - service: switch.turn_off
+                entity_id: switch.hottub_power
+              - delay: '00:00:30'            
+              - service: switch.turn_on
+                entity_id: switch.hottub_filter
+          # ELSE  filter on for 5 mins
+        default:
+          - service: logbook.log
+            data:
+              domain: switch
+              entity_id: switch.hottub_filter
+              name: "Hot Tub"
+              message: "Off"
+#          - service: rest_command.hottub_temp_set
+#            data: 
+#              hottub_api_did: !secret hottub_api_did
+#              hottub_water_target: "{{ states('input_number.hottub_water_target') | int}} "             
+          - service: switch.turn_off
+            entity_id: switch.hottub_power
+        

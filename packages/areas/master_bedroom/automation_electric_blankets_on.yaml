@@ -1,0 +1,95 @@
+automation:
+  - id: electric_blankets_on
+    alias: 'Electric Blankets on at 21:45'
+    
+    description: >
+      turn on electric blankets
+
+    trigger:
+      - platform: time
+        id: "time"
+        at: '21:45:00'
+      - platform: homeassistant
+        id: "start"
+        event: start
+      - platform: event
+        id: "event"
+        event_type: automation_reloaded        
+
+    condition:
+      - alias: check Bruce or Sarah at home
+        condition: state
+        entity_id: group.bruce_or_sarah_home
+        state: 'home'
+      - alias: check Bruce is not asleep
+        condition: state
+        entity_id: input_boolean.bruce_is_asleep
+        state: 'off'
+      - alias: check Sarah is not asleep
+        condition: state
+        entity_id: input_boolean.sarah_is_asleep
+        state: 'off'        
+      - alias: check that time is around 21:45
+        condition: time
+        after: '21:40:00'
+        before: '21:50:00'
+
+    action:
+      - choose:
+          - alias:  Master Bedroom Temperature above 25C
+            conditions:
+              - condition: numeric_state
+                entity_id: sensor.master_bedroom_rad_current_temperature
+                above: 25
+            sequence:
+              - alias: turn on fan
+                service: fan.turn_on
+                target:
+                  entity_id: fan.master_bedroom_fan  
+                data:
+                  percentage: 33                
+              - alias: send message to confirm fan turned on
+                service: telegram_bot.send_message
+                data:
+                  target: !secret telegram_chat_id_bruce
+                  message: >
+                    Bedroom Fan on
+                    
+                    Outside Temp: {{ states('sensor.outside_temp') }}°C
+                    
+                    Bedroom Temp: {{ states('sensor.master_bedroom_rad_current_temperature') }}°C    
+                    
+          - alias: Outside temperature above 16
+            conditions:
+              - condition: numeric_state
+                entity_id: sensor.outside_temp
+                above: 16
+            sequence:
+              - alias: Send Message to confirm temperatures
+                service: telegram_bot.send_message
+                data:
+                  target: !secret telegram_chat_id_bruce
+                  message: >
+                    Electric Blankets not on
+                    
+                    Outside Temp: {{ states('sensor.outside_temp') }}°C
+                    
+                    Bedroom Temp: {{ states('sensor.master_bedroom_rad_current_temperature') }}°C
+
+        default:              
+          - alias: Turn on Electric Blankets
+            service: switch.turn_on
+            target:
+              entity_id: 
+                - switch.electric_blanket_sarah
+                - switch.electric_blanket_bruce
+          - alias: Send Message to confirm Blankets turned on
+            service: telegram_bot.send_message
+            data:
+              target: !secret telegram_chat_id_bruce
+              message: >
+                The electric blankets have switched on   
+                
+                Outside Temp: {{ sensor.outside_temp }}°C
+                
+                Bedroom Temp: {{ sensor.master_bedroom_rad_current_temperature }}°C                 

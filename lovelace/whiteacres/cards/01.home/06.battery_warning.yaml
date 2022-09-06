@@ -1,0 +1,508 @@
+card:
+  show_state: false
+  type: glance
+entities:
+  - entity: sensor.master_bedroom_environment_co2
+    name: CO2 High
+    state_filter:
+      - operator: '>'
+        value: 1000
+  - entity: sensor.nuc_cpu_temperature
+    name: HA Server Temp High
+    state_filter:
+      - operator: '>'
+        value: 45
+  - entity: sensor.loft_cabinet_temperature
+    name: Loft Temp High
+    state_filter:
+      - operator: '>'
+        value: 30
+  - entity: sensor.kitchen_sink_water_leak_battery
+    name: Kitchen Sink
+    state_filter:
+      - operator: <
+        value: 25  
+  - entity: sensor.sonos_move_battery        
+    name: Sonos Move
+    state_filter:
+      - operator: <
+        value: 25       
+  - entity: sensor.sonos_black_battery        
+    name: Sonos Black Controller
+    state_filter:
+      - operator: <
+        value: 25  
+  - entity: sensor.sonos_white_battery        
+    name: Sonos White Controller
+    state_filter:
+      - operator: <
+        value: 25         
+  - entity: sensor.flic_battery_hrt
+    name: Flic - HRT
+    state_filter:
+      - operator: <
+        value: 25     
+  - entity: sensor.flic_battery_tray_drum
+    name: Flic - Tray Drum
+    state_filter:
+      - operator: <
+        value: 25  
+  - entity: sensor.flic_battery_tray_utility
+    name: Flic - Tray Utility
+    state_filter:
+      - operator: <
+        value: 25   
+  - entity: sensor.flic_battery_tray_shower
+    name: Flic - Tray Shower
+    state_filter:
+      - operator: <
+        value: 25   
+  - entity: sensor.flic_battery_bedside_bruce
+    name: Flic - Bedside Bruce
+    state_filter:
+      - operator: <
+        value: 25      
+  - entity: sensor.flic_battery_bedside_sarah
+    name: Flic - Bedside Sarah
+    state_filter:
+      - operator: <
+        value: 25      
+  - entity: sensor.flic_battery_bedside_sophie
+    name: Flic - Bedside Sophie
+    state_filter:
+      - operator: <
+        value: 25      
+  - entity: sensor.flic_battery_bedside_kate
+    name: Flic - Bedside Kate
+    state_filter:
+      - operator: <
+        value: 25     
+  - entity: sensor.flic_battery_bedside_guest
+    name: Flic - Bedside Guest
+    state_filter:
+      - operator: <
+        value: 25            
+  - entity: sensor.flic_battery_tray_downstairs
+    name: Flic - Tray Downstairs
+    state_filter:
+      - operator: <
+        value: 25     
+  - entity: sensor.flic_battery_tray_downstairs
+    name: Flic - Tray Downstairs
+    state_filter:
+      - operator: <
+        value: 25           
+  - entity: sensor.ipod_touch_battery_level_2
+    name: Lounge iPod
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.loft_cabinet_battery
+    name: Cabinet Temp
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.master_bedroom_environment_battery    
+    name: Master Bed CO2
+    state_filter:
+      - operator: <
+        value: 25        
+  - entity: sensor.bar_rad_battery_level
+    name: Bar Rad
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.conservatory_rad_battery_level
+    name: Conservatory Rad
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.guest_bedroom_rad_battery_level
+    name: Guest Bedroom Rad
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.hall_rad_battery_level
+    name: Hall Rad
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.kates_bathroom_rad_battery_level
+    name: Kate's Bathroom Rad
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.landing_1_rad_battery_level
+    name: Landing 1 Rad
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.lounge_bay_rad_battery_level
+    name: Lounge Bay Rad
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.master_bedroom_rad_battery_level
+    name: Master Bedroom Rad
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.sophies_bedroom_rad_battery_level
+    name: Sophie's Bedroom Rad
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.lounge_rad_battery_level
+    name: Lounge Rad
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.landing_2_rad_battery_level
+    name: Landing 2 Rad
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.garage_back_door_battery
+    name: Shed Door
+    state_filter:
+      - operator: <
+        value: 25           
+  - entity: sensor.shed_door_battery
+    name: Shed Door
+    state_filter:
+      - operator: <
+        value: 25          
+  - entity: sensor.kitchen_door_battery
+    name: Kitchen Door
+    state_filter:
+      - operator: <
+        value: 25        
+  - entity: sensor.kitchen_rad_battery_level
+    name: Kitchen Rad
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.kitchen_tall_rad_battery_level
+    name: Kitchen Tall Rad
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.kates_bedroom_rad_battery_level
+    name: Kate's Bedroom Rad
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.drum_room_rad_battery_level
+    name: Drum Room Rad
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.conservatory_door_battery
+    name: Conservatory Door
+    state_filter:
+      - operator: <
+        value: 25        
+  - entity: sensor.downstairs_loo_rad_battery_level
+    name: Downstairs Loo Rad
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.apc_ups_battery_charge
+    name: Loft UPS
+    state_filter:
+      - operator: <
+        value: 50
+  - entity: sensor.master_bedroom_door_battery
+    name: Master Bedroom Door
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.master_bedroom_ensuite_battery
+    name: Master Ensuite Motion
+    state_filter:
+      - operator: <
+        value: 25   
+  - entity: sensor.master_bedroom_ensuite_door_battery
+    name: Master Ensuite Door
+    state_filter:
+      - operator: <
+        value: 25              
+  - entity: sensor.master_bedroom_wardrobe_door_1_door_battery
+    name: Wardrobe Door 1
+    state_filter:
+      - operator: <
+        value: 25       
+  - entity: sensor.master_bedroom_wardrobe_door_2_door_battery
+    name: Wardrobe Door 2
+    state_filter:
+      - operator: <
+        value: 25          
+  - entity: sensor.guest_bedroom_door_battery
+    name: Guest Bedroom Door
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.under_stairs_door_battery
+    name: Under Stairs Door
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.main_bathroom_sensor_battery
+    name: Bathroom Motion
+    state_filter:
+      - operator: <
+        value: 25        
+  - entity: sensor.main_bathroom_door_battery
+    name: Bathroom Door
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.lounge_door_battery
+    name: Lounge Door
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.downstairs_toilet_door_battery
+    name: Downstairs Toilet Door
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.downstairs_toilet_motion_battery
+    name: Downstairs Toilet Motion
+    state_filter:
+      - operator: <
+        value: 25        
+  - entity: sensor.sophies_bedroom_door_battery
+    name: Sophie's Door
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.kates_bedroom_door_battery
+    name: Kate's Door
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.drum_room_door_battery
+    name: Drum Room Door
+    state_filter:
+      - operator: <
+        value: 25        
+  - entity: binary_sensor.hive_low_battery
+    name: Hive
+    state_filter:
+      - 'on'
+  - entity: sensor.downstairs_protect_battery_health_state
+    name: Smoke Alarm (Downstairs)
+    state_filter:
+      - '0'
+  - entity: sensor.upstairs_1_protect_battery_health_state
+    name: Smoke Alarm (Upstairs 1)
+    state_filter:
+      - '0'
+  - entity: sensor.upstairs_2_protect_battery_health_state
+    name: Smoke Alarm (Upstairs 2)
+    state_filter:
+      - '0'
+  - entity: sensor.loft_protect_battery_health_state
+    name: Smoke Alarm (Loft)
+    state_filter:
+      - '0'
+  - entity: sensor.bar_button_battery_level
+    name: Bar Button
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.bar_door_battery
+    name: Bar Door
+    state_filter:
+      - operator: <
+        value: 25        
+  - entity: sensor.lounge_button_battery_level
+    name: Lounge Button
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.hall_button_battery_level
+    name: Hall Button
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.landing_button_1_battery_level
+    name: Landing Button 1
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.landing_button_2_battery_level
+    name: Landing Button 2
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.landing_button_3_battery_level
+    name: Landing Button 3
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.master_bedroom_button_battery_level
+    name: Master Bed Button
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.conservatory_switch_battery_level
+    name: Conservatory Dimmer
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.drum_room_switch_battery_level
+    name: Drum Room Dimmer
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.guest_bedroom_switch_battery_level
+    name: Guest Bed Switch
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.kates_bedroom_button_battery_level
+    name: Kate's Bed Button
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.sophies_bedroom_button_battery_level
+    name: Sophie's Bed Button
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.drive_sensor_battery
+    name: Drive Sensor
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.patio_switch_battery_level
+    name: Patio Switch
+    state_filter:
+      - operator: <        
+        value: 25        
+  - entity: sensor.patio_sensor_battery
+    name: Patio Sensor
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.patio_garage_sensor_battery
+    name: Patio Sensor
+    state_filter:
+      - operator: <
+        value: 25        
+  - entity: sensor.drive_sensor_battery
+    name: Patio Sensor 2
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.downstairs_toilet_motion_battery
+    name: Downstairs Loo Sensor
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.utility_switch_battery_level
+    name: Utility Dimmer
+    state_filter:
+      - operator: <
+        value: 25        
+  - entity: sensor.utility_sensor_battery
+    name: Utility Sensor
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.jyggy_battery_level
+    name: Jyggy
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.wn70pdy_battery_level
+    name: Paddy
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.feeder_grey_battery_level
+    name: Grey Feeder
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: sensor.feeder_pink_battery_level
+    name: Pink Feeder
+    state_filter:
+      - operator: <
+        value: 25
+  - entity: binary_sensor.hot_tub_door
+    name: Hot Tub Cover
+    state_filter:
+      - attribute: battery_level
+        operator: <
+        value: 25        
+  - entity: binary_sensor.back_gate_door
+    name: Back Gate
+    state_filter:
+      - attribute: battery_level
+        operator: <
+        value: 25
+  - entity: sensor.whiteacres_battery_level
+    name: Hive Thermostat
+    state_filter:
+      - operator: <
+        value: 25       
+  - entity: sensor.flic_battery_alert
+    name: Flic Alert
+    state_filter:
+      - operator: <
+        value: 25        
+  - entity: sensor.flic_battery_bedside_bruce
+    name: Flic Bedside Bruce
+    state_filter:
+      - operator: <
+        value: 25      
+  - entity: sensor.flic_battery_bedside_sarah
+    name: Flic Bedside Sarah
+    state_filter:
+      - operator: <
+        value: 25  
+  - entity: sensor.flic_battery_bedside_sophie
+    name: Flic Bedside Sophie
+    state_filter:
+      - operator: <
+        value: 25    
+  - entity: sensor.flic_battery_bedside_kate
+    name: Flic Bedside Kate
+    state_filter:
+      - operator: <
+        value: 25     
+  - entity: sensor.flic_battery_bedside_guest
+    name: Flic Bedside Guest
+    state_filter:
+      - operator: <
+        value: 25   
+  - entity: sensor.flic_battery_kitchen_radio
+    name: Flic Kitchen Radio
+    state_filter:
+      - operator: <
+        value: 25    
+  - entity: sensor.flic_battery_tray_downstairs
+    name: Flic Tray Downstairs
+    state_filter:
+      - operator: <
+        value: 25   
+  - entity: sensor.flic_battery_tray_drum
+    name: Flic Tray Drum
+    state_filter:
+      - operator: <
+        value: 25     
+  - entity: sensor.flic_battery_tray_shower
+    name: Flic Tray Shower
+    state_filter:
+      - operator: <
+        value: 25  
+  - entity: sensor.flic_battery_tray_utility
+    name: Flic Tray Utility
+    state_filter:
+      - operator: <
+        value: 25          
+show_empty: false
+type: entity-filter

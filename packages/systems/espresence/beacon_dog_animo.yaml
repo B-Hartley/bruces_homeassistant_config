@@ -1,0 +1,7 @@
+sensor:
+  - platform: mqtt_room
+    device_id: !secret dog_animo
+    name: 'EsPresence Dog Animo'
+    state_topic: 'espresense/rooms'
+    timeout: 60
+    away_timeout: 120

@@ -1,0 +1,22 @@
+title: Gas and Water
+path: gas_and_water
+icon: 'mdi:water'
+badges: []
+cards:
+  - entities:
+      - entity: sensor.smart_meter_gas_import
+        name: Meter
+      - entity: sensor.smart_meter_gas_import_today
+        name: Today
+    title: Gas
+    type: entities
+  - entities:
+      - entity: switch.shutoff_valve
+      - entity: sensor.current_system_mode
+      - entity: binary_sensor.pending_system_alerts
+      - entity: sensor.today_s_water_usage_litres
+      - entity: sensor.water_flow_rate_litres
+      - entity: sensor.water_pressure_bar
+      - entity: sensor.water_temperature
+    type: entities
+    title: Water

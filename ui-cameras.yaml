@@ -1,0 +1,2 @@
+title: Cameras
+views: !include_dir_list lovelace/cameras/views

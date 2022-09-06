@@ -1,0 +1,13 @@
+light:          
+  - platform: group
+    unique_id: light_group_master_bedroom
+    name: Master Bedroom Lights
+    entities:
+    # Hue Group
+    - light.master_bedroom
+    #- light.master_bedroom_bedside_left
+    #- light.master_bedroom_bedside_right
+    #- light.master_bedroom_lamp
+    #- light.master_bedroom_wall_left
+    #- light.master_bedroom_wall_right
+    #- light.master_bedroom_wardrobe_bars    

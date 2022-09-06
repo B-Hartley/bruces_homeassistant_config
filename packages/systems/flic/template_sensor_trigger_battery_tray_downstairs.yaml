@@ -1,0 +1,13 @@
+template:
+  - trigger:
+      - platform: webhook
+        webhook_id: !secret flic_battery_tray_downstairs
+
+    sensor:
+      - name: "Flic Battery Tray Downstairs"
+        state: "{{ trigger.json.battery_status }}"
+        unit_of_measurement: "%"
+        device_class: battery
+        attributes:
+          last_pressed: "{{ now() }}"
+          last_press_type: "{{ trigger.json.click_type }}"

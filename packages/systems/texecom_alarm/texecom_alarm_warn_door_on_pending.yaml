@@ -1,0 +1,75 @@
+automation:
+  - id: texecom_alarm_warn_doors
+    alias: Intruder Alarm warn about open doors on arming
+
+    description: >
+      Intruder Alarm warn doors on arming
+
+    trigger:
+      - platform: state
+        id: 'arming'
+        entity_id: alarm_control_panel.texecom
+        from: 'disarmed'
+        to: 'pending'
+
+    condition:
+      - condition: not
+        conditions:
+          - condition: and
+            conditions:
+              - condition: state
+                entity_id: 
+                  - binary_sensor.lounge_door
+                  - fan.master_bedroom_fan
+                  - fan.conservatory_fan
+                  - input_boolean.watching_skytv 
+                  - binary_sensor.conservatory_door 
+                  - binary_sensor.front_door
+                  - binary_sensor.back_gate_door
+                  - binary_sensor.back_door
+                  - binary_sensor.under_stairs_door
+                  - binary_sensor.kates_bedroom_door
+                  - binary_sensor.sophies_bedroom_door
+                  - binary_sensor.lounge_door
+                state: 'off'
+              - condition: state
+                entity_id: 
+                  - media_player.kitchen_sonos
+                  - media_player.sophies_sonos
+                  - media_player.kates_sonos
+                  - media_player.master_bed_sonos
+                  - media_player.bar_sonos
+                  - media_player.lounge_sonos
+                state: 'Idle'
+                    # Doors closed that should be open
+              - condition: state
+                entity_id: 
+                  - binary_sensor.main_bathroom_door
+                  - binary_sensor.downstairs_toilet_door
+                  - binary_sensor.drum_room_door
+                state: 'on'          
+
+    action:
+      - service: telegram_bot.send_message
+        data:
+          target: !secret telegram_chat_id_bruce_and_sarah
+          title: Alarm is setting
+          message: >
+            {{ 'Bedroom Fan is on\n' if is_state('fan.master_bedroom_fan','on') }}{{
+            'Conservatory Fan is on\n' if is_state('fan.conservatory_fan','on') }}{{
+            'TV on in lounge\n' if is_state('input_boolean.watching_skytv','on') }}{{
+            'SONOS playing in the kitchen\n' if is_state('media_player.kitchen_sonos','playing') }}{{
+            'SONOS playing in Sophie bedroom\n' if is_state('media_player.sophies_sonos','playing') }}{{
+            'SONOS playing in Kate bedroom\n' if is_state('media_player.kates_sonos','playing') }}{{
+            'SONOS playing in the Lounge\n' if is_state('media_player.lounge_sonos','playing') }}{{
+            'SONOS playing in the Bar\n' if is_state('media_player.bar_sonos','playing') }}{{
+            'Conservatory door is open\n' if is_state('binary_sensor.conservatory_door','on') }}{{
+            'Front door is open\n' if is_state('binary_sensor.front_door','on') }}{{
+            'Back gate is open\n' if is_state('binary_sensor.back_gate_door','on') }}{{
+            'Back door is open\n' if is_state('binary_sensor.back_door','on') }}{{
+            'Under stairs door is open\n' if is_state('binary_sensor.under_stairs_door','on') }}{{
+            'Lounge door is open\n' if is_state('binary_sensor.lounge_door','on') }}{{
+            "Sophie's door is open\n" if is_state('binary_sensor.sophies_bedroom_door','on') }}{{
+            "Kate's door is open\n" if is_state('binary_sensor.kates_bedroom_door','on') }}{{
+            'Downstairs Loo door is closed\n' if is_state('binary_sensor.downstairs_toilet_door','off') }}{{
+            'Bathroom door is closed\n' if is_state('binary_sensor.main_bathroom_door','off') }}

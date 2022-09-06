@@ -1,0 +1,112 @@
+19ee737dd0cc446fbc5994fbdb10f56f:
+  disabled: false
+  floor: Downstairs
+  icon: hue:room-kitchen
+1cabb632abf74eb7a98e97204fdac145:
+  disabled: false
+  floor: Downstairs
+  icon: hue:room-hallway
+2a69d1d6e4414061b7aabc1d9359bb0c:
+  disabled: false
+  floor: Downstairs
+  icon: hue:room-toilet
+40e14c0e4e944229b9809f591029fbc3:
+  disabled: false
+  floor: Outside
+  icon: mdi:garage
+4f37c98f9fe6484dac9fc018a4639cef:
+  disabled: false
+  floor: Upstairs
+  icon: hue:room-gym
+6931d60216de11eba73119f019317293:
+  disabled: false
+  floor: Outside
+  icon: mdi:car
+7e4dcf553f2d4c50b57d0144ad309e8a:
+  disabled: false
+  floor: Upstairs
+  icon: mdi:bed-queen-outline
+7f8eca6f07564415b866e9523e1850f4:
+  disabled: false
+  floor: Downstairs
+  icon: hue:room-dining
+9711bda1f1dc41bda7c4acbea2d96622:
+  disabled: false
+  floor: Upstairs
+  icon: hue:room-bedroom
+a6f9daacc6d749f1b9769ef326d98aef:
+  disabled: false
+  floor: Upstairs
+  icon: hue:room-office
+a87f1ab7f9b74578a9a695f84be278df:
+  disabled: false
+  floor: Downstairs
+  icon: hue:room-living
+aa750b58fdc211ea89fd45b47ae5e4ac:
+  disabled: false
+  floor: Upstairs
+  icon: mdi:shower-head
+b50aa5dba3204795933afb348ba9edda:
+  disabled: false
+  floor: Downstairs
+  icon: hue:room-hallway
+cd4f0a4b146d47a7b7e2d15739551f33:
+  disabled: false
+  floor: Downstairs
+  icon: mdi:glass-cocktail
+d624502637a143808ed8ef44b9d6de84:
+  disabled: false
+  floor: Downstairs
+  icon: hue:room-laundry
+d954240215c44eb8a5c2a7f34cc73458:
+  disabled: false
+  floor: Loft
+  icon: hue:room-attic
+downstairs:
+  disabled: true
+  floor: ''
+  icon: ''
+e553e0035ccb41e79c0438ab568b929b:
+  disabled: false
+  floor: Upstairs
+  icon: mdi:bed-king-outline
+f0e5a5f1b9ca405f91f8b04ebb35beb9:
+  disabled: false
+  floor: Upstairs
+  icon: mdi:bed-queen
+f7c5b7a6d1d84b3786258d050c855285:
+  disabled: false
+  floor: Outside
+  icon: mdi:patio-heater
+garden_colour:
+  disabled: false
+  floor: Outside
+  icon: hue:lily-two
+home:
+  disabled: true
+  floor: ''
+  icon: ''
+hot_tub:
+  disabled: false
+  floor: Outside
+  icon: mdi:hot-tub
+kate_s_bathroom:
+  disabled: false
+  floor: Upstairs
+  icon: mdi:shower-head
+kates_bedroom:
+  disabled: false
+  floor: Upstairs
+  icon: mdi:bed-queen-outline
+sophies_bedroom:
+  disabled: false
+  floor: Upstairs
+  icon: mdi:bed-king
+stairs:
+  disabled: false
+  floor: Downstairs
+  icon: hue:room-stairs
+upstairs:
+  disabled: true
+  floor: ''
+  icon: ''

@@ -1,0 +1,383 @@
+title: Remote
+badges: []
+icon: 'mdi:remote'
+path: remote
+cards:
+
+  - entity: media_player.lounge_skyq
+    type: media-control
+    name: SkyQ
+        
+  - type: grid
+    columns: 3
+    square: false
+    cards:
+
+
+      - entity: media_player.lounge_amp
+        hold_action:
+          action: call-service
+          haptic: success
+          repeat: 333
+          service: media_player.volume_down
+          service_data:
+            entity_id: media_player.lounge_amp
+        icon: 'mdi:volume-minus'
+        show_icon: true
+        show_name: false
+        styles:
+          card:
+            - height: 90px
+        tap_action:
+          action: call-service
+          haptic: success
+          service: media_player.volume_down
+          service_data:
+            entity_id: media_player.lounge_amp
+        type: 'custom:button-card'
+      - color: blue
+        entity: media_player.lounge_amp
+        icon: 'mdi:volume-off'
+        show_icon: true
+        show_name: false
+        state:
+          - operator: template
+            styles:
+              card:
+                - icon: 'mdi:volume-high'
+              icon:
+                - color: red
+              value: >
+                return
+                states['media_player.lounge_amp'].attributes.is_volume_muted
+                === true
+        styles:
+          card:
+            - height: 90px
+        tap_action:
+          action: call-service
+          haptic: success
+          service: script.lounge_amp_toggle_mute
+        type: 'custom:button-card'
+      - entity: media_player.lounge_amp
+        hold_action:
+          action: call-service
+          haptic: success
+          repeat: 333
+          service: media_player.volume_up
+          service_data:
+            entity_id: media_player.lounge_amp
+        icon: 'mdi:volume-plus'
+        show_icon: true
+        show_name: false
+        styles:
+          card:
+            - height: 90px
+        tap_action:
+          action: call-service
+          haptic: success
+          service: media_player.volume_up
+          service_data:
+            entity_id: media_player.lounge_amp
+        type: 'custom:button-card'
+
+      - confirmation:
+          text: Are you sure you want to power on/off
+        entity: media_player.lounge_skyq
+        icon: 'mdi:power-standby'
+        show_icon: true
+        show_name: false
+        styles:
+          card:
+            - height: 90px
+          icon:
+            - color: red
+        tap_action:
+          action: call-service
+          haptic: success
+          service: switch.toggle
+          service_data:
+            entity_id: switch.switch_skytv
+        type: 'custom:button-card'
+      - entity: media_player.lounge_skyq
+        hold_action:
+          action: none
+        icon: 'mdi:play-pause'
+        name: PlayPause
+        show_icon: true
+        show_name: false
+        state:
+          - icon: 'mdi:play'
+            value: 'paused'
+          - icon: 'mdi:pause'
+            value: 'playing'                    
+        styles:
+          card:
+            - height: 90px
+        tap_action:
+          action: call-service
+          haptic: success
+          service: media_player.media_play
+          service_data:
+            entity_id: media_player.lounge_skyq
+        type: 'custom:button-card'
+      - entity: input_boolean.lounge_ambilight_required
+        icon: 'mdi:television-ambient-light'
+        show_icon: true
+        show_name: false
+        state:
+          - color_type: icon
+            color: blue
+            value: 'off'
+          - color_type: icon
+            color: yellow
+            value: 'on'
+        styles:
+          card:
+            - height: 90px
+        tap_action:
+          action: call-service
+          haptic: success
+          service: input_boolean.toggle
+          service_data:
+            entity_id: input_boolean.lounge_ambilight_required
+        type: 'custom:button-card'
+
+      - entity: media_player.lounge_skyq
+        icon: 'mdi:undo'
+        show_icon: true
+        show_name: false
+        styles:
+          card:
+            - height: 90px
+        tap_action:
+          action: call-service
+          haptic: success
+          service: media_player.play_media
+          service_data:
+            entity_id: media_player.lounge_skyq
+            media_content_id: dismiss
+            media_content_type: skyq
+        type: 'custom:button-card'
+      - entity: media_player.lounge_skyq
+        hold_action:
+          action: call-service
+          haptic: success
+          repeat: 250
+          service: media_player.play_media
+          service_data:
+            entity_id: media_player.lounge_skyq
+            media_content_id: up
+            media_content_type: skyq
+        icon: 'mdi:arrow-up'
+        show_icon: true
+        show_name: false
+        styles:
+          action: call-service
+          card:
+            - height: 90px
+          haptic: success
+        tap_action:
+          action: call-service
+          haptic: success
+          service: media_player.play_media
+          service_data:
+            entity_id: media_player.lounge_skyq
+            media_content_id: up
+            media_content_type: skyq
+        type: 'custom:button-card'
+      - color: red
+        entity: media_player.lounge_skyq
+        icon: 'mdi:alpha-r-circle-outline'
+        show_icon: true
+        show_name: false
+        state:
+          - color: red
+            value: 'on'
+        styles:
+          card:
+            - height: 90px
+        tap_action:
+          action: call-service
+          haptic: success
+          service: media_player.play_media
+          service_data:
+            entity_id: media_player.lounge_skyq
+            media_content_id: record
+            media_content_type: skyq
+        type: 'custom:button-card'
+
+      - entity: media_player.lounge_skyq
+        hold_action:
+          action: call-service
+          haptic: success
+          repeat: 250
+          service: media_player.play_media
+          service_data:
+            entity_id: media_player.lounge_skyq
+            media_content_id: left
+            media_content_type: skyq
+        icon: 'mdi:arrow-left'
+        show_icon: true
+        show_name: false
+        styles:
+          card:
+            - height: 90px
+        tap_action:
+          action: call-service
+          haptic: success
+          service: media_player.play_media
+          service_data:
+            entity_id: media_player.lounge_skyq
+            media_content_id: left
+            media_content_type: skyq
+        type: 'custom:button-card'
+      - entity: media_player.lounge_skyq
+        icon: 'mdi:circle-medium'
+        show_icon: true
+        show_name: false
+        styles:
+          card:
+            - height: 90px
+        tap_action:
+          action: call-service
+          haptic: success
+          service: media_player.play_media
+          service_data:
+            entity_id: media_player.lounge_skyq
+            media_content_id: select
+            media_content_type: skyq
+        type: 'custom:button-card'
+      - entity: media_player.lounge_skyq
+        hold_action:
+          action: call-service
+          haptic: success
+          repeat: 250
+          service: media_player.play_media
+          service_data:
+            entity_id: media_player.lounge_skyq
+            media_content_id: right
+            media_content_type: skyq
+        icon: 'mdi:arrow-right'
+        show_icon: true
+        show_name: false
+        styles:
+          card:
+            - height: 90px
+        tap_action:
+          action: call-service
+          haptic: success
+          service: media_player.play_media
+          service_data:
+            entity_id: media_player.lounge_skyq
+            media_content_id: right
+            media_content_type: skyq
+        type: 'custom:button-card'
+
+      - entity: media_player.lounge_skyq
+        icon: 'mdi:home'
+        show_icon: true
+        show_name: false
+        styles:
+          card:
+            - height: 90px
+        tap_action:
+          action: call-service
+          haptic: success
+          service: media_player.play_media
+          service_data:
+            entity_id: media_player.lounge_skyq
+            media_content_id: home
+            media_content_type: skyq
+        type: 'custom:button-card'
+      - entity: media_player.lounge_skyq
+        hold_action:
+          action: call-service
+          haptic: success
+          repeat: 250
+          service: media_player.play_media
+          service_data:
+            entity_id: media_player.lounge_skyq
+            media_content_id: down
+            media_content_type: skyq
+        icon: 'mdi:arrow-down'
+        show_icon: true
+        show_name: false
+        styles:
+          card:
+            - height: 90px
+        tap_action:
+          action: call-service
+          haptic: success
+          service: media_player.play_media
+          service_data:
+            entity_id: media_player.lounge_skyq
+            media_content_id: down
+            media_content_type: skyq
+        type: 'custom:button-card'
+
+      - entity: media_player.lounge_skyq
+        icon: 'mdi:menu'
+        show_icon: true
+        show_name: false
+        styles:
+          card:
+            - height: 90px
+        tap_action:
+          action: navigate
+          haptic: success
+          navigation_path: /lovelace-switchboard/menu
+        type: 'custom:button-card'
+
+      - entity: media_player.lounge_skyq
+        icon: 'mdi:remote'
+        show_icon: true
+        show_name: false
+        styles:
+          card:
+            - height: 90px
+          icon:
+            - color: yellow
+        tap_action:
+          action: navigate
+          haptic: success
+          navigation_path: remote
+        type: 'custom:button-card'
+      - entity: media_player.lounge_skyq
+        hold_action:
+          action: none
+        icon: 'mdi:grid'
+        show_icon: true
+        show_name: false
+        styles:
+          card:
+            - height: 90px
+        tap_action:
+          action: navigate
+          haptic: success
+          navigation_path: channels
+        type: 'custom:button-card'
+      - entity: media_player.lounge_skyq
+        icon: 'mdi:dialpad'
+        show_icon: true
+        show_name: false
+        styles:
+          card:
+            - height: 90px
+        tap_action:
+          action: navigate
+          haptic: success
+          navigation_path: keypad
+        type: 'custom:button-card'
+
+  - entities:
+    - entity: light.lounge
+      name: Lounge
+      hide_state: true
+      type: 'custom:slider-entity-row'
+    - entity: light.hall
+      name: Hall
+      hide_state: true
+      type: 'custom:slider-entity-row'
+    show_header_toggle: false
+    type: entities

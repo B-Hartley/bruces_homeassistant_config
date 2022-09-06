@@ -1,0 +1,6 @@
+rest_command:
+  hottub_temp_set_unit: 
+    method: POST
+    content_type: "application/x-www-form-urlencoded"
+    url: "https://mobileapi.lay-z-spa.co.uk/v1/gizwits/temp_set_unit"
+    payload: "{{hottub_api_did}}&unit={{hottub_tempcode}}"

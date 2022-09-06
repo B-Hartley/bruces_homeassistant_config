@@ -1,0 +1,6 @@
+light:          
+  - platform: group
+    unique_id: light_group_drum_room
+    name: Drum Room Lights
+    entities:
+    - light.drum_room_light

@@ -1,0 +1,6 @@
+template:
+  - sensor:
+      - name: "Milk Bottles"
+        state: "{% if now().hour>12 and now().weekday() in (1,3,6) %}Empty{% elif now().hour<12 and now().weekday() in (2,4,0)%}Full{% else %}None{% endif %}"
+        unique_id: milk_bottles
+        icon: "{% if now().hour>12 and now().weekday() in (1,3,6) %}mdi:bottle-tonic-outline{% elif now().hour<12 and now().weekday() in (2,4,0)%}mdi:bottle-tonic{% else %}mdi:radiobox-blank{% endif %}"

@@ -1,0 +1,9 @@
+script:
+  lounge_amp_toggle_mute:
+    alias: Lounge Amp Toggle Mute
+    sequence:
+      - service: media_player.volume_mute
+        target:
+          entity_id: media_player.lounge_amp
+        data:
+          is_volume_muted: "{{ not state_attr('media_player.lounge_amp','is_volume_muted') }}"

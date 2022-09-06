@@ -1,0 +1,154 @@
+rest:
+  - resource: !secret teslafi_resource_last_good
+    #resource: https://www.teslafi.com/feed.php?token=xxxxxxxxxxxxxxxxxxxx&command=lastGood  
+    scan_interval: 60
+
+    binary_sensor:
+      - name: Jyggy Battery Heater On
+        value_template: "{{ value_json.battery_heater_on == '1' }}"
+        device_class: heat
+
+      - name: Jyggy Locked
+        value_template: "{{ value_json.locked == '1'}}"
+        device_class: lock
+
+      - name: Jyggy Needs Charge
+        value_template: "{{ value_json.battery_level|int(0) < value_json.charge_limit_soc|int(0) }}"
+
+      - name: Jyggy FD Window
+        value_template: "{{ value_json.fd_window == '1'}}"
+        device_class: window
+        
+      - name: Jyggy FP Window
+        value_template: "{{ value_json.fp_window == '1'}}"
+        device_class: window
+        
+      - name: Jyggy RD Window
+        value_template: "{{ value_json.rd_window == '1'}}"
+        device_class: window
+        
+      - name: Jyggy RP Window
+        value_template: "{{ value_json.rp_window == '1'}}"      
+        device_class: window
+        
+      - name: Jyggy 3 Phase
+        value_template: "{{ value_json.charger_phases == '3'}}"          
+        
+    sensor:
+
+      - name: Tyre Pressure FL
+        value_template: "{{ value_json.tpms_pressure_fl|int(0) }}"
+        device_class: pressure
+        unit_of_measurement: 'psi'
+        
+      - name: Tyre Pressure FR
+        value_template: "{{ value_json.tpms_pressure_fr|int(0) }}"
+        device_class: pressure
+        unit_of_measurement: 'psi'
+
+      - name: Tyre Pressure RL
+        value_template: "{{ value_json.tpms_pressure_rl|int(0) }}"
+        device_class: pressure
+        unit_of_measurement: 'psi'
+
+      - name: Tyre Pressure RR
+        value_template: "{{ value_json.tpms_pressure_rr|int(0) }}"
+        device_class: pressure
+        unit_of_measurement: 'psi'        
+        
+      - name: Jyggy Charge Current Request Max
+        value_template: "{{ value_json.charge_current_request_max|int(0) }}"
+        device_class: current
+        unit_of_measurement: 'A'
+        
+      - name: Jyggy Charge Current Request
+        value_template: "{{ value_json.charge_current_request|int(0) }}"
+        device_class: current
+        unit_of_measurement: 'A'        
+
+      - name: Jyggy Charger Pilot Current
+        value_template: "{{ value_json.charger_pilot_current|int(0) }}"
+        device_class: current
+        unit_of_measurement: 'A' 
+
+      - name: Jyggy Charger Actual Current
+        value_template: "{{ value_json.charger_actual_current|int(0) }}"
+        device_class: current
+        unit_of_measurement: 'A' 
+        
+      - name: Jyggy Charge Limit SOC
+        value_template: "{{ value_json.charge_limit_soc|int(0) }}"
+        device_class: battery
+        unit_of_measurement: '%'
+        
+      - name: Jyggy Charger Power kW
+        value_template: "{{ value_json.charger_power|int(0)}}"
+        unit_of_measurement: "kW"
+        device_class: power        
+
+      - name: Jyggy Charging State
+        value_template: "{{ value_json.charging_state }}"
+
+      - name: Jyggy GPS as of
+        value_template: "{{ value_json.gps_as_of|int(0) }}"
+        
+      - name: Jyggy Inside Temp
+        value_template: "{{ value_json.inside_temp|int(0) }}"
+        device_class: temperature
+        unit_of_measurement: '°C'        
+        
+      - name: Jyggy Latitude
+        value_template: "{{ value_json.latitude|float(51.356496) }}"
+        unit_of_measurement: '°'        
+        
+      - name: Jyggy Location
+        value_template: "{{ value_json.location }}"
+
+      - name: Jyggy Longitude
+        value_template: "{{ value_json.longitude|float(-2.9110906) }}"
+        unit_of_measurement: '°'        
+        
+      - name: Jyggy Odometer
+        value_template: "{{ value_json.odometer|int(0) }}"
+        unit_of_measurement: 'miles'
+        
+      - name: Jyggy Outside Temp
+        value_template: "{{ value_json.outside_temp|float(0) }}"
+        device_class: temperature
+        unit_of_measurement: '°C'        
+        
+#      - name: Jyggy Scheduled Software Update
+#        value_template: "{{ value_json.software_update }}"
+        
+      - name: Jyggy Scheduled Charging Start Time
+        value_template: "{{ value_json.scheduled_charging_start_time }}"
+        
+      - name: Jyggy Shift State
+        value_template: "{{ value_json.shift_state }}"
+        
+      - name: Jyggy Speed
+        value_template: "{{ 0 if value_json.speed == null else value_json.speed|int(0) }}"
+        unit_of_measurement: 'mph'        
+        
+      - name: Jyggy Time to Full Charge
+        value_template: "{{ value_json.time_to_full_charge }}"
+        unit_of_measurement: 'hrs'
+
+      - name: Jyggy Battery Level
+        value_template: "{{ value_json.battery_level|int(0) }}"
+        device_class: battery
+        unit_of_measurement: '%'        
+        
+      - name: Jyggy CarState
+        value_template: "{{ value_json.carState }}"
+        
+      - name: Jyggy Charge Cable
+        value_template: "{{ value_json.conn_charge_cable }}"
+
+      - name: Jyggy Sensor
+        value_template: "{{ value_json.carState }}"
+        json_attributes:
+          - car_version
+          - distFromHome
+          - software_update
+

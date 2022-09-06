@@ -1,0 +1,5 @@
+type: glance
+entities:
+  - entity: person.chas
+  - entity: person.mo
+  - entity: person.moira

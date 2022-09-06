@@ -1,0 +1,11 @@
+icon: 'mdi:menu'
+show_icon: true
+show_name: false
+styles:
+  card:
+    - height: 90px
+tap_action:
+  action: navigate
+  haptic: success
+  navigation_path: /lovelace-switchboard
+type: 'custom:button-card'

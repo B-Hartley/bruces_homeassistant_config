@@ -1,0 +1,25 @@
+template:
+  binary_sensor:
+      - name: "Littertray Utility Dirty"
+        device_class: problem
+        availability: "{{ states('sensor.littertray_utility_usage')|is_number}}"
+        unique_id: littertray_utility_dirty
+        state: "{{ ((as_timestamp(now())-as_timestamp(states('input_button.littertray_utility')))/86400)>8  or  states('sensor.littertray_utility_usage')|int(0)>99 }}"
+   
+      - name: "Littertray Shower Dirty"
+        device_class: problem
+        availability: "{{ states('sensor.littertray_shower_usage')|is_number}}"
+        unique_id: littertray_shower_dirty
+        state: "{{ ((as_timestamp(now())-as_timestamp(states('input_button.littertray_shower')))/86400)>8  or  states('sensor.littertray_shower_usage')|int(0)>99 }}"
+   
+      - name: "Littertray Downstairs Dirty"
+        device_class: problem
+        availability: "{{ states('sensor.littertray_downstairs_usage')|is_number}}"        
+        unique_id: littertray_downstairs_dirty
+        state: "{{ ((as_timestamp(now())-as_timestamp(states('input_button.littertray_downstairs')))/86400)>8  or  states('sensor.littertray_downstairs_usage')|int(0)>99 }}"
+   
+      - name: "Littertray Drum Dirty"
+        device_class: problem
+        availability: "{{ states('sensor.littertray_drum_usage')|is_number}}"             
+        unique_id: littertray_drum_dirty
+        state: "{{ ((as_timestamp(now())-as_timestamp(states('input_button.littertray_drum')))/86400)>8  or  states('sensor.littertray_drum_usage')|int(0)>99 }}"

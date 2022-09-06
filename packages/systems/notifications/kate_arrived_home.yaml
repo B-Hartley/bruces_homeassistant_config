@@ -1,0 +1,21 @@
+automation:
+    - id: kate_arrived
+      alias: Kate Arrived Home 
+      mode: single
+      trigger:
+        - platform: state
+          entity_id: person.kate_hartley
+          to: home
+      action:
+        - service: telegram_bot.send_message
+          data:
+            target: !secret telegram_chat_id_bruce_and_sarah
+            message: >
+              {% if (states("climate.kates_bedroom_rad") == "auto") and (states("climate.kates_bathroom_rad") == "auto") %}
+              Kate arrived home
+              {% else %}
+              Kate arrived home but heating is OFF
+              {% endif %}
+        - delay: 00:05:00
+
+#Add keyboard and option to turn on Kate heating

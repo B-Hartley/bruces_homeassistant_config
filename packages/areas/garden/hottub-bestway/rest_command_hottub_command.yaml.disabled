@@ -1,0 +1,10 @@
+rest_command:
+  hottub_command: 
+    method: POST
+    headers:
+      content_type: "application/json"
+      X-Gizwits-Application-Id: "98754e684ec045528b073876c34c7348"
+      X-Gizwits-User-token: !secret bestway_token
+#    url: "https://euapi.gizwits.com/app/control/{my did}"    
+    url: !secret bestway_control_url
+    payload: "{{hottub_command}}"

@@ -1,0 +1,19 @@
+sensor:
+  - platform: rest
+    name: hottub_bindings
+    scan_interval: 172000
+    resource: "https://euapi.gizwits.com/app/bindings?limit=20&skip=0"
+    headers:
+      Content-Type: application/json
+      X-Gizwits-Application-Id: "98754e684ec045528b073876c34c7348"
+      X-Gizwits-User-token: !secret bestway_token
+    method: GET
+    value_template: "{{ value_json.devices[0].did }}"    
+    json_attributes_path: "$.devices[0]"
+    json_attributes:
+      - dev_alias
+      - mac
+      - product_key
+      - passcode
+      - product_name
+

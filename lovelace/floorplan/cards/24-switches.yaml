@@ -1,0 +1,61 @@
+type: conditional
+#view_layout:
+#  position: sidebar
+conditions:
+  - entity: input_boolean.floorplan_show_toggle_switches
+    state: "on"
+card:
+  type: entities
+  entities:
+    - entity: input_boolean.floorplan_motion
+      name: Motion
+    - entity: input_boolean.floorplan_camera_motion
+      name: Camera Motion
+    - entity: input_boolean.floorplan_presence_iphone_ra
+      name: Presence - Phone
+    - entity: input_boolean.floorplan_presence_watch
+      name: Presence - Watch      
+    - entity: input_boolean.floorplan_presence_wallet
+      name: Presence - Wallet 
+    - entity: input_boolean.floorplan_presence_dog
+      name: Presence - Dog          
+    - entity: input_boolean.floorplan_temperatures
+      name: Temperatures
+    - entity: input_boolean.floorplan_water
+      name: Water
+    - entity: input_boolean.floorplan_lights
+      name: Lights  
+    - entity: input_boolean.floorplan_cameras    
+      name: Cameras  
+    - entity: input_boolean.floorplan_doors   
+      name: Doors
+    - entity: input_boolean.floorplan_radiators  
+      name: Radiators    
+    - entity: input_boolean.floorplan_low_battery
+      name: Low Battery
+    - entity: input_boolean.floorplan_litter_trays
+      name: Litter Trays
+    - entity: input_boolean.floorplan_access_points
+      name: Access Points
+    - entity: input_boolean.floorplan_bins
+      name: Bins   
+    - entity: input_boolean.floorplan_weather
+      name: Weather
+    - entity: input_boolean.floorplan_hottub
+      name: Hot Tub
+    - entity: input_boolean.floorplan_grid
+      name: Grid     
+    - entity: input_boolean.floorplan_solar
+      name: Solar 
+    - entity: input_boolean.floorplan_powerwall
+      name: Powerwall
+    - entity: input_boolean.floorplan_cars
+      name: Cars    
+    - entity: input_boolean.floorplan_appliances
+      name: Appliances       
+    - entity: input_boolean.floorplan_fans
+      name: Fans    
+    - entity: input_boolean.floorplan_christmas_lights
+      name: Christmas Lights    
+    - entity: input_boolean.floorplan_show_toggle_switches
+      name: Show These Switches

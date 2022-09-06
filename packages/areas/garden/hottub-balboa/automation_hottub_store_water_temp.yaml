@@ -1,0 +1,35 @@
+automation:
+  - id: hottub_store_watere_temp
+    alias: 'HotTub Store Water Temp'
+    mode: restart
+    
+    description: >
+      Capture Hot Tub Temperature if realistic
+    
+    trigger:
+      - platform: state
+        entity_id: sensor.hottub_water_temp
+      - platform: homeassistant
+        event: start
+      - platform: event
+        event_type: automation_reloaded    
+        
+    condition:
+      - condition: numeric_state
+        entity_id: sensor.hottub_water_temp
+        above: 10
+        below: 41
+      - condition: numeric_state
+        entity_id: input_number.hottub_water_temp
+        above: 10
+        below: 41        
+      - condition: template
+        value_template: "{{ states('sensor.hottub_water_temp') != states('input_number.hottub_water_temp') }}"
+        
+    action:
+      - service: input_number.set_value
+        target:
+          entity_id: input_number.hottub_water_temp
+        data:
+          value: "{{ states('sensor.hottub_water_temp') }}"                
+      

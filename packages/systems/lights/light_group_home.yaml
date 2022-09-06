@@ -1,0 +1,12 @@
+light:           
+  - platform: group
+    unique_id: light_group_home
+    name: Home Lights
+    entities:
+      - light.home_1
+      - light.home_2      
+      - light.hottub_light
+      - light.kate_lightstrip
+      - light.patio_lights
+      - light.shed_light
+   

@@ -1,0 +1,5 @@
+template:
+  sensor:
+    - name: "Hottub Error"
+      availability: "{{ states('binary_sensor.hottub_online') }}"
+      state: "{% if ( state_attr('sensor.hottub_status','system_err1') | int  + state_attr('sensor.hottub_status','system_err2') | int  + state_attr('sensor.hottub_status','system_err3') | int  + state_attr('sensor.hottub_status','system_err4') | int  + state_attr('sensor.hottub_status','system_err5') | int  + state_attr('sensor.hottub_status','system_err6') | int  + state_attr('sensor.hottub_status','system_err7') | int  + state_attr('sensor.hottub_status','system_err8') | int  + state_attr('sensor.hottub_status','system_err9') | int  + state_attr('sensor.hottub_status','earth') | int ) > 0 %}on{% else %}off{% endif %}"

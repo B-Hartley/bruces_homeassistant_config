@@ -1,0 +1,17 @@
+sensor:
+  - platform: rest
+    name: hottub_login
+    scan_interval: 172000
+    resource: "https://euapi.gizwits.com/app/login"
+    headers:
+      Content-Type: application/json
+      X-Gizwits-Application-Id: "98754e684ec045528b073876c34c7348"
+    method: POST
+#    payload: '{ "username": "xxx.xxx@xxxxxxx.co.uk", "password": "xxxxxxxx", "lang": "en" }'    
+    payload: !secret bestway_login_payload
+    value_template: "{{ value_json.token }}"    
+    json_attributes:
+      - uid
+      - expire_at
+
+

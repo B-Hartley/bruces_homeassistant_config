@@ -1,0 +1,6 @@
+light:
+  - platform: group
+    unique_id: downstairs_toilet_lights_group
+    name: Downstairs Toilet Lights
+    entities:
+    - light.downstairs_toilet_light

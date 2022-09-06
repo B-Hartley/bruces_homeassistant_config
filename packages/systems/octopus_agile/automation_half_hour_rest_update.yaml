@@ -1,0 +1,26 @@
+automation:
+  - id: half_hour_agile_rest_sensors
+    alias: 'Update rest sensors on half hour'
+
+    description: >
+      Update rest sensors for Agile prices on half hour
+    
+    trigger:
+      - platform: homeassistant
+        event: start
+      - platform: event
+        event_type: automation_reloaded      
+      - platform: time_pattern
+        minutes: '/30'
+      - platform: state
+        entity_id: input_boolean.go_tariff
+        
+    action:
+      - service: homeassistant.update_entity
+        target:
+          entity_id:
+            - sensor.import_price
+            - sensor.import_price_pounds     
+            - sensor.export_price
+            - sensor.export_price_pounds
+

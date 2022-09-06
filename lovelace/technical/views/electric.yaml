@@ -1,0 +1,123 @@
+title: Electric
+path: electric
+icon: 'mdi:flash'
+badges: []
+cards:
+  - entities:
+      - entity: binary_sensor.grid_status
+      - entity: sensor.mqtt_power
+        name: Import Power
+      - entity: sensor.mqtt_export_power
+        name: Export Power      
+      - entity: sensor.apc_ups_input_voltage
+        name: Voltage
+      - entity: sensor.electricity_demand_cost
+        name: Current Cost per Hour
+      - entity: sensor.octopus_current_price_rounded
+        name: Electricity Price
+      - entity: input_datetime.octopus_power_hour
+        name: Octopus Power Hour
+    title: Electricity
+    type: entities
+  - type: entities
+    entities:
+      - entity: sensor.powerwall_battery_now
+      - entity: binary_sensor.powerwall_charging
+      - entity: input_number.powerwall_charge_below_x_pence
+        name: Charge below Xp
+        icon: 'mdi:currency-gbp'
+      - entity: input_number.overnight_powerwall_max_charge
+        name: Max night Charge
+        icon: 'mdi:battery-charging'
+      - entity: sensor.powerwall_charge_corrected
+        name: Powerwall Charge (App %)
+      - entity: sensor.powerwall_stored_energy
+      - entity: sensor.powerwall_charge
+        name: Powerwall Charge (API %)
+      - entity: sensor.powerwall_efficiency
+        name: Efficiency        
+      - entity: input_boolean.freeze_power_when_cars_charging
+        name: Freeze Powerwall overnight when Cars Charging
+    title: Powerwall
+    show_header_toggle: false
+    state_color: true
+  - type: entities
+    entities:
+      - entity: sensor.smart_meter_electricity_import
+      - entity: sensor.smart_meter_electricity_export
+      - entity: sensor.smart_meter_electricity_import_today
+      - entity: sensor.smart_meter_electricity_import_this_week
+      - entity: sensor.smart_meter_electricity_import_this_month
+    title: Electricity Meters
+    show_header_toggle: false
+  - type: entities
+    entities:
+      - entity: sensor.solaredge_mb_ac_current
+        name: AC Current      
+      - entity: sensor.solaredge_mb_ac_voltage_ab
+        name: AC Voltage
+      - entity: sensor.solaredge_mb_ac_power
+        name: AC Power      
+      - entity: sensor.solaredge_mb_temp_sink
+        name: Heatsink Temp            
+      - entity: sensor.solaredge_mb_ac_frequency
+        name: AC Frequency            
+      - entity: sensor.solaredge_status_text
+        name: Status    
+      - entity: sensor.solar_energy_hourly_kwh
+        name: This Hour        
+      - entity: sensor.solar_energy_daily_kwh
+        name: Today
+      - entity: sensor.solar_energy_weekly_kwh
+        name: This Week        
+      - entity: sensor.solar_energy_monthly_kwh
+        name: This Month
+      - entity: sensor.solar_energy_yearly_kwh
+        name: This Year
+      - entity: sensor.solaredge_lifetime_energy_mwh
+        name: Lifetime
+    title: Solar Production
+    state_color: true
+    show_header_toggle: false
+  - type: entities
+    title: VoltAware
+    entities:
+      - entity: sensor.voltaware_v
+        name: 'Voltage'
+      - entity: sensor.voltaware_i
+        name: 'Current'
+      - entity: sensor.voltaware_phase
+        name: 'Phase Shift'
+      - entity: sensor.voltaware_frequency
+        name: 'Frequency'
+      - entity: sensor.voltaware_active_power
+        name: 'P'
+      - entity: sensor.voltaware_reactive_power
+        name: 'Q'
+      - entity: sensor.voltaware_active_exp
+        name: 'Produced Energy (P)'
+      - entity: sensor.voltaware_active_imp
+        name: 'Consumed Energy (P)'
+      - entity: sensor.voltaware_active_net
+        name: 'net Active Energy (P)'
+      - entity: sensor.voltaware_reactive_exp
+        name: 'Produced Energy (Q)'      
+      - entity: sensor.voltaware_reactive_imp
+        name: 'Consumed Energy (Q)'      
+      - entity: sensor.voltaware_reactive_net
+        name: 'net Reactive Energy'      
+
+  - type: entities
+    title: Solcast  
+    entities:
+      - entity: sensor.solcast_forecast_today
+        name: Today         
+      - entity: sensor.solcast_forecast_remaining_today
+        name: Today Remaining
+      - entity: sensor.solcast_forecast_tomorrow
+        name: Tomorrow            
+      - entity: sensor.solcast_api_last_polled
+        name: Last Updated
+      - entity: sensor.solcast_api_remaining
+        name: API Counter      
+        

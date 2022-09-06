@@ -1,0 +1,43 @@
+icon: 'mdi:flash'
+panel: false
+path: eleccost
+title: Elec Cost
+badges:
+  - entity: binary_sensor.grid_status
+    name: Elec Supply
+  - entity: sensor.octopus_current_price_rounded
+    name: Current Price
+  - entity: sensor.solaredge_grid
+    name: Usage
+  - entity: sensor.electricity_demand_cost
+    name: Current Cost
+cards:
+  - cols: 3
+    entity: octopusagile.rates
+    highlimit: 18
+    mediumlimit: 11
+    type: 'custom:agile-rates-card'
+  - type: entities
+    entities:
+      - entity: sensor.export_price
+        name: Current Export Price
+      - entity: sensor.import_price
+        name: Current Import Price        
+      - entity: sensor.octopus_current_tariff
+        name: Current Octopus Tariff
+      - entity: sensor.octopus_agile_min_rate
+        name: Minimum Agile Rate
+        icon: 'mdi:currency-gbp'
+
+  - icon: 'mdi:menu'
+    show_icon: true
+    show_name: false
+    styles:
+      card:
+        - height: 90px
+    tap_action:
+      action: navigate
+      haptic: success
+      navigation_path: /lovelace-switchboard/menu
+    type: 'custom:button-card'
+

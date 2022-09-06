@@ -1,0 +1,9 @@
+template:
+  - sensor:
+      - name: "Water Flow Rate - Litres"
+        unique_id: water_flow_lites
+        unit_of_measurement: l/m
+        availability: "{{states('sensor.water_flow_rate')|is_number}}"
+        state: "{{ states('sensor.water_flow_rate')|float*4.54609}}"
+        state_class: measurement  
+

@@ -1,0 +1,30 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "description": "Om du behöver hjälp med konfigurationen, se här: https://github.com/cjne/ha-myenergi",
+        "data": {
+          "username": "Serienummer för hub",
+          "password": "API nyckel / Lösenord"
+        }
+      }
+    },
+    "error": {
+      "auth": "Serienummer / API nyckel är fel",
+      "connection": "Kunde inte ansluta till myenergi, vänligen försök lite senare.",
+      "connection_timeout": "Anslutningen tappades, servern kan vara upptagen, vänligen försök lite senare."
+    },
+    "abort": {
+      "single_instance_allowed": "Endast en anslutning är tillåten."
+    }
+  },
+  "options": {
+    "step": {
+      "user": {
+        "data": {
+          "scan_interval": "Uppdateringsintervall (sekunder)."
+        }
+      }
+    }
+  }
+}

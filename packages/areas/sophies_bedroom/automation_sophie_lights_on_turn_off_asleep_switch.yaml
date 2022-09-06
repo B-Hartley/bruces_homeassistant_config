@@ -1,0 +1,23 @@
+automation:
+  - id: turn_off_sophie_asleep_with_lights
+    alias: 'Turn off Sophie Asleep switch from lights on'
+    mode: single
+    
+    description: >
+      Turn off Sophie Asleep switch when lights on
+      
+    trigger:
+      - platform: state
+        id: "lights"
+        entity_id: light.sophies_bedroom_lights     
+        to: 'on'      
+        
+    condition:
+      - condition: state
+        entity_id: input_boolean.sophie_is_asleep
+        state: 'on'        
+        
+    action:
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.sophie_is_asleep  

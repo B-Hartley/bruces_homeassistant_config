@@ -1,0 +1,8 @@
+group:
+  hottub_switches:
+    name: HotTub Switches
+    entities:
+      - switch.hottub_power
+      - switch.hottub_filter
+      - switch.hottub_heat
+      - switch.hottub_bubbles      

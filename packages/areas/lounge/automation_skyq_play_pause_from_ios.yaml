@@ -1,0 +1,18 @@
+automation:
+  - id: ios_action_skyq_play_pause
+    alias: "Play/Pause SkyQ from Phone"
+
+    description: >
+      SkyQ Play / Pause from ios
+      
+    trigger:
+      - platform: event
+        id: "ios"
+        event_type: ios.action_fired
+        event_data:
+          actionName: 'Pause Sky Q'
+          
+    action:
+      - service: media_player.media_play
+        target:
+          entity_id: media_player.lounge_skyq

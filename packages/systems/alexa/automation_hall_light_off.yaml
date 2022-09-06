@@ -1,0 +1,19 @@
+automation:
+  - id: alexa_actionable_hall_light_off
+    alias: 'Hall Light Off'
+    
+    description: >
+      Hall Light Off
+
+    trigger:
+      - platform: event
+        event_type: "alexa_actionable_notification"
+        event_data:
+          event_id: actionable_notification_hall_light_off
+          event_reponse_type: ResponseYes
+
+              
+    action:              
+      - service: light.turn_off
+        target:
+          entity_id: light.hall_light

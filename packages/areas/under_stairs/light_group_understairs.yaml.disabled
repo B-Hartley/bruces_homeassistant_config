@@ -1,0 +1,6 @@
+light:          
+  - platform: group
+    unique_id: light_group_understairs
+    name: Under Stairs Lights
+    entities:
+    - light.under_stairs_light

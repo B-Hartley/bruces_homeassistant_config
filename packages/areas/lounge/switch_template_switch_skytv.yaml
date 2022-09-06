@@ -1,0 +1,23 @@
+switch:
+  - platform: template
+    switches:
+        switch_skytv:
+            unique_id: switch_skytv
+            friendly_name: Sky TV on (with Amp and TV controlled by automation later)
+            value_template: "{{ 'off' if states('media_player.lounge_skyq') == 'off' else 'on' }}"
+            turn_on:
+              - service: media_player.turn_on
+                target:
+                  entity_id: 
+                    - media_player.lounge_skyq
+              
+ #             service: script.turn_on
+ #             entity_id: script.skytv_turn_on
+            turn_off:
+              - service: media_player.turn_off
+                target:
+                  entity_id: 
+                    - media_player.lounge_skyq            
+#              service: script.turn_on
+#              entity_id: script.skytv_turn_off
+        

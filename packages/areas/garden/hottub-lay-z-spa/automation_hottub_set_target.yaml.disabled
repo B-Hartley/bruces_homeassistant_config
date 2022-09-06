@@ -1,0 +1,15 @@
+automation:
+  - id: hottub_set_target
+    alias: HotTub Set Target
+    trigger:
+      platform: state
+      entity_id: sensor.hottub_pump_target
+    condition: 
+      condition: numeric_state
+      entity_id: 'sensor.hottub_pump_target'
+      above: 20
+    action:
+      service: input_number.set_value
+      data:
+        entity_id: input_number.hottub_water_target
+        value: "{{ states('sensor.hottub_pump_target') | int }}"

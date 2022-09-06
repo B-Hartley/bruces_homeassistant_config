@@ -1,0 +1,9 @@
+script:      
+  hottub_card_tap:
+    sequence:
+      - service: input_boolean.toggle
+        entity_id: input_boolean.hottub_scheduled
+  hottub_card_double_tap:
+    sequence:
+      - service: switch.toggle
+        entity_id: switch.hottub_heat

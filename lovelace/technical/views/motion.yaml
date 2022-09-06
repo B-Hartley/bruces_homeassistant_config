@@ -1,0 +1,11 @@
+title: Motion
+path: motion
+badges: []
+cards:
+  - type: history-graph
+    entities:
+      - entity: binary_sensor.patio_motion
+      - entity: binary_sensor.garage_motion
+    hours_to_show: 24
+    refresh_interval: 0
+    title: Motion

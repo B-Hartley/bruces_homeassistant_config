@@ -1,0 +1,21 @@
+automation:
+  - id: sonos_controller_bar
+    alias: Ikea SONOS Controller Bar
+
+    description: >
+      Control SONOS with Ikea controller
+
+    use_blueprint:
+      path: seamus65/zha-ikea-symfonisk-sound-controller-for-media-the-spinny-one.yaml
+      input:
+        remote: 076f644c900e178a75eb25ac55803839
+        media_player:
+          entity_id: media_player.bar_sonos
+        double_press:
+        - service: media_player.media_next_track
+          target:
+            entity_id: media_player.bar_sonos
+        triple_press:
+        - service: media_player.media_previous_track
+          target:
+            entity_id: media_player.bar_sonos

@@ -1,0 +1,20 @@
+light:           
+  - platform: group
+    unique_id: light_group_downstairs
+    name: Downstairs Lights
+    entities:
+      - light.downstairs
+      - light.kitchen_main
+      - light.kitchen_floor_lamp
+      - light.utility_light
+      - light.downstairs_toilet_light
+      - light.under_stairs_light  
+      - light.hall_stairs_lightstrip      
+#    - light.log_burner
+#    - light.bar 
+#    - light.kitchen
+#    - light.conservatory
+#    - light.lounge
+#    - light.hall
+#    - light.utility
+#    - light.downstairs_toilet

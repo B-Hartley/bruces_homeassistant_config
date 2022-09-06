@@ -1,0 +1,26 @@
+automation:
+  - id: bedtime_lights_when_lounge_off
+    alias: 'turn on landing & maybe bedroom lights when lights turned off'
+    
+    description: >
+      turn on landing & maybe bedroom when lounge goes off
+      
+    trigger:
+      - platform: state
+        id: "lounge"
+        entity_id: 
+          - light.lounge
+          - media_player.lounge_skytv
+        to: 'off'
+
+    condition:
+      - condition: time
+        after: '21:00:00'
+      - condition: state
+        entity_id: binary_sensor.light_outside
+        state: 'off'
+
+    action:
+      - service: scene.turn_on
+        data:
+          entity_id: "{{ 'scene.gotobed_lights_bedroom' if (is_state('input_boolean.bruce_is_asleep','off') and is_state('input_boolean.sarah_is_asleep','off')) else 'scene.gotobed_lights' }}"

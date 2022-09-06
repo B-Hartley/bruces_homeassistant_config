@@ -1,0 +1,18 @@
+icon: 'mdi:door'
+panel: true
+path: Hall
+title: Hall
+badges: []
+visible:
+  - user: 86df00251766415c9acf21b3b3e51496
+  - user: 1de5d8e2c14c47939a8174d6e4147f31
+cards:
+  - aspect_ratio: 56%
+    camera_image: camera.hall_medium
+    camera_view: live
+    entities:
+      - entity: binary_sensor.hall_motion
+      - entity: sensor.hall_last_motion
+    title: Hall
+    type: picture-glance
+

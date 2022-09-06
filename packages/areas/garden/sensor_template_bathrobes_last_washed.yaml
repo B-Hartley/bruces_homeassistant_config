@@ -1,0 +1,32 @@
+template:
+  sensor:
+    - name: "Bathrobe 1 Last Washed"
+      unique_id: bathrobe_1_last_washed
+      unit_of_measurement: days
+      state: "{{ ((as_timestamp(now()) - as_timestamp(states('input_button.bathrobe_1')))|int(0))// 86400 }}"
+      icon: mdi:washing-machine        
+    - name: "Bathrobe 2 Last Washed"
+      unique_id: bathrobe_2_last_washed
+      unit_of_measurement: days
+      state: "{{ ((as_timestamp(now()) - as_timestamp(states('input_button.bathrobe_2')))|int(0))// 86400 }}"
+      icon: mdi:washing-machine        
+    - name: "Bathrobe 13 Last Washed"
+      unique_id: bathrobe_3_last_washed
+      unit_of_measurement: days
+      state: "{{ ((as_timestamp(now()) - as_timestamp(states('input_button.bathrobe_3')))|int(0))// 86400 }}"
+      icon: mdi:washing-machine        
+    - name: "Bathrobe 4 Last Washed"
+      unique_id: bathrobe_4_last_washed
+      unit_of_measurement: days
+      state: "{{ ((as_timestamp(now()) - as_timestamp(states('input_button.bathrobe_4')))|int(0))// 86400 }}"
+      icon: mdi:washing-machine        
+    - name: "Bathrobe 5 Last Washed"
+      unique_id: bathrobe_5_last_washed
+      unit_of_measurement: days
+      state: "{{ ((as_timestamp(now()) - as_timestamp(states('input_button.bathrobe_5')))|int(0))// 86400 }}"
+      icon: mdi:washing-machine        
+    - name: "Bathrobe 6 Last Washed"
+      unique_id: bathrobe_6_last_washed
+      unit_of_measurement: days
+      state: "{{ ((as_timestamp(now()) - as_timestamp(states('input_button.bathrobe_6')))|int(0))// 86400 }}"
+      icon: mdi:washing-machine              

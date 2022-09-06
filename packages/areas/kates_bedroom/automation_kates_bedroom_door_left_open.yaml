@@ -1,0 +1,57 @@
+automation:
+  - id: kates_door_left_open
+    alias: 'Kates Door Left Open'
+    
+    description: >
+      Message if door left open
+      
+    trigger:
+      - platform: state
+        id: "open"
+        entity_id: binary_sensor.kates_bedroom_door        
+        to: 'on'
+        for: '00:00:30'
+      - platform: state
+        id: "closed"
+        entity_id: binary_sensor.kates_bedroom_door        
+        to: 'off'
+        
+    action:
+
+      - choose:
+            # previous message sent
+          - conditions: 
+              - condition: numeric_state
+                entity_id: input_text.kate_door_message_id
+                above: 0
+            sequence:
+              - alias: 'delete previous message'
+                service: telegram_bot.delete_message
+                data:
+                  message_id: "{{ states('input_text.kate_door_message_id') }}"
+                  chat_id: !secret telegram_chat_id_bruce_and_sarah
+              - alias: 'delete message id'
+                service: input_text.set_value
+                data:
+                  entity_id: input_text.kate_door_message_id
+                  value: 0                     
+              - condition: trigger
+                id: "closed"
+              - service: telegram_bot.send_message
+                data:
+                  target: !secret telegram_chat_id_bruce_and_sarah
+                  message: "Kate's door is closed"     
+        
+ 
+      - choose:
+            # Open 
+          - conditions: 
+              - condition: trigger
+                id: "open"
+            sequence:
+              - service: telegram_bot.send_message
+                data:
+                  target: !secret telegram_chat_id_bruce_and_sarah
+                  message_tag: kate_door
+                  message: "Kate's door is open"
+                  

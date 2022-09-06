@@ -1,0 +1,5 @@
+sensor:
+  - platform: integration
+    name: "Powerwall Discharge Energy"
+    source: sensor.powerwall_discharging
+    round: 1

@@ -1,0 +1,30 @@
+card:
+  show_state: true
+  type: glance
+entities:
+  - entity: sensor.littertray_drum_usage
+    icon: 'mdi:emoticon-poop'
+    name: Drum Room
+    state_filter:
+      - operator: '>'
+        value: 80
+  - entity: sensor.littertray_utility_usage
+    icon: 'mdi:emoticon-poop'
+    name: Utility
+    state_filter:
+      - operator: '>'
+        value: 80
+  - entity: sensor.littertray_shower_usage
+    icon: 'mdi:emoticon-poop'
+    name: Shower
+    state_filter:
+      - operator: '>'
+        value: 80
+  - entity: sensor.littertray_downstairs_usage
+    icon: 'mdi:emoticon-poop'
+    name: Downstairs
+    state_filter:
+      - operator: '>'
+        value: 80
+show_empty: false
+type: entity-filter

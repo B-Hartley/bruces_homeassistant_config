@@ -1,0 +1,5 @@
+sonoff:
+  username: !secret sonoff_username
+  password: !secret sonoff_password
+  mode: local  # do not use cloud
+  #reload: always  # update device list every time HA starts  

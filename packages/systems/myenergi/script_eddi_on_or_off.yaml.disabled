@@ -1,0 +1,78 @@
+script:
+  eddi_on_or_off:
+    alias: Set Power for Eddi
+    icon: mdi:water-boiler
+    
+    description: >
+      Set Power for eddi
+
+    fields:
+      mode:
+        name: Mode
+        description: 'Eddi on (True) or off (False)?'
+        required: true
+        default: false
+        example: true
+        selector: 
+          boolean:
+
+    sequence:
+      - alias: "Repeat until previous command is complete"
+        repeat:
+          sequence:   
+            - alias: "update CMT every 3 seconds"              
+              service: homeassistant.update_entity
+              target:
+                entity_id: sensor.eddi_cmt
+            - delay: 3   
+          until: "{{ states('sensor.eddi_cmt')|int(0) > 250 }}"  
+   
+      - alias: "send command to switch eddi"
+        service: shell_command.eddi_on_or_off
+        data:
+          myenergi_serial: !secret myenergi_serial
+          myenergi_password: !secret myenergi_password
+          eddi_serial: !secret eddi_serial
+          eddi_mode: "{{ 1 if mode else 0 }}"
+
+      - alias: "Repeat until this command is complete"
+        repeat:
+          sequence:   
+            - service: homeassistant.update_entity
+              target:
+                entity_id: sensor.eddi_cmt
+            - delay: 3    
+          until: "{{ states('sensor.eddi_cmt')|int(0) > 250 }}"    
+
+      - alias: "Check if command failed"            
+        condition: template      
+        value_template: "{{ states('sensor.eddi_cmt')|int(0) == 253 }}"
+
+      - alias: "check if not in correct status"        
+        condition: template      
+        value_template: "{{ (states('sensor.eddi_status') not in ('stopped','reached','off') and not mode) or (states('sensor.eddi_status') in ('stopped','off') and mode )  }}"
+        
+      - alias: "send telegram message"
+        service: telegram_bot.send_message
+        data:
+          target: !secret telegram_chat_id_bruce         
+          message: >
+            Eddi failed to change to {{'on' if mode else 'off'}}
+                
+            Currently set to {{ states('sensor.eddi_status') }}
+            
+            Last Online at: {{ states('sensor.eddi_last_online')  }}            
+          
+
+#cgi-eddi-mode-EID-ModeNo
+#
+#Action
+#Sets the mode of the EDDI. 
+#
+#Inputs
+#EID
+#The character ‘E’ followed by the serial number of the Eddi.
+#
+#ModeNo
+#0=Stop Mode
+#1=Normal Mode

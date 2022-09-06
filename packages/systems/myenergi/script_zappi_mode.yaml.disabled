@@ -1,0 +1,93 @@
+script:
+  zappi_mode:
+    alias: Set charging mode for Zappi
+    icon: mdi:car-electric
+    
+    description: >
+      Set charging mode for Zappi
+      
+    fields:
+      mode:
+        name: 'Mode'
+        required: true
+        default: Stopped
+        description: 'what charging mode? Fast, Eco, Eco+, Stopped'
+        example: 'Fast'        
+        selector: 
+          select:        
+            options:
+              - 'Fast'
+              - 'Eco'
+              - 'Eco+'
+              - 'Stopped'
+
+      serial: 
+        name: 'Serial No.'
+        required: true
+        default: '123456'
+        description: 'Zappi Serial Number?'
+        example: !secret zappi_serial_jyggy
+#        selector: 
+#          select:        
+#            options:
+#              - '123456'
+#              - '123457'
+      name: 
+        name: 'Description'
+        required: true
+        default: 'Jyggy'
+        description: 'Zappi Name?'
+        example: 'Jyggy'
+#        selector: 
+#          select:        
+#            options:
+#              - 'Jyggy'
+#              - 'Paddy'
+              
+    sequence:
+      - alias: "Wait until previous commands are complete"
+        wait_template: "{{ states('sensor.zappi_jyggy_cmt') | int > 250 and states('sensor.zappi_paddy_cmt') | int > 250 }}"     
+      - alias: Set Zappi to required Mode
+        service: shell_command.zappi_set_mode
+        data:
+          myenergi_serial: !secret myenergi_serial
+          myenergi_password: !secret myenergi_password
+          zappi_serial: "{{ serial }}"
+          zappi_mode: "{% set mapper = {'Fast':'1','Eco': '2','Eco+':'3','Stopped':'4'} %}{{mapper[mode]}}"
+     # - alias: "Wait for myEnergi Update"
+      #  wait_for_trigger:
+     #     - platform: state
+      #      entity_id: 
+        #      - sensor.zappi_jyggy_cmt
+          #    - sensor.zappi_paddy_cmt 
+      - delay: 1
+      - service: homeassistant.update_entity
+        target:
+          entity_id: 
+            - sensor.zappi_jyggy_cmt
+            - sensor.zappi_paddy_cmt
+      - delay: 1
+      - alias: "Wait until command is complete"
+        wait_template: "{{ states('sensor.zappi_jyggy_cmt') | int > 250 and states('sensor.zappi_paddy_cmt') | int > 250 }}"     
+      - delay: 1
+      - condition: template      
+        value_template: "{{ (states('input_select.zappi_jyggy_charge_mode') != states('sensor.zappi_jyggy_mode')) or (states('input_select.zappi_paddy_charge_mode') != states('sensor.zappi_paddy_mode')) }}"
+      - service: telegram_bot.send_message
+        data:
+          target: !secret telegram_chat_id_bruce         
+          message: >
+            Zappi {{name}} failed to change to {{mode}}
+                
+            {% if name == 'jyggy' %}Currently set to {{ states('sensor.zappi_jyggy_mode') }}
+            
+            Last Online at: {{ state_attr('sensor.zappi_jyggy','dat') + ' ' + state_attr('sensor.zappi_jyggy','tim') }}     
+
+            {% else %}Currently set to {{ states('sensor.zappi_paddy_mode') }}
+            
+            Last Online at: {{ state_attr('sensor.zappi_paddy','dat') + ' ' + state_attr('sensor.zappi_paddy','tim') }}    
+            {% endif %} 
+            
+          inline_keyboard:
+            - 'Fast:/{{name}}_fast, Eco+:/{{name}}_ecoplus'
+            - 'Eco:/{{name}}_eco, Stop:/{{name}}_stop' 
+            - 'Refresh:/{{name}}_refresh, OK:/remove_keyboard'               

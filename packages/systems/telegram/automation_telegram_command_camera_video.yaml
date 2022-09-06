@@ -1,0 +1,76 @@
+automation:
+  - id: telegram_callback_camera_video
+    alias: 'Show a camera video'
+    
+    description: >
+      Video from camera
+      
+    trigger:
+      - platform: event
+        event_type: telegram_callback
+        event_data:
+          command: '/video_drive'  
+      - platform: event
+        event_type: telegram_callback
+        event_data:
+          command: '/video_patio'     
+      - platform: event
+        event_type: telegram_callback
+        event_data:
+          command: '/video_bins'     
+      - platform: event
+        event_type: telegram_callback
+        event_data:
+          command: '/video_gazebo'     
+      - platform: event
+        event_type: telegram_callback
+        event_data:
+          command: '/video_hall'     
+      - platform: event
+        event_type: telegram_callback
+        event_data:
+          command: '/video_lounge'     
+      - platform: event
+        event_type: telegram_callback
+        event_data:
+          command: '/video_kitchen'     
+      - platform: event
+        event_type: telegram_callback
+        event_data:
+          command: '/video_kitchen_2'       
+      - platform: event
+        event_type: telegram_callback
+        event_data:
+          command: '/video_landing'     
+      - platform: event
+        event_type: telegram_callback
+        event_data:
+          command: '/video_bar'     
+          
+    variables:
+      pic_file: "{{ trigger.event.data.command[7:] + '_' + now().strftime('%d%m%y%H%M%S') }}"
+      
+    action:
+      - service: telegram_bot.answer_callback_query
+        data:
+          message: "Recording 10 seconds video for {{ trigger.event.data.command[7:]}} @ {{ now().strftime('%H:%M:%S') }}"
+          callback_query_id: '{{ trigger.event.data.id }}'           
+      - service: camera.record
+        target:
+          entity_id: "camera.{{ trigger.event.data.command[7:]}}"        
+        data:
+          duration: 5
+          filename: "/config/www/cam_snaps/{{ pic_file }}.mp4"
+      - wait_template: >
+          {{ "/config/www/cam_snaps/" + pic_file  in states.sensor.cam_snaps.attributes.file_list }}
+        timeout: '00:00:10'
+      - service: telegram_bot.send_video
+        data:
+          file: "/config/www/cam_snaps/{{ pic_file }}.mp4"    
+          caption: "{{ trigger.event.data.command[7:]}} @ {{ now().strftime('%H:%M:%S') }}"          
+          target: "{{trigger.event.data.chat_id}}"
+      - service: telegram_bot.edit_replymarkup
+        data:
+          message_id: "{{ trigger.event.data.message.message_id }}"
+          chat_id: "{{ trigger.event.data.chat_id }}"
+          inline_keyboard: []        

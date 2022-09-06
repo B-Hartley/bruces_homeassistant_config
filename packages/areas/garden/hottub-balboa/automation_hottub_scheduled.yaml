@@ -1,0 +1,156 @@
+automation:
+  - id: hottub_heat_on_schedule
+    alias: 'HotTub Set Temperature to Target Minus Time'
+    mode: restart
+    
+    description: >
+      Set target temp based on schedule and other factors
+
+    trigger:
+      - platform: homeassistant
+        event: start
+      - platform: event
+        event_type: automation_reloaded    
+      - platform: state
+        entity_id: 
+          - sensor.hottub_schedule_target_temp
+          - binary_sensor.hottub_scheduled_today
+          - input_boolean.hottub_boost
+          - input_datetime.hottub_ready_by
+          - binary_sensor.hottub_at_or_below_max_heat_cost
+          - sensor.hottub_summary
+          - binary_sensor.agile_plunge
+          - binary_sensor.agile_peak
+          - binary_sensor.go_cheap
+          - binary_sensor.power_hour          
+#          - binary_sensor.hot_tub_door     
+          
+    action:
+      - choose:
+#          # If in use - Set to 39
+#          - conditions:
+#              - condition: state
+#                entity_id: binary_sensor.hot_tub_door
+#                state: 'on'
+#            sequence:
+#              - service: logbook.log
+#                data:
+#                  domain: switch
+#                  entity_id: climate.spa_thermostat
+#                  name: "Hot Tub"
+#                  message: "Heat to 39 as In Use"
+#              - service: input_number.set_value
+#                target:
+#                  entity_id: input_number.hottub_water_target
+#                data:
+#                  value: 39
+     
+          # If plunge pricing or boosting - Set to 40
+          - conditions:
+              - or:
+                  - condition: state
+                    entity_id: input_boolean.hottub_boost
+                    state: 'on'
+                  - condition: state
+                    entity_id: binary_sensor.agile_plunge
+                    state: 'on'
+            alias: "Plunge or Boost - set to 40"
+            sequence:
+              - service: logbook.log
+                data:
+                  domain: switch
+                  entity_id: climate.spa_thermostat
+                  name: "Hot Tub"
+                  message: "Heat to 40 for plunge pricing"
+              - service: input_number.set_value
+                target:
+                  entity_id: input_number.hottub_water_target
+                data:
+                  value: 40
+      
+          # IF cheap pricing - heat
+          - alias: "Cheap Price - Heat"          
+            conditions:
+              - or:
+                  - condition: state
+                    entity_id: binary_sensor.hottub_at_or_below_max_heat_cost
+                    state: 'on' 
+                  - condition: state
+                    entity_id: binary_sensor.power_hour
+                    state: 'on'    
+            sequence:
+              - service: switch.turn_on
+                target:
+                  entity_id: switch.spa_temp_range
+              - service: logbook.log
+                data:
+                  domain: switch
+                  entity_id: climate.spa_thermostate
+                  name: "Hot Tub"
+                  message: "Heat to Target for cheap pricing"
+              - service: input_number.set_value
+                target:
+                  entity_id: input_number.hottub_water_target
+                data:
+                  value: "{{ states('input_number.hottub_standard_temp')|float(28) + 0.5 }}"
+                  
+          # IF Go tariff cheap pricing and scheduled and solar tomorrow (today) below 20 - heat
+          - alias: "Go Cheap Period and scheduled today"          
+            conditions:
+              - condition: state
+                entity_id: binary_sensor.go_cheap
+                state: 'on' 
+              - condition: state
+                entity_id: binary_sensor.hottub_scheduled_today
+                state: 'on'    
+              - condition: numeric_state
+                entity_id: sensor.solcast_forecast_today
+                below: 20
+            sequence:
+              - service: switch.turn_on
+                target:
+                  entity_id: switch.spa_temp_range
+              - service: logbook.log
+                data:
+                  domain: switch
+                  entity_id: climate.spa_thermostat
+                  name: "Hot Tub"
+                  message: "Heat to Target for Octopus Go cheap and scheduled"
+              - service: input_number.set_value
+                target:
+                  entity_id: input_number.hottub_water_target
+                data:
+                  value: "{{ states('input_number.hottub_standard_temp')|float(28) + 0.5 }}"                  
+
+          # ELIF scheduled 
+          - alias: "Scheduled"   
+            conditions:
+              - condition: state
+                entity_id: input_boolean.hottub_scheduled
+                state: 'on'    
+            sequence:
+              - service: logbook.log
+                data:
+                  domain: switch
+                  entity_id: climate.spa_thermostat
+                  name: "Hot Tub"
+                  message: "Heating for schedule"
+              - service: input_number.set_value
+                target:
+                  entity_id: input_number.hottub_water_target
+                data:
+                  value: "{{ states('sensor.hottub_schedule_target_temp')|float(28) }}"
+
+        default: 
+          - service: logbook.log
+            data:
+              domain: switch
+              entity_id: climate.spa_thermostat
+              name: "Hot Tub"
+              message: "Not Scheduled - Heating off"
+          - service: input_number.set_value
+            target:
+              entity_id: input_number.hottub_water_target
+            data:
+              value: 28
+

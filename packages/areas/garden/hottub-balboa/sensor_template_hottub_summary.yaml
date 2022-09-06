@@ -1,0 +1,8 @@
+template:
+  sensor:
+    - name: "HotTub Summary"
+      unique_id: hottub_summary
+      state: "{% if not states('binary_sensor.bwa_wi_fi_module') %}offline{% elif is_state('binary_sensor.hot_tub_door','on') %}in use{% elif is_state('binary_sensor.spa_filter1','on') %}filtering{% elif is_state('climate.spa_thermostat','heat') %}heating{% elif is_state('binary_sensor.circulation_pump','on') %}circulating{% elif is_state('input_boolean.hottub_scheduled','on') %}scheduled{% else %}off{% endif %}"
+      icon:  "{% if not states('binary_sensor.bwa_wi_fi_module') %}mdi:access-point-off{% elif is_state('binary_sensor.hot_tub_door','on') %}mdi:pool{% elif is_state('binary_sensor.spa_filter1','on') %}mdi:air-filter{% elif is_state('climate.spa_thermostat','heat') %}mdi:fire{% elif is_state('binary_sensor.circulation_pump','on') %}mdi:water-pump{% elif is_state('input_boolean.hottub_scheduled','on') %}mdi:clock{% else %}mdi:power-standby{% endif %}"
+
+

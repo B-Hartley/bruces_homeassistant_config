@@ -1,0 +1,7 @@
+template:
+  sensor:
+    - name: "Octopus Current Price Rounded"
+      unique_id: octopus_current_price_rounded
+      availability: "{{ states('sensor.import_price')|is_number }}"
+      unit_of_measurement: 'p/kWh'
+      state: "{{ states('sensor.import_price')|round(1,'',0) }}"

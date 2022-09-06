@@ -1,0 +1,92 @@
+automation:
+  - id: water_running_for_ten_mins
+    alias: 'Water Running for Ten Minutes'
+    mode: single
+    
+    description: >
+      Water Running for 10 Minutes
+
+    trigger:
+      - platform: state
+        id: "Water"
+        entity_id: binary_sensor.water_running
+        to: 'on'
+        for: '00:10:00'
+        
+    action:
+      - service: input_boolean.turn_on
+        data:
+          entity_id:
+            - input_boolean.water_alert    
+      - service: telegram_bot.send_message
+        data:
+          message_tag: water_running
+          target: !secret telegram_chat_id_bruce_and_sarah
+          message: >
+            Water Running for 
+            {%- set time = (as_timestamp(now()) - as_timestamp(states.binary_sensor.water_running.last_changed)) | int  %}
+            {%- set minutes = ((time % 3600) // 60) %}
+            {%- set minutes = '{}minutes'.format(minutes) if minutes > 0 else '' %}
+            {%- set hours = ((time % 86400) // 3600) %}
+            {%- set hours = '{}hours '.format(hours) if hours > 0 else '' %}
+            {%- set days = (time // 86400) %}
+            {%- set days = '{}days '.format(days) if days > 0 else '' %}
+            {{ 'Less than 1 minute' if time < 60 else days + hours + minutes }} ago
+          
+            currently at {{ states('sensor.water_flow_rate') }} gpm
+          inline_keyboard:
+            - 'Clear Alert:/clear_water_alert,Water Off:/water_off'
+            - 'OK:/remove_keyboard'           
+
+      - alias: "Repeat the message UNTIL water stops or alert disabled"
+        repeat:
+          sequence:
+            - delay: 
+                minutes: 2
+            - service: telegram_bot.delete_message
+              data:
+                message_id: "{{ states('input_text.water_running_message_id') }}"
+                chat_id: !secret telegram_chat_id_bruce_and_sarah
+            - service: telegram_bot.send_message
+              data:
+                message_tag: water_running
+                target: !secret telegram_chat_id_bruce_and_sarah
+                message: >
+                  Water Running for 
+                  {%- set time = (as_timestamp(now()) - as_timestamp(states.binary_sensor.water_running.last_changed)) | int  %}
+                  {%- set minutes = ((time % 3600) // 60) %}
+                  {%- set minutes = ' {}minutes'.format(minutes) if minutes > 0 else '' %}
+                  {%- set hours = ((time % 86400) // 3600) %}
+                  {%- set hours = ' {}hours '.format(hours) if hours > 0 else '' %}
+                  {%- set days = (time // 86400) %}
+                  {%- set days = ' {}days '.format(days) if days > 0 else '' %}
+                  {{ ' less than 1 minute' if time < 60 else days + hours + minutes }}
+                  
+                  currently at {{ states('sensor.water_flow_rate') }} gpm
+                inline_keyboard:
+                  - 'Clear Alert:/clear_water_alert,Water Off:/water_off'
+                  - 'OK:/remove_keyboard'                     
+          until:
+            - or:
+                - condition: state
+                  entity_id: binary_sensor.water_running
+                  state: "off"
+                - condition: state
+                  entity_id: input_boolean.water_alert
+                  state: "off"       
+                - condition: state
+                  entity_id: switch.shutoff_valve
+                  state: "off"                   
+
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.water_alert  
+            
+      - service: telegram_bot.send_message
+        data:
+          message_tag: water_running
+          target: !secret telegram_chat_id_bruce_and_sarah
+          message: >
+            Water has stopped running
+            
+            Water supply is {{ states('switch.shutoff_valve') }}

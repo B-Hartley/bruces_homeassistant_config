@@ -1,0 +1,70 @@
+influxdb:
+  host: a0d7b954-influxdb
+  port: 8086
+  max_retries: 3
+  default_measurement: state
+  database: homeassistant
+  username: !secret influx_username
+  password: !secret influx_password
+  include:
+    entity_globs:
+      - sensor.*_rad_current_temperature  
+      - sensor.master_bedroom_environment*      
+      - binary_sensor.*_door
+      - sensor.*_illuminance
+      - sensor.zappi_*_power     
+      - sensor.voltaware_*  
+      - sensor.energy_production_*
+      - sensor.power_production_*      
+      - sensor.forecastsolar_*
+    entities:
+      - input_number.hottub_standard_temp
+      - input_number.hottub_water_target
+      - input_number.hottub_water_temp
+      - sensor.floorplan_hottub_load
+      - sensor.hottub_hvac_action
+      - sensor.hottub_water_temp
+      - fan.loft_fan
+      - sensor.bruce_iphone_battery
+      - sensor.drive_temperature   
+      - sensor.eddi
+      - sensor.eddi_power      
+      - sensor.eddi_water_temp
+      - sensor.electricity_consumption
+      - sensor.export_power    
+      - sensor.forecastsolar_power_now      
+      - sensor.fridge_freezer_temperature
+      - sensor.fridge_fridge_temperature
+      - sensor.hottub_water_temp
+      - sensor.import_power     
+      - sensor.jyggy_battery_level
+      - sensor.jyggy_inside_temp
+      - sensor.jyggy_speed
+      - sensor.loft_cabinet_humidity
+      - sensor.loft_cabinet_temperature
+      - sensor.nuc_cpu_temperature
+      - sensor.octopus_agile_current_rate
+      - sensor.import_price
+      - sensor.outside_light
+      - sensor.outside_temp
+      - sensor.patio_garage_temperature      
+      - sensor.patio_temperature
+      - sensor.powerwall_battery_now
+      - sensor.powerwall_charge_corrected
+      - sensor.powerwall_charging            
+      - sensor.powerwall_discharging      
+      - sensor.powerwall_stored_energy
+      - sensor.solar_production
+      - sensor.solaredge_ac_power_output
+      - sensor.solaredge_inverter_efficiency
+      - sensor.solaredge_meter_ac_power_output
+      - sensor.speedtest_download
+      - sensor.speedtest_upload
+      - sensor.paddy_battery_level
+      - sensor.washing_machine_current_consumption
+      - sensor.zappi_jyggy
+      - sensor.zappi_jyggy_grid
+      - sensor.zappi_paddy
+      - sensor.import_meter
+      - sensor.export_meter
+      - sensor.gas_meter

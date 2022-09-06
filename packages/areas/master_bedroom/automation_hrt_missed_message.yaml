@@ -1,0 +1,37 @@
+automation:
+  - id: hrt_missed
+    alias: 'HRT Missed notification'
+    mode: single
+    
+    description: >
+      Telegram message about HRT 
+      
+    trigger:
+      - platform: homeassistant
+        id: "start"
+        event: start
+      - platform: event
+        id: "reload"
+        event_type: automation_reloaded       
+      - platform: time
+        id: "time"
+        at: 
+          - '11:00:00'
+          - '12:00:00'
+          - '14:00:00'
+
+    condition: "{{ (((as_timestamp(now()) - as_timestamp(states('input_button.hrt_last_used')))|int(0))// 3600) > 20 }}"   
+    
+    action:  
+      - service: notify.mobile_app_sarah_iphone
+        data:
+          title: "MISSED - HRT Gel "
+          message: "Last used: {{ states('input_button.hrt_last_used')}}"
+      - service: telegram_bot.send_message
+        data:
+          target: !secret telegram_chat_id_bruce_and_sarah           
+          title: "MISSED - HRT Gel "
+          message: "Last used: {{ states('input_button.hrt_last_used')}}"
+          inline_keyboard:
+            - 'HRT Done:/hrt_done, OK:/remove_keyboard'          
+          # 74 squirts a bottle ?

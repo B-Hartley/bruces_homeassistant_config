@@ -1,0 +1,9 @@
+template:
+  - sensor:
+      - name: "HotTub Water Temp"
+        unique_id: hottub_current_temp
+        availability: "{{ state_attr('climate.spa_thermostat','current_temperature')|is_number and state_attr('climate.spa_thermostat','current_temperature')|int(0)>5 }}"
+        device_class: temperature
+        unit_of_measurement: '°C'        
+        #state: "{{ state_attr('climate.spa_thermostat','current_temperature')|round(1, 'half')  }}"
+        state: "{{ state_attr('climate.spa_thermostat','current_temperature') }}"

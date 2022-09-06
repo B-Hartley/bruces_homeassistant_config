@@ -1,0 +1,26 @@
+automation:
+  - id: set_most_recent_to_arrive
+    alias: Record last person to arrive
+    
+    description: >
+      Who was last person to arrive
+    
+    trigger:
+      - platform: state
+        id: 'person'
+        entity_id:            
+          - person.cleaner
+          - person.cat_sit
+          - person.bruce_hartley
+          - person.sarah_hartley
+          - person.sophie_hartley
+          - person.kate_hartley
+          - person.moira
+        to: home
+        
+    action:
+      - service: input_text.set_value
+        target:
+          entity_id: input_text.last_person_to_arrive
+        data:
+          value: "{{ trigger.from_state.attributes.friendly_name }}"

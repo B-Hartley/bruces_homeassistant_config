@@ -1,0 +1,21 @@
+automation:
+    - id: sophie_arrived
+      alias: Sophie Arrived Home 
+      mode: single
+      trigger:
+        - platform: state
+          entity_id: person.sophie_hartley
+          to: home
+      action:
+        - service: telegram_bot.send_message
+          data:
+            target: !secret telegram_chat_id_bruce_and_sarah
+            message: >
+              {% if (states("climate.sophies_bedroom_rad") == "auto") %}
+              Sophie arrived home
+              {% else %}
+              Sophie arrived home but heating is OFF
+              {% endif %}
+        - delay: 00:05:00
+
+# add keyboard and option to turn on Sophie heating

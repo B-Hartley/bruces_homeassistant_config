@@ -1,0 +1,4 @@
+sensor:
+  - platform: integration
+    name: "Zappi Paddy Energy"
+    source: sensor.zappi_paddy_power    

@@ -1,0 +1,50 @@
+automation:
+  - id: turn_off_heating
+    alias: 'Turn off heating'
+    
+    description: >
+      Turn off heating
+      
+    trigger:
+      - platform: event
+        id: "ios notification"
+        event_type: ios.notification_action_fired
+        event_data:
+          actionName: TURN_OFF_HEATING
+      - platform: event
+        id: "ios action"      
+        event_type: ios.action_fired
+        event_data:
+          actionName: 'heating_off'
+          
+    action:
+      - service: water_heater.set_operation_mode
+        target:
+          entity_id: water_heater.hot_water
+        data:
+          operation_mode: off
+      - service: climate.set_hvac_mode
+        target: 
+          entity_id:
+            - climate.heating
+            - climate.kitchen_tall_rad
+            - climate.bar_rad
+            - climate.drum_room_rad
+            - climate.landing_1_rad
+            - climate.master_bedroom_rad
+            - climate.downstairs_loo_rad
+            - climate.guest_bedroom_rad
+            - climate.landing_2_rad
+            - climate.hall_rad
+            - climate.lounge_bay_rad
+            - climate.lounge_rad
+            - climate.kates_bathroom_rad
+            - climate.conservatory_rad
+            - climate.kates_bedroom_rad
+            - climate.sophies_bedroom_rad
+            - climate.kitchen_rad
+        data:
+          hvac_mode: 'off'
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.away_heating_off

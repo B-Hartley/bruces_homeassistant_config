@@ -1,0 +1,85 @@
+automation:
+  - id: manage_paddy_charging
+    alias: 'Manage Paddy Charging'
+    mode: queued 
+    
+    description: >
+      Manage Car Charging
+      FAST - if needs charge AND (Plunge Pricing or below charging price)
+      STOPPED - If unplugged or notr charge required of Peak Pricing or SolarEdge Sleep (nighttime)
+      ECO+ - otherwise
+
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.powerwall_charge_corrected
+        above: 95
+      - platform: homeassistant
+        event: start
+      - platform: event
+        event_type: automation_reloaded      
+      - platform: state
+        entity_id: 
+          - binary_sensor.agile_peak
+          - binary_sensor.agile_plunge            
+          - binary_sensor.paddy_below_max_charge_cost
+          - binary_sensor.paddy_needs_charge          
+          - sensor.solaredge_status_text       
+          - binary_sensor.go_cheap
+      - platform: state
+        entity_id: binary_sensor.zappi_paddy_plugged_in
+        to: 'on'          
+     
+    action:
+      - alias: "Repeat until previous command is complete"
+        repeat:
+          sequence:   
+            - service: homeassistant.update_entity
+              target:
+                entity_id: sensor.zappi_paddy_cmt
+            - delay: 3    
+          until: 
+            - condition: numeric_state
+              entity_id: sensor.zappi_paddy_cmt
+              above: 250
+
+      - alias: Set Zappi to required Mode
+        service: shell_command.zappi_set_mode
+        data:
+          myenergi_serial: !secret myenergi_serial
+          myenergi_password: !secret myenergi_password
+          zappi_serial: !secret zappi_serial_paddy
+#          zappi_mode: "{%- if (is_state('binary_sensor.go_cheap','on') or is_state('binary_sensor.agile_plunge','on') or is_state('binary_sensor.paddy_below_max_charge_cost','on')) and is_state('binary_sensor.paddy_needs_charge','on') -%}1{%- elif is_state('binary_sensor.zappi_paddy_plugged_in','off') or is_state('binary_sensor.paddy_needs_charge','off') or is_state('binary_sensor.agile_peak','on') or is_state('sensor.solaredge_status_text','Sleep') -%}4{%- else -%}3{%- endif -%}"
+          zappi_mode: "{%- if (is_state('binary_sensor.agile_plunge','on') or is_state('binary_sensor.paddy_below_max_charge_cost','on')) and is_state('binary_sensor.paddy_needs_charge','on') -%}1{%- elif is_state('binary_sensor.zappi_paddy_plugged_in','off') or is_state('binary_sensor.paddy_needs_charge','off') or is_state('binary_sensor.agile_peak','on') or is_state('sensor.solaredge_status_text','Sleep') -%}4{%- else -%}3{%- endif -%}"
+
+      - alias: "Repeat until this command is complete"
+        repeat:
+          sequence:   
+            - service: homeassistant.update_entity
+              target:
+                entity_id: sensor.zappi_paddy_cmt
+            - delay: 3    
+          until:             
+            - condition: numeric_state
+              entity_id: sensor.zappi_paddy_cmt
+              above: 250
+
+      - alias: "Check if command failed"            
+        condition: state      
+        entity_id: sensor.zappi_paddy_cmt
+        state: '253'
+        
+      - alias: "Send Telegram as command failed"              
+        service: telegram_bot.send_message
+        data:
+          target: !secret telegram_chat_id_bruce         
+          message: >
+            Zappi Paddy failed to change to required mode.
+                
+            Currently set to {{ states('sensor.zappi_paddy_mode') }}
+            
+            Last Online at: {{ states('sensor.zappi_paddy_last_online') }}    
+            
+          inline_keyboard:
+            - 'Fast:/paddy_fast, Eco+:/paddy_ecoplus'
+            - 'Eco:/paddy_eco, Stop:/paddy_stop' 
+            - 'Refresh:/paddy_refresh, OK:/remove_keyboard'               

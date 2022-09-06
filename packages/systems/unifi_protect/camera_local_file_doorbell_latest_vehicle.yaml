@@ -1,0 +1,4 @@
+camera:
+  - name: "latest car"
+    platform: local_file
+    file_path: "/config/www/cam_snaps/latest_car.jpg"

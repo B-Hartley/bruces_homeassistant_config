@@ -1,0 +1,31 @@
+automation:
+  - id: violet_webhook
+    alias: events from Violet Switch - Webhook
+    mode: parallel
+    
+    description: >
+      Violet commands http via ssd
+      Receive as Webhook
+
+    trigger:
+      - platform: webhook
+        id: "violet"
+        webhook_id: !secret violet_webhook
+  
+    variables: 
+      button_name: "{{ trigger.json.button_name }}"
+      click_type: "{{ trigger.json.click_type }}"
+
+    action:   
+      - choose:
+      
+          - alias: "Violet Click"
+            conditions: "{{ button_name == 'violet_1' and click_type == 'click' }}"
+            sequence:
+
+              - alias: "Send Test Message"
+                service: telegram_bot.send_message
+                data:
+                  target: !secret telegram_chat_id_bruce_and_sarah
+                  title: "test"
+                  message: "Test"

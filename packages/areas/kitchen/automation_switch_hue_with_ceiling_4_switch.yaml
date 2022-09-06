@@ -1,0 +1,27 @@
+automation:
+  - id: switch_hue_with_ceiling_4_switch
+    alias: 'Switch Hue with Ceiling 4 Switch'
+    mode: queued
+    
+    description: >
+      Lightwave switch 4 to control hue group
+      
+    trigger: 
+      - platform: state
+        id: "ceiling4"
+        entity_id: light.kitchen_ceiling_4
+        
+    action:
+      - service: light.turn_{{ states('light.kitchen_ceiling_4') }}
+        target:
+          entity_id: light.kitchen_hue_ceiling
+      - condition: state 
+        entity_id: light.kitchen_ceiling_4
+        state: 'on'
+      - service: light.turn_on
+        target:
+          entity_id: light.kitchen_hue_ceiling
+        data:
+          brightness: >
+            {{state_attr("light.kitchen_ceiling_4","brightness") }}
+

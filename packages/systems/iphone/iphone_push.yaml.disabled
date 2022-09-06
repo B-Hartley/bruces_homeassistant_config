@@ -1,0 +1,68 @@
+ios:
+  push:
+    categories:
+      - name: Boolean
+        identifier: 'boolean_acknowledgement'
+        actions:
+          - identifier: 'BOOLEAN_DISABLE'
+            title: 'Disable alert?'
+            authenticationRequired: false
+            destructive: true
+            behavior: 'default'
+            activationMode: 'background'
+      - name: Alert
+        identifier: 'alert_acknowledgement'
+        actions:
+          - identifier: 'ALERT_ACKNOWLEDGEMENT_DISABLE'
+            title: 'Disable alert?'
+            authenticationRequired: false
+            destructive: true
+            behavior: 'default'
+            activationMode: 'background'
+      - name: Heating_On
+        identifier: 'heating_on'
+        actions:
+          - identifier: 'TURN_ON_HEATING'
+            title: 'Turn on heating'
+            activationMode: 'background'
+            authenticationRequired: false
+            destructive: true
+            behavior: 'default'
+      - name: Heating_Off
+        identifier: 'heating_off'
+        actions:
+          - identifier: 'TURN_OFF_HEATING'
+            title: 'Turn off heating'
+            activationMode: 'background'
+            authenticationRequired: false
+            destructive: true
+            behavior: 'default'
+      - name: Heating_S
+        identifier: 'heating_s'
+        actions:
+          - identifier: 'TURN_ON_S_HEATING'
+            title: 'Turn on Sophie heating'
+            activationMode: 'background'
+            authenticationRequired: false
+            destructive: true
+            behavior: 'default'
+      - name: Heating_K
+        identifier: 'heating_k'
+        actions:
+          - identifier: 'TURN_ON_K_HEATING'
+            title: 'Turn on Kate heating'
+            activationMode: 'background'
+            authenticationRequired: false
+            destructive: true
+            behavior: 'default'
+      - name: Lighting
+        identifier: 'lighting'
+        actions:
+          - identifier: 'TURN_OFF_LIGHTS'
+            title: 'Turn off lights'
+            activationMode: 'background'
+            authenticationRequired: false
+            destructive: true
+            behavior: 'default'
+ 
+  

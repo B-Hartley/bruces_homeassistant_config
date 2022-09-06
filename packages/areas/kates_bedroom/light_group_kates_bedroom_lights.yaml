@@ -1,0 +1,11 @@
+light:          
+  - platform: group
+    unique_id: light_group_kates_bedroom
+    name: Kates Bedroom Lights
+    entities:
+# hue group
+    - light.kates_bedroom
+# Flux Strip    
+    - light.kate_lightstrip
+#    - light.kates_bedroom_light
+#    - light.kates_bedroom_lamp

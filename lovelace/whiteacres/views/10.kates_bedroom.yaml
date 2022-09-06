@@ -1,0 +1,82 @@
+icon: 'mdi:bed-double-outline'
+title: Kate
+path: kate
+visible:
+  - user: 990bb6b8fa704d2ab36d42d63b8ad19e
+badges:
+  - entity: sensor.kates_bedroom_rad_current_temperature
+    name: Bedroom
+  - entity: sensor.kates_bathroom_rad_current_temperature
+    name: Bathroom
+cards:
+  - cards:
+      - entity: light.kates_bedroom_light
+        hold_action:
+          action: more-info
+        icon: 'mdi:lightbulb-off-outline'
+        name: Light
+        show_icon: true
+        show_name: true
+        state:
+          - icon: 'mdi:lightbulb-on'
+            value: 'on'
+        tap_action:
+          action: toggle
+          haptic: success
+        type: 'custom:button-card'
+      - entity: light.kates_bedroom_lamp
+        hold_action:
+          action: more-info
+        icon: 'mdi:lightbulb-off-outline'
+        name: Lamp
+        show_icon: true
+        show_name: true
+        state:
+          - icon: 'mdi:lightbulb-on'
+            value: 'on'
+        tap_action:
+          action: toggle
+          haptic: success
+        type: 'custom:button-card'
+      - entity: light.kate_lightstrip
+        hold_action:
+          action: more-info
+        icon: 'mdi:lightbulb-off-outline'
+        name: Lightstrip
+        show_icon: true
+        show_name: true
+        state:
+          - icon: 'mdi:lightbulb-on'
+            value: 'on'
+        tap_action:
+          action: toggle
+          haptic: success
+        type: 'custom:button-card'
+    type: horizontal-stack
+  - entity: light.kate_lightstrip
+    name: Kate's Bedroom Lightstrip
+    type: light
+  - artwork: full-cover
+    entity: media_player.kates_sonos
+    hide:
+      power: true
+    speaker_group:
+      entities:
+        - entity_id: media_player.kitchen_sonos
+          name: Kitchen
+        - entity_id: media_player.lounge_sonos
+          name: Lounge
+        - entity_id: media_player.landing_sonos
+          name: Landing
+        - entity_id: media_player.sophies_sonos
+          name: Sophie
+        - entity_id: media_player.master_bed_sonos
+          name: Master Bedroom
+      platform: sonos
+      show_group_count: true
+    type: 'custom:mini-media-player'
+
+  - entities:
+      - entity: switch.sonos_alarm_1
+    title: Sonos
+    type: entities

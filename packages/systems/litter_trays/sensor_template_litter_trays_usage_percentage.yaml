@@ -1,0 +1,25 @@
+template:
+  - sensor:
+      - name: "Littertray Utility Usage"
+        unique_id: littertray_utility_usage
+        availability: "{{ states('counter.littertray_utility_wee')|is_number and states('counter.littertray_utility_poo')|is_number }}"
+        unit_of_measurement: '%'
+        state: "{{ ((100.0/12.0) * (states('counter.littertray_utility_wee')|float + states('counter.littertray_utility_poo')|float))|int }}"
+
+      - name: "Littertray Downstairs Usage"
+        unique_id: littertray_downstairs_usage
+        availability: "{{ states('counter.littertray_downstairs_wee')|is_number and states('counter.littertray_downstairs_poo')|is_number }}"        
+        unit_of_measurement: '%'
+        state: "{{ ((100/12) * (states('counter.littertray_downstairs_wee')|float + states('counter.littertray_downstairs_poo')|float))|int }}"
+
+      - name: "Littertray Shower Usage"
+        unique_id: littertray_shower_usage
+        availability: "{{ states('counter.littertray_shower_wee')|is_number and states('counter.littertray_shower_poo')|is_number }}"             
+        unit_of_measurement: '%'
+        state: "{{ ((100.0/12.0) * (states('counter.littertray_shower_wee')|float + states('counter.littertray_shower_poo')|float))|int }}"
+
+      - name: "Littertray Drum Usage"
+        unique_id: littertray_drum_usage
+        availability: "{{ states('counter.littertray_drum_wee')|is_number and states('counter.littertray_drum_poo')|is_number }}"             
+        unit_of_measurement: '%'
+        state: "{{ ((100.0/12.0) * (states('counter.littertray_drum_wee')|float + states('counter.littertray_drum_poo')|float))|int }}"

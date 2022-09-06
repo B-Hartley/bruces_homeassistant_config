@@ -1,0 +1,5 @@
+template:
+  sensor:
+    - name: "HRT Squirts used"
+      unique_id: hrt_squirts_used
+      state: "{{ states('counter.hrt_squirts_used') }}"

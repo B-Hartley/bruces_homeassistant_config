@@ -1,0 +1,8 @@
+template: 
+  sensor:
+    - name: "ForecastSolar Power Now"
+      unique_id: forecastsolar_now  
+      availability: "{{ states('sensor.power_production_now_sw')|is_number and states('sensor.power_production_now_se')|is_number and states('sensor.power_production_now_nw')|is_number and states('sensor.power_production_now_ne')|is_number }}"
+      state: "{{ ((states('sensor.power_production_now_sw')|float(0) + states('sensor.power_production_now_se')|float(0) + states('sensor.power_production_now_nw')|float(0) + states('sensor.power_production_now_ne')|float(0))/1000.0)|round(1) }}"
+      unit_of_measurement: "kW"
+      device_class: Power

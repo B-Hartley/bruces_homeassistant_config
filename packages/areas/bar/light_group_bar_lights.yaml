@@ -1,0 +1,6 @@
+light:
+  - platform: group
+    unique_id: bar_bar_lights_group
+    name: Bar Lights
+    entities:
+    - light.bar

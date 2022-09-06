@@ -1,0 +1,59 @@
+icon: 'mdi:bed-double-outline'
+path: sophie
+title: Sophie
+visible:
+  - user: 5b3b262300294eb5ae1308855791b6a2
+badges:
+  - entity: sensor.sophies_bedroom_rad_current_temperature
+    name: Bedroom
+cards:
+  - cards:
+      - entity: light.sophies_bedroom_light
+        hold_action:
+          action: more-info
+        icon: 'mdi:lightbulb-off-outline'
+        name: Light
+        show_icon: true
+        show_name: true
+        state:
+          - icon: 'mdi:lightbulb-on'
+            value: 'on'
+        tap_action:
+          action: toggle
+          haptic: success
+        type: 'custom:button-card'
+      - entity: light.sophies_bedroom_lamp
+        hold_action:
+          action: more-info
+        icon: 'mdi:lightbulb-off-outline'
+        name: Lamp
+        show_icon: true
+        show_name: true
+        state:
+          - icon: 'mdi:lightbulb-on'
+            value: 'on'
+        tap_action:
+          action: toggle
+          haptic: success
+        type: 'custom:button-card'
+    type: horizontal-stack
+  - artwork: full-cover
+    entity: media_player.sophies_sonos
+    hide:
+      power: true
+    speaker_group:
+      entities:
+        - entity_id: media_player.kitchen_sonos
+          name: Kitchen
+        - entity_id: media_player.lounge_sonos
+          name: Lounge
+        - entity_id: media_player.landing_sonos
+          name: Landing
+        - entity_id: media_player.kates_sonos
+          name: Kate
+        - entity_id: media_player.master_bed_sonos
+          name: Master Bedroom
+      platform: sonos
+      show_group_count: true
+    type: 'custom:mini-media-player'
+

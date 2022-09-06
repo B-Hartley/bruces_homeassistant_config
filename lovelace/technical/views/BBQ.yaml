@@ -1,0 +1,82 @@
+title: BBQ
+path: bbq
+icon: 'mdi:chef-hat'
+badges: []
+cards:
+  - entities:
+      - entity: sensor.meater_probe_1_internal
+        name: Meat
+      - entity: sensor.meater_probe_1_ambient
+        name: BBQ
+      - entity: sensor.meater_probe_1_cook_state
+        name: Cooking
+      - entity: sensor.meater_probe_1_target
+        name: Target
+      - entity: sensor.meater_probe_1_peak
+        name: Peak
+      - entity: sensor.meater_probe_1_remaining_time
+        name: Remaining
+    title: Probe 1
+    type: entities
+  - entities:
+      - entity: sensor.meater_probe_2_internal
+        name: Meat
+      - entity: sensor.meater_probe_2_ambient
+        name: BBQ
+      - entity: sensor.meater_probe_2_cook_state
+        name: Cooking
+      - entity: sensor.meater_probe_2_target
+        name: Target
+      - entity: sensor.meater_probe_2_peak
+        name: Peak
+      - entity: sensor.meater_probe_2_remaining_time
+        name: Remaining
+    title: Probe 2        
+    type: entities
+  - entities:
+      - entity: sensor.meater_probe_3_internal
+        name: Meat
+      - entity: sensor.meater_probe_3_ambient
+        name: BBQ
+      - entity: sensor.meater_probe_3_cook_state
+        name: Cooking
+      - entity: sensor.meater_probe_3_target
+        name: Target
+      - entity: sensor.meater_probe_3_peak
+        name: Peak
+      - entity: sensor.meater_probe_3_remaining_time
+        name: Remaining
+    title: Probe 3        
+    type: entities
+  - entities:
+      - entity: sensor.meater_probe_4_internal
+        name: Meat
+      - entity: sensor.meater_probe_4_ambient
+        name: BBQ
+      - entity: sensor.meater_probe_4_cook_state
+        name: Cooking
+      - entity: sensor.meater_probe_4_target
+        name: Target
+      - entity: sensor.meater_probe_4_peak
+        name: Peak
+      - entity: sensor.meater_probe_4_remaining_time
+        name: Remaining
+    title: Probe 4        
+    type: entities
+    
+  - entities:
+      - entity: input_boolean.meater
+        name: Meater on/off
+#      - entity: sensor.meater_probe_5_internal
+#        name: Meat
+#      - entity: sensor.meater_probe_5_ambient
+#        name: BBQ
+#      - entity: sensor.meater_probe_5_cook_state
+#        name: Cooking
+#      - entity: sensor.meater_probe_5_target
+#        name: Target
+#      - entity: sensor.meater_probe_5_peak
+#        name: Peak
+#      - entity: sensor.meater_probe_5_remaining_time
+#        name: Remaining
+    type: entities

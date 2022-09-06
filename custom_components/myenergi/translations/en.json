@@ -1,0 +1,30 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "description": "If you need help with the configuration have a look here: https://github.com/cjne/ha-myenergi",
+        "data": {
+          "username": "Hub serial number",
+          "password": "API key / Password"
+        }
+      }
+    },
+    "error": {
+      "auth": "Hub serial or API key is wrong.",
+      "connection": "Could not connect to myenergi, please try again in a while.",
+      "connection_timeout": "Connection timed out, servers might be busy, please try again in a while."
+    },
+    "abort": {
+      "single_instance_allowed": "Only a single instance is allowed."
+    }
+  },
+  "options": {
+    "step": {
+      "user": {
+        "data": {
+          "scan_interval": "Update interval (seconds)"
+        }
+      }
+    }
+  }
+}

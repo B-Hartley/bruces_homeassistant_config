@@ -1,0 +1,17 @@
+icon: 'mdi:glass-cocktail'
+panel: true
+path: bar
+title: Bar
+visible:
+  - user: 86df00251766415c9acf21b3b3e51496
+  - user: 1de5d8e2c14c47939a8174d6e4147f31
+badges: []
+cards:
+  - aspect_ratio: 56%
+    camera_image: camera.bar_medium
+    camera_view: live
+    entities:
+      - entity: binary_sensor.bar_motion
+      - entity: sensor.bar_last_motion
+    type: picture-glance
+    title: Bar

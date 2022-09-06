@@ -1,0 +1,7 @@
+template:
+  binary_sensor:
+    - name: "Doorbell Person Detected"
+      unique_id: doorbell_person_detected
+      device_class: occupancy
+      state: "{{ is_state('sensor.doorbell_detected_object','person') }}"
+      icon: "{{ 'mdi:motion-sensor' if is_state('sensor.doorbell_detected_object','person') else 'mdi:motion-sensor-off'}}"

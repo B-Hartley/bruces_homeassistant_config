@@ -1,0 +1,6 @@
+template:
+  binary_sensor:
+    - name: "Elec High Cost"
+      availability: "{{ states('sensor.electricity_demand_cost')|is_number }}"
+      state: "{{ (states('sensor.electricity_demand_cost')|float(35.0))>20.0 }}"
+      device_class: problem

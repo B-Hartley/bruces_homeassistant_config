@@ -1,0 +1,70 @@
+type: conditional
+#view_layout:
+#  position: sidebar
+conditions:
+  - entity: input_boolean.floorplan_show_bar_switches
+    state: "on"
+card:
+ type: entities
+ entities:
+  - entity: light.bar_ceiling_1
+    hide_state: true
+    name: Ceiling 1
+    type: 'custom:slider-entity-row'
+  - entity: light.bar_ceiling_2
+    hide_state: true
+    name: Ceiling 2
+    type: 'custom:slider-entity-row'
+  - entity: light.bar_ceiling_3
+    hide_state: true
+    name: Ceiling 3
+    type: 'custom:slider-entity-row' 
+  - entity: light.bar_ceiling_4
+    hide_state: true
+    name: Ceiling 4
+    type: 'custom:slider-entity-row'
+  - entity: light.bar_ceiling_5
+    hide_state: true
+    name: Ceiling 5
+    type: 'custom:slider-entity-row'
+  - entity: light.bar_ceiling_6
+    hide_state: true
+    name: Ceiling 6
+    type: 'custom:slider-entity-row'
+  - entity: light.bar_ceiling_7
+    hide_state: true
+    name: Ceiling 7
+    type: 'custom:slider-entity-row'
+  - entity: light.bar_ceiling_8
+    hide_state: true
+    name: Ceiling 8
+    type: 'custom:slider-entity-row'
+  - entity: light.bar_palm_1
+    hide_state: true
+    name: Palm 1
+    type: 'custom:slider-entity-row'
+  - entity: light.bar_palm_2
+    hide_state: true
+    name: Palm 2
+    type: 'custom:slider-entity-row'
+  - entity: light.bar_palm_3
+    hide_state: true
+    name: Palm 3   
+    type: 'custom:slider-entity-row'    
+  - entity: light.bar_shelves
+    hide_state: true
+    name: Bar Shelves
+    type: 'custom:slider-entity-row'
+  - entity: light.bar_worktop
+    hide_state: true
+    name: Bar Worktop
+    type: 'custom:slider-entity-row'  
+  - entity: light.bar_lamp
+    hide_state: true
+    name: Bar Lamp
+    type: 'custom:slider-entity-row'    
+  - entity: input_boolean.floorplan_show_bar_switches
+    name: Show These Switches    
+
+
+  

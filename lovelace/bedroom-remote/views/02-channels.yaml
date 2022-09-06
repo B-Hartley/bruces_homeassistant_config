@@ -1,0 +1,296 @@
+title: Channels
+icon: 'mdi:grid'
+path: channels
+badges: []
+cards:
+
+  - entity: media_player.lounge_skyq
+    type: media-control
+    name: SkyQ            
+
+  - type: grid
+    columns: 3
+    square: false
+    cards:    
+      - entity: media_player.lounge_amp
+        hold_action:
+          action: call-service
+          haptic: success
+          repeat: 333
+          service: media_player.volume_down
+          service_data:
+            entity_id: media_player.lounge_amp
+        icon: 'mdi:volume-minus'
+        show_icon: true
+        show_name: false
+        styles:
+          card:
+            - height: 90px
+        tap_action:
+          action: call-service
+          haptic: success
+          service: media_player.volume_down
+          service_data:
+            entity_id: media_player.lounge_amp
+        type: 'custom:button-card'
+      - color: blue
+        entity: media_player.lounge_amp
+        icon: 'mdi:volume-off'
+        show_icon: true
+        show_name: false
+        state:
+          - operator: template
+            styles:
+              card:
+                - icon: 'mdi:volume-high'
+              icon:
+                - color: red
+              value: >
+                return
+                states['media_player.lounge_amp'].attributes.is_volume_muted
+                === true
+        styles:
+          card:
+            - height: 90px
+        tap_action:
+          action: call-service
+          haptic: success
+          service: script.lounge_amp_toggle_mute
+        type: 'custom:button-card'
+      - entity: media_player.lounge_amp
+        hold_action:
+          action: call-service
+          haptic: success
+          repeat: 333
+          service: media_player.volume_up
+          service_data:
+            entity_id: media_player.lounge_amp
+        icon: 'mdi:volume-plus'
+        show_icon: true
+        show_name: false
+        styles:
+          card:
+            - height: 90px
+        tap_action:
+          action: call-service
+          haptic: success
+          service: media_player.volume_up
+          service_data:
+            entity_id: media_player.lounge_amp
+        type: 'custom:button-card'
+
+      - image: /local/ch/bbc-one-uk.png
+        tap_action:
+          action: call-service
+          haptic: success
+          service: media_player.select_source
+          service_data:
+            entity_id: media_player.lounge_skyq
+            source: "BBC One HD"
+          styles:
+            card:
+              - height: 90px
+        type: picture
+      - image: /local/ch/bbc-two-uk.png
+        tap_action:
+          action: call-service
+          haptic: success
+          service: media_player.select_source
+          service_data:
+            entity_id: media_player.lounge_skyq
+            source: "BBC Two HD"
+          styles:
+            card:
+              - height: 90px
+        type: picture
+      - image: /local/ch/itv_uk.png
+        tap_action:
+          action: call-service
+          haptic: success
+          service: media_player.select_source
+          service_data:
+            entity_id: media_player.lounge_skyq
+            source: "ITV HD"
+          styles:
+            card:
+              - height: 90px
+        type: picture
+
+      - image: /local/ch/channel_4_uk.png
+        service: media_player.select_source
+        service_data:
+          entity_id: media_player.lounge_skyq
+        tap_action:
+          action: call-service
+          haptic: success
+          service: media_player.select_source
+          service_data:
+            entity_id: media_player.lounge_skyq
+            source: "Channel 4 HD"
+          styles:
+            card:
+              - height: 90px
+        type: picture
+      - image: /local/ch/channel-5-uk.png
+        service: media_player.select_source
+        tap_action:
+          action: call-service
+          haptic: success
+          service: media_player.select_source
+          service_data:
+            entity_id: media_player.lounge_skyq
+            source: "Channel 5 HD"
+          styles:
+            card:
+              - height: 90px
+        type: picture
+      - image: /local/ch/sky-one-uk.png
+        service: media_player.select_source
+        tap_action:
+          action: call-service
+          haptic: success
+          service: media_player.select_source
+          service_data:
+            entity_id: media_player.lounge_skyq
+            source: "Sky One HD"
+          styles:
+            card:
+              - height: 90px
+        type: picture
+
+      - image: /local/ch/4-seven-uk.png
+        service: media_player.select_source
+        tap_action:
+          action: call-service
+          haptic: success
+          service: media_player.select_source
+          service_data:
+            entity_id: media_player.lounge_skyq
+            source: "4Seven"
+          styles:
+            card:
+              - height: 90px
+        type: picture
+      - image: /local/ch/fox_global.png
+        service: media_player.select_source
+        tap_action:
+          action: call-service
+          haptic: success
+          service: media_player.select_source
+          service_data:
+            entity_id: media_player.lounge_skyq
+            source: "FOX HD"
+          styles:
+            card:
+              - height: 90px
+        type: picture
+      - image: /local/ch/dave_uktv_ie.png
+        service: media_player.select_source
+        tap_action:
+          action: call-service
+          haptic: success
+          service: media_player.select_source
+          service_data:
+            entity_id: media_player.lounge_skyq
+            source: "Dave HD"
+          styles:
+            card:
+              - height: 90px
+        type: picture
+
+  
+      - entity: media_player.lounge_skyq
+        name: SkyQ
+        entity_picture: /local/logos/sky.png
+        show_icon: false
+        show_name: false
+        show_entity_picture: true
+        styles:
+          card:
+            - height: 90px
+        tap_action:
+          action: call-service
+          haptic: success
+          service: script.skytv_turn_on
+        type: 'custom:button-card'
+      - entity: media_player.lounge_skyq
+        name: Apple TV
+        entity_picture: /local/logos/AppleTV.png
+        show_icon: false
+        show_name: false
+        show_entity_picture: true
+        styles:
+          card:
+            - height: 90px
+        tap_action:
+          action: call-service
+          haptic: success
+          service: script.appletv_turn_on
+        type: 'custom:button-card'     
+      - entity: media_player.lounge_skyq
+        name: Portal
+        entity_picture: /local/logos/portal.png
+        show_icon: true
+        show_name: false
+        show_entity_picture: true
+        styles:
+          card:
+            - height: 90px
+        tap_action:
+          action: call-service
+          haptic: success
+          service: script.portal_turn_on
+        type: 'custom:button-card'    
+
+      - entity: media_player.lounge_skyq
+        icon: 'mdi:remote'
+        show_icon: true
+        show_name: false
+        styles:
+          card:
+            - height: 90px
+        tap_action:
+          action: navigate
+          haptic: success
+          navigation_path: remote
+        type: 'custom:button-card'
+      - entity: media_player.lounge_skyq
+        hold_action:
+          action: none
+        icon: 'mdi:grid'
+        show_icon: true
+        show_name: false
+        styles:
+          card:
+            - height: 90px
+          icon:
+            - color: yellow
+        tap_action:
+          action: navigate
+          haptic: success
+          navigation_path: channels
+        type: 'custom:button-card'
+      - entity: media_player.lounge_skyq
+        icon: 'mdi:dialpad'
+        show_icon: true
+        show_name: false
+        styles:
+          card:
+            - height: 90px
+        tap_action:
+          action: navigate
+          haptic: success
+          navigation_path: keypad
+        type: 'custom:button-card'
+
+  - entities:
+    - entity: light.lounge
+      name: Lounge
+      hide_state: true
+      type: 'custom:slider-entity-row'
+    - entity: light.hall
+      name: Hall
+      hide_state: true
+      type: 'custom:slider-entity-row'
+    show_header_toggle: false
+    type: entities

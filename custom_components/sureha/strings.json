@@ -1,0 +1,30 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "title": "Sure Petcare",
+                "description": "Login with your Sure Petcare Account.",
+                "data": {
+                    "username": "[%key:common::config_flow::data::username%]",
+                    "password": "[%key:common::config_flow::data::password%]"
+                }
+            }
+        },
+        "error": {
+            "invalid_auth": "[%key:common::config_flow::error::invalid_auth%]",
+            "unknown": "[%key:common::config_flow::error::unknown%]"
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "title": "SureHA Options",
+                "description": "Battery options",
+                "data": {
+                    "voltage_full": "Voltage (batteries full)",
+                    "voltage_low": "Voltage (batteries low)"
+                }
+            }
+        }
+    }
+}

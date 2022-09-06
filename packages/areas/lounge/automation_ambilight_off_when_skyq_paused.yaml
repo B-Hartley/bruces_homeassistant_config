@@ -1,0 +1,94 @@
+automation:
+  - id: ambilight_off_when_skyq_paused
+    alias: 'Ambilight off when SkyQ paused'
+    mode: restart
+  
+    description: >
+      Ambilight Off When Sky Paused
+    
+    trigger:
+      - platform: state
+        entity_id: sensor.lounge_source_state
+        for: 00:00:04
+      - platform: state
+        entity_id: input_boolean.lounge_ambilight_required
+  
+      
+    condition:
+      - condition: state
+        entity_id: input_boolean.watching_skytv
+        state: 'on'
+      - condition: state
+        entity_id: media_player.lounge_amp
+        state: 'on'
+      - condition: state
+        entity_id: input_boolean.bruce_is_asleep
+        state: 'off'        
+      - condition: state
+        entity_id: input_boolean.sarah_is_asleep
+        state: 'off'        
+        
+    action:
+      - choose:
+          - conditions: 
+              - or:
+                  - and:
+                      - condition: state
+                        entity_id: light.lounge_ambilight
+                        state: 'on'
+                      - condition: state
+                        entity_id: input_boolean.lounge_ambilight_required
+                        state: 'off'     
+                  - condition: state
+                    entity_id: sensor.lounge_source_state
+                    state: 'paused'                        
+            sequence:
+              - service: light.turn_off
+                entity_id: light.lounge_ambilight
+              - delay: 2
+              - service: scene.turn_on
+                data:
+                  entity_id: scene.lounge_skyq_paused
+                  transition: 2.5
+              - delay: 2
+              - service: scene.turn_on
+                data:
+                  entity_id: scene.lounge_skyq_paused
+          - conditions: 
+              - condition: state
+                entity_id: input_boolean.lounge_ambilight_required
+                state: 'on'     
+              - condition: state
+                entity_id: sensor.lounge_source_state
+                state: 'playing'   
+            sequence:
+              - service: light.turn_on
+                data:
+                  entity_id: light.lounge
+                  brightness: 30
+              - service: light.turn_off
+                target:
+                  entity_id: light.lounge_lamp
+              - service: media_player.turn_on 
+                entity_id: media_player.lounge_tv
+              - service: light.turn_on
+                target:
+                  entity_id: light.lounge_ambilight
+                data:
+                  effect: 'FOLLOW_VIDEO: NATURAL'
+        default:
+          - service: light.turn_off
+            entity_id: light.lounge_ambilight
+          - delay: 2
+          - service: scene.turn_on
+            target:
+              entity_id: scene.lounge_skyq_paused
+            data:
+              transition: 2.5
+          - delay: 2
+          - service: scene.turn_on
+            target:
+              entity_id: scene.lounge_skyq_paused
+          - service: light.turn_on
+            target:
+              entity_id: light.lounge_lamp            

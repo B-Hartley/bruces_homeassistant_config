@@ -1,0 +1,8 @@
+template:
+  sensor:
+    - name: "Eddi Power"
+      unique_id: eddi_power
+      availability: "{{ states('sensor.myenergi_eddi_power_ct_internal_load') != 'Unavailable' }}"
+      state: "{{ (states('sensor.myenergi_eddi_power_ct_internal_load')|float(0)/1000)|round(1) }}"
+      unit_of_measurement: 'kW'
+      device_class: power 

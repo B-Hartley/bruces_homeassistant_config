@@ -1,0 +1,9 @@
+light:          
+  - platform: group
+    unique_id: light_group_guest_bedroom
+    name: Guest Bedroom Lights
+    entities:
+    # hue group
+    - light.guest_bedroom
+#    - light.guest_bedroom_light
+#    - light.guest_bedroom_bedside    

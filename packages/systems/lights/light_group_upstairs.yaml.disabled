@@ -1,0 +1,12 @@
+light:           
+  - platform: group
+    unique_id: light_group_upstairs_all
+    name: Upstairs All
+    entities:
+    - light.upstairs
+    - light.kate_lightstrip
+#    - light.master_bedroom 
+#    - light.sophies_bedroom
+#    - light.kates_bedroom
+#    - light.guest_bedroom
+#    - light.landing

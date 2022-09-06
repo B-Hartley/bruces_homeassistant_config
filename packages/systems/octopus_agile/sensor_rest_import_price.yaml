@@ -1,0 +1,14 @@
+rest:
+  resource_template: "https://api.octopus.energy/v1/products/AGILE-18-02-21/electricity-tariffs/E-1R-AGILE-18-02-21-L/standard-unit-rates/?period_from={{ now().year }}-{{ now().month }}-{{ now().day }}T{{ now().hour }}:{% if now().minute <30 %}00{% else %}30{% endif %}&period_to={{ now().year }}-{{ now().month }}-{% if (now().hour == 23) and (now().minute >=30) %}{{ now().day+1 }}{% else %}{{ now().day }}{% endif %}T{% if (now().hour == 23) and (now().minute >=30) %}00{% elif now().minute >=30 %}{{ now().hour+1}}{% else %}{{ now().hour}}{% endif %}:{% if now().minute >=30 %}00{% else %}30{% endif %}"
+  scan_interval: 1800    
+  sensor:
+    - name: "Import Price"
+      value_template: "{% if is_state('binary_sensor.power_hour','on') %}0.0{% elif is_state('input_boolean.go_tariff','on') %}{{ 5.0 if is_state('binary_sensor.go_cheap','on') else 16.26}}{% else %}{{ value_json.results[0].value_inc_vat|round(2) }}{% endif %}"
+      unit_of_measurement: "p/kWh"
+
+
+      
+    - name: "Import Price Pounds"
+      value_template: "{% if is_state('binary_sensor.power_hour','on') %}0.0{% elif is_state('input_boolean.go_tariff','on') %}{{ 0.05 if is_state('binary_sensor.go_cheap','on') else 0.1626}}{% else %}{{ value_json.results[0].value_inc_vat/100.0 }}{% endif %}"
+      unit_of_measurement: "£/kWh"     
+    

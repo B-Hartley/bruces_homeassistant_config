@@ -1,0 +1,721 @@
+automation:
+  - id: telegram_text
+    alias: 'Process Telegram Text'
+    
+    description: >
+      Free Text Telegram Control
+      
+    trigger:
+      - platform: event
+        id: 'text'
+        event_type: telegram_text
+        
+    action:
+      - choose:
+          - conditions: "{{trigger.event.data.text.lower() == 'hrt done'}}"
+            sequence:      
+              - service: input_button.press
+                target: 
+                  entity_id: input_button.hrt_last_used
+              - service: counter.increment
+                target: 
+                  entity_id: counter.hrt_squirts_used
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"                
+                  title: "HRT Gel"
+                  message: "Last used: {{ states('input_button.hrt_last_used')}}"
+                  inline_keyboard:
+                    - 'HRT Done:/hrt_done, OK:/remove_keyboard'
+                    
+          - conditions: "{{trigger.event.data.text.lower() == 'hrt'}}"
+            sequence:
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"                
+                  title: "HRT Gel"
+                  message: >
+                    Last used: {{ states('input_button.hrt_last_used')}}
+                    
+                    Squirts Used: {{ states('sensor.hrt_squirts_used')}}
+                  inline_keyboard:
+                    - 'HRT Done:/hrt_done, OK:/remove_keyboard'                  
+                    
+          - conditions: "{{trigger.event.data.text.lower() == 'powerwall'}}"
+            sequence:
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"                
+                  message: >
+                    Powerwall at {{states('sensor.powerwall_charge_corrected')}}% ({{states('input_number.powerwall_reserve_requested')|int(0)}}% Reserve)
+                    
+                    {% if is_state('sensor.powerwall_direction','import') %}Discharging @ {{states('sensor.powerwall_discharging')}} kW{% elif is_state('sensor.powerwall_direction','export')%}Charging @ {{states('sensor.powerwall_charging')}} kW{% else %}On standby{% endif %}
+                    
+                    Home Load: {{states('sensor.floorplan_powerwall_home_load')}} kW
+                 
+          - conditions: "{{trigger.event.data.text.lower() == 'solar'}}"
+            sequence:
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"                
+                  message: >
+                    Solar Power Now: {{states('sensor.solar_production')}} kW
+                    
+                    Today's Production: {{states('sensor.solar_energy_daily_kwh')|round(1)}} kWh
+                    
+                    Today's Forecast: {{states('sensor.solcast_forecast_today')}} kWh
+                  inline_keyboard:
+                    - 'Refresh:/solar_refresh, OK:/remove_keyboard'
+                    
+          - conditions: "{{trigger.event.data.text.lower() == 'litter'  and is_state('binary_sensor.litter_trays_dirty','on')}}"
+            sequence:
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"                
+                  message: >
+                    {% set litter_trays = [states.binary_sensor.littertray_utility_dirty,
+                                          states.binary_sensor.littertray_shower_dirty,
+                                          states.binary_sensor.littertray_downstairs_dirty,
+                                          states.binary_sensor.littertray_drum_dirty] %}
+                    {%- for tray in litter_trays -%}
+                    {%- if tray.state == 'on' -%}
+                    {{tray.name}}
+                    {%- if not loop.last %}, {% endif -%}
+                    {%- endif -%}
+                    {%- endfor -%}  
+                  inline_keyboard:
+                    - 'Detail:/littertray_detail'
+                    - 'OK:/remove_keyboard'                    
+                  
+          - conditions: "{{trigger.event.data.text.lower() == 'litter'  and is_state('binary_sensor.litter_trays_dirty','off')}}"
+            sequence:
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"                
+                  message: "All Litter Trays are clean"
+                  inline_keyboard:
+                    - 'Detail:/littertray_detail'
+                    - 'OK:/remove_keyboard'                  
+
+            # status           
+          - conditions: "{{trigger.event.data.text.lower() == 'status'}}"
+            sequence:
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"     
+                  message: >
+                    {{'There is a powercut!' if is_state('binary_sensor.grid_status','off')}}
+
+                    Alarm currently {{states('alarm_control_panel.texecom').replace('_',' ')}}
+                    
+                    Water supply is {{ states('switch.shutoff_valve') }}
+                    
+                    {% if is_state('binary_sensor.water_running','on') %}Water has been running for 
+                    {%- set time = (as_timestamp(now()) - as_timestamp(states.binary_sensor.water_running.last_changed)) | int  %}
+                    {%- set minutes = ((time % 3600) // 60) %}
+                    {%- set minutes = ' {}minutes'.format(minutes) if minutes > 0 else '' %}
+                    {%- set hours = ((time % 86400) // 3600) %}
+                    {%- set hours = ' {}hours '.format(hours) if hours > 0 else '' %}
+                    {%- set days = (time // 86400) %}
+                    {%- set days = ' {}days '.format(days) if days > 0 else '' %}
+                    {{ ' less than 1 minute' if time < 60 else days + hours + minutes }}
+                  
+                    currently at {{ states('sensor.water_flow_rate') }} gpm{% else %}Water is not Running{% endif %}
+                    
+                    Powerwall at {{states('sensor.powerwall_charge_corrected')}}% ({% if is_state('sensor.powerwall_direction','import') %}Discharging{% elif is_state('sensor.powerwall_direction','export')%}Charging{% else %}on standby{% endif %})
+                    
+                    Solar Power Now: {{states('sensor.solar_production')}} kW
+                    
+                    Solar Production Today: {{states('sensor.solar_energy_daily_kwh')|round(1)}} kWh
+                    
+                    Solar Forecast (Today): {{states('sensor.solcast_forecast_today_rounded')}} kWh
+                  
+                    Solar Forecast (Tomorrow): {{states('sensor.solcast_forecast_tomorrow_rounded')}} kWh
+                    
+                    Paddy ({{states('sensor.paddy_battery_level')}}%) is {% if states('sensor.zappi_paddy_mode') != 'Stopped' %}Charging ({{states('sensor.zappi_paddy_mode')}}) @ {{states('sensor.zappi_paddy_power')}}kW{% elif is_state('sensor.zappi_paddy_status','EV Connected') %}Plugged in{% elif is_state('device_tracker.vf1ag000366115079_location','home') or is_state('device_tracker.vf1ag000366115079_location','Home') %}unplugged{% else %}not at home{% endif %}
+                    
+                    Jyggy ({{states('sensor.jyggy_battery_level')}}%) is {% if states('sensor.zappi_jyggy_mode') != 'Stopped' %}Charging ({{states('sensor.zappi_jyggy_mode')}}) @ {{states('sensor.zappi_jyggy_power')}}kW{% elif is_state('sensor.zappi_jyggy_status','EV Connected') %}Plugged in{% elif is_state('sensor.jyggy_location','Home') or is_state('sensor.jyggy_location','home') %}unplugged{% else %}not at home{% endif %}
+
+                    HotTub is {{states('sensor.hottub_summary')}}
+
+                    {{iif(is_state('fan.bedroom_fan','on'),'Bedroom Fan is on                    
+                    
+                    ','')}}
+                    {{iif(is_state('fan.conservatory_fan','on'),'Conservatory Fan is on
+                    
+                    ','')}}
+                    {{iif(is_state('switch.electric_blanket_bruce','on') and is_state('switch.electric_blanket_sarah','on'),'Both electric blankets are on
+                    
+                    ','')}}
+                    {{iif(is_state('switch.electric_blanket_bruce','on') and is_state('switch.electric_blanket_sarah','off'),"Bruce's electric blanket is on
+                    
+                    ",'')}}
+                    {{iif(is_state('switch.electric_blanket_sarah','on') and is_state('switch.electric_blanket_bruce','off'),"Sarah's electric blanket is on                    
+                    
+                    ",'')}}
+                    {{iif(is_state('light.downstairs','on'),'Lights are on downstairs
+                    
+                    ','')}}
+                    {{iif(is_state('light.outside','on'),'Lights are on Outside
+                    
+                    ','')}}
+                    {{iif(is_state('light.upstairs','on'),'Lights are on upstairs
+                    
+                    ','')}}
+                    {{iif(is_state('input_boolean.watching_skytv','on'),'TV on in lounge
+                    
+                    ','')}}
+                    {{iif(is_state('media_player.kitchen_sonos','playing'),'SONOS playing in the kitchen
+                    
+                    ','')}}
+                    {{iif(is_state('media_player.sophies_sonos','playing'),'SONOS playing in Sophie bedroom
+                    
+                    ','')}}
+                    {{iif(is_state('media_player.kates_sonos','playing'),'SONOS playing in Kate bedroom
+                    
+                    ','')}}
+                    {{iif(is_state('media_player.lounge_sonos','playing'),'SONOS playing in the Lounge
+                    
+                    ','')}}
+                    {{iif(is_state('media_player.bar_sonos','playing'),'SONOS playing in the Bar
+                    
+                    ','')}}
+                    {{iif(is_state('binary_sensor.conservatory_door','on'),'Conservatory door is open
+                    
+                    ','')}}
+                    {{iif(is_state('binary_sensor.front_door','on'),'Front door is open
+                    
+                    ','')}}
+                    {{iif(is_state('binary_sensor.back_door','on'),'Back door is open
+                    
+                    ','')}}                    
+                    {{iif(is_state('binary_sensor.back_gate_door','on'),'Back gate is open
+                    
+                    ','')}}
+                    {{iif(is_state('binary_sensor.shed_door','on'),'Shed door is open
+                    
+                    ','')}}
+                    {{iif(is_state('binary_sensor.garage_back_door','on'),'Garage Back door is open
+                    
+                    ','')}}
+                    {{iif(is_state('binary_sensor.under_stairs_door','off'),'Understairs door is open
+                    
+                    ','')}}
+                    {{iif(is_state('binary_sensor.master_bedroom_door','off'),'Master bedroom door is closed
+                    
+                    ','')}}
+                    {{iif(is_state('binary_sensor.lounge_door','on'),'Lounge door is open
+                    
+                    ','')}}
+                    {{iif(is_state('binary_sensor.sophies_bedroom_door','on'),"Sophie's door is open
+                    
+                    ",'')}}
+                    {{iif(is_state('binary_sensor.kates_bedroom_door','off'),"Kate's door is open
+                    
+                    ",'')}}
+                    {{iif(is_state('binary_sensor.guest_bedroom_door','on'),"Guest's door is open
+                    
+                    ",'')}}
+                    {{iif(is_state('binary_sensor.downstairs_toilet_door','off'),'Downstairs Loo door is closed
+                    
+                    ','')}}
+                    {{iif(is_state('binary_sensor.main_bathroom_door','off'),'Bathroom door is closed
+                    
+                    ','')}}
+                    {{iif(is_state('binary_sensor.drum_room_door','off'),'Drum Room door is closed
+                    
+                    ','')}}                    
+                    
+            # /alarm and Alarm Disarmed
+          - conditions: "{{trigger.event.data.text.lower() == 'alarm' and is_state('alarm_control_panel.texecom','disarmed')}}"
+            sequence:
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"
+                  message: >
+                    Alarm currently disarmed.
+                    
+                    Which Alarm Status do you want?
+                  inline_keyboard:
+                    - 'Arm:/arm_away'
+                    - 'Home:/arm_home, Night:/arm_night'
+                    - 'OK:/remove_keyboard'
+
+            # /alarm and Alarm Armed          
+          - conditions: "{{trigger.event.data.text.lower() == 'alarm'}}"
+            sequence:
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"
+                  message: >
+                    Alarm currently {{states('alarm_control_panel.texecom').replace('_',' ')}}
+                    
+                    Which Alarm Status do you want?                  
+                  inline_keyboard:
+                    - 'Disarm:/disarm'
+                    - 'OK:/remove_keyboard'       
+
+            # cars
+          - conditions: "{{trigger.event.data.text.lower() == 'cars' }}"
+            sequence:
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"
+                  message: >
+                    Paddy ({{states('sensor.paddy_battery_level')}}%) is {% if states('sensor.zappi_paddy_mode') != 'Stopped' %}Charging ({{states('sensor.zappi_paddy_mode')}}) @ {{states('sensor.zappi_paddy_power')}}kW{% elif is_state('sensor.zappi_jyggy_status','EV Connected') %}Plugged in{% elif is_state('device_tracker.vf1ag000366115079_location','Home') %}unplugged{% else %}not at home{% endif %}
+                    
+                    Jyggy ({{states('sensor.jyggy_battery_level')}}%) is {% if states('sensor.zappi_jyggy_mode') != 'Stopped' %}Charging ({{states('sensor.zappi_jyggy_mode')}}) @ {{states('sensor.zappi_jyggy_power')}}kW{% elif is_state('sensor.zappi_jyggy_status','EV Connected') %}Plugged in{% elif is_state('sensor.jyggy_location','Home')%}unplugged{% else %}not at home{% endif %}
+                  inline_keyboard:
+                    - 'Paddy:/paddy_refresh, Jyggy:/jyggy_refresh'
+                    - 'Refresh:/cars_refresh, OK:/remove_keyboard'  
+
+
+            # paddy fast
+          - conditions: "{{trigger.event.data.text.lower()|regex_match('.*paddy.*fast.*')}}"
+            sequence:
+              - service: script.zappi_mode_paddy
+                data:
+                  mode: "fast"
+              - wait_for_trigger:
+                  - platform: state
+                    entity_id: sensor.zappi_paddy
+                timeout: 00:00:45
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"                
+                  message: "Paddy ({{states('sensor.paddy_battery_level')}}%) is {% if states('sensor.zappi_paddy_mode') != 'Stopped' %}Charging ({{states('sensor.zappi_paddy_mode')}}) @ {{states('sensor.zappi_paddy_power')}}kW{% elif is_state('sensor.zappi_jyggy_status','EV Connected') %}Plugged in{% elif is_state('device_tracker.vf1ag000366115079_location','Home') %}unplugged{% else %}not at home{% endif %}"
+                  inline_keyboard:
+                    - 'Fast:/paddy_fast, Eco+:/paddy_ecoplus'
+                    - 'Eco:/paddy_eco, Stop:/paddy_stop' 
+                    - 'Refresh:paddy_refresh, OK:/remove_keyboard'  
+
+            # paddy eco+
+          - conditions: "{{(trigger.event.data.text.lower()|regex_match('.*paddy.*eco.+.*')) or (trigger.event.data.text.lower()|regex_match('.*paddy.*eco.*plus.*'))}}"
+            sequence:
+              - service: script.zappi_mode_paddy
+                data:
+                  mode: "ecoplus"
+              - wait_for_trigger:
+                  - platform: state
+                    entity_id: sensor.zappi_paddy
+                timeout: 00:00:45
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"                
+                  message: "Paddy ({{states('sensor.paddy_battery_level')}}%) is {% if states('sensor.zappi_paddy_mode') != 'Stopped' %}Charging ({{states('sensor.zappi_paddy_mode')}}) @ {{states('sensor.zappi_paddy_power')}}kW{% elif is_state('sensor.zappi_jyggy_status','EV Connected') %}Plugged in{% elif is_state('device_tracker.vf1ag000366115079_location','Home') %}unplugged{% else %}not at home{% endif %}"
+                  inline_keyboard:
+                    - 'Fast:/paddy_fast, Eco+:/paddy_ecoplus'
+                    - 'Eco:/paddy_eco, Stop:/paddy_stop' 
+                    - 'Refresh:paddy_refresh, OK:/remove_keyboard'  
+            
+            # paddy eco
+          - conditions: "{{trigger.event.data.text.lower()|regex_match('.*paddy.*eco.*') }}"
+            sequence:
+              - service: script.zappi_mode_paddy
+                data:
+                  mode: "eco"
+              - wait_for_trigger:
+                  - platform: state
+                    entity_id: sensor.zappi_paddy
+                timeout: 00:00:45
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"                
+                  message: "Paddy ({{states('sensor.paddy_battery_level')}}%) is {% if states('sensor.zappi_paddy_mode') != 'Stopped' %}Charging ({{states('sensor.zappi_paddy_mode')}}) @ {{states('sensor.zappi_paddy_power')}}kW{% elif is_state('sensor.zappi_jyggy_status','EV Connected') %}Plugged in{% elif is_state('device_tracker.vf1ag000366115079_location','Home') %}unplugged{% else %}not at home{% endif %}"
+                  inline_keyboard:
+                    - 'Fast:/paddy_fast, Eco+:/paddy_ecoplus'
+                    - 'Eco:/paddy_eco, Stop:/paddy_stop' 
+                    - 'Refresh:paddy_refresh, OK:/remove_keyboard'       
+
+            # paddy stop
+          - conditions: "{{trigger.event.data.text.lower()|regex_match('.*paddy.*stop.*') }}"
+            sequence:
+              - service: script.zappi_mode_paddy
+                data:
+                  mode: "eco"
+              - wait_for_trigger:
+                  - platform: state
+                    entity_id: sensor.zappi_paddy
+                timeout: 00:00:45
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"                
+                  message: "Paddy ({{states('sensor.paddy_battery_level')}}%) is {% if states('sensor.zappi_paddy_mode') != 'Stopped' %}Charging ({{states('sensor.zappi_paddy_mode')}}) @ {{states('sensor.zappi_paddy_power')}}kW{% elif is_state('sensor.zappi_jyggy_status','EV Connected') %}Plugged in{% elif is_state('device_tracker.vf1ag000366115079_location','Home') %}unplugged{% else %}not at home{% endif %}"
+                  inline_keyboard:
+                    - 'Fast:/paddy_fast, Eco+:/paddy_ecoplus'
+                    - 'Eco:/paddy_eco, Stop:/paddy_stop' 
+                    - 'Refresh:paddy_refresh, OK:/remove_keyboard'       
+                    
+            # paddy
+          - conditions: "{{trigger.event.data.text.lower() == 'paddy' }}"
+            sequence:
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"
+                  message: "Paddy ({{states('sensor.paddy_battery_level')}}%) is {% if states('sensor.zappi_paddy_mode') != 'Stopped' %}Charging ({{states('sensor.zappi_paddy_mode')}}) @ {{states('sensor.zappi_paddy_power')}}kW{% elif is_state('sensor.zappi_paddy_status','EV Connected') %}Plugged in{% elif is_state('device_tracker.vf1ag000366115079_location','home') or is_state('device_tracker.vf1ag000366115079_location','Home') %}unplugged{% else %}not at home{% endif %}"
+                  inline_keyboard:
+                    - 'Fast:/paddy_fast, Eco+:/paddy_ecoplus'
+                    - 'Eco:/paddy_eco, Stop:/paddy_stop' 
+                    - 'Refresh:/paddy_refresh, OK:/remove_keyboard'         
+
+            # Jyggy fast
+          - conditions: "{{trigger.event.data.text.lower()|regex_match('.*jyggy.*fast.*')}}"
+            sequence:
+              - service: script.zappi_mode_jyggy
+                data:
+                  mode: "fast"
+              - wait_for_trigger:
+                  - platform: state
+                    entity_id: sensor.zappi_jyggy
+                timeout: 00:00:45
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"                
+                  message: "Jyggy ({{states('sensor.jyggy_battery_level')}}%) is {% if states('sensor.zappi_jyggy_mode') != 'Stopped' %}Charging ({{states('sensor.zappi_jyggy_mode')}}) @ {{states('sensor.zappi_jyggy_power')}}kW{% elif is_state('sensor.zappi_jyggy_status','EV Connected') %}Plugged in{% elif is_state('sensor.jyggy_location','Home')%}unplugged{% else %}not at home{% endif %}"
+                  inline_keyboard:
+                    - 'Fast:/jyggy_fast, Eco+:/jyggy_ecoplus'
+                    - 'Eco:/jyggy_eco, Stop:/jyggy_stop' 
+                    - 'Refresh:/jyggy_refresh, OK:/remove_keyboard'    
+
+            # Jyggy eco+
+          - conditions: "{{(trigger.event.data.text.lower()|regex_match('.*jyggy.*eco.+.*')) or (trigger.event.data.text.lower()|regex_match('.*jyggy.*eco.*plus.*'))}}"
+            sequence:
+              - service: script.zappi_mode_jyggy
+                data:
+                  mode: "ecoplus"
+              - wait_for_trigger:
+                  - platform: state
+                    entity_id: sensor.zappi_jyggy
+                timeout: 00:00:45
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"                
+                  message: "Jyggy ({{states('sensor.jyggy_battery_level')}}%) is {% if states('sensor.zappi_jyggy_mode') != 'Stopped' %}Charging ({{states('sensor.zappi_jyggy_mode')}}) @ {{states('sensor.zappi_jyggy_power')}}kW{% elif is_state('sensor.zappi_jyggy_status','EV Connected') %}Plugged in{% elif is_state('sensor.jyggy_location','Home')%}unplugged{% else %}not at home{% endif %}"
+                  inline_keyboard:
+                    - 'Fast:/jyggy_fast, Eco+:/jyggy_ecoplus'
+                    - 'Eco:/jyggy_eco, Stop:/jyggy_stop' 
+                    - 'Refresh:/jyggy_refresh, OK:/remove_keyboard'  
+            
+            # Jyggy eco
+          - conditions: "{{trigger.event.data.text.lower()|regex_match('.*jyggy.*eco.*') }}"
+            sequence:
+              - service: script.zappi_mode_jyggy
+                data:
+                  mode: "eco"
+              - wait_for_trigger:
+                  - platform: state
+                    entity_id: sensor.zappi_jyggy
+                timeout: 00:00:45
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"                
+                  message: "Jyggy ({{states('sensor.jyggy_battery_level')}}%) is {% if states('sensor.zappi_jyggy_mode') != 'Stopped' %}Charging ({{states('sensor.zappi_jyggy_mode')}}) @ {{states('sensor.zappi_jyggy_power')}}kW{% elif is_state('sensor.zappi_jyggy_status','EV Connected') %}Plugged in{% elif is_state('sensor.jyggy_location','Home')%}unplugged{% else %}not at home{% endif %}"
+                  inline_keyboard:
+                    - 'Fast:/jyggy_fast, Eco+:/jyggy_ecoplus'
+                    - 'Eco:/jyggy_eco, Stop:/jyggy_stop' 
+                    - 'Refresh:/jyggy_refresh, OK:/remove_keyboard'     
+
+            # Jyggy stop
+          - conditions: "{{trigger.event.data.text.lower()|regex_match('.*jyggy.*stop.*') }}"
+            sequence:
+              - service: script.zappi_mode_jyggy
+                data:
+                  mode: "stop"
+              - wait_for_trigger:
+                  - platform: state
+                    entity_id: sensor.zappi_jyggy
+                timeout: 00:00:45
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"                
+                  message: "Jyggy ({{states('sensor.jyggy_battery_level')}}%) is {% if states('sensor.zappi_jyggy_mode') != 'Stopped' %}Charging ({{states('sensor.zappi_jyggy_mode')}}) @ {{states('sensor.zappi_jyggy_power')}}kW{% elif is_state('sensor.zappi_jyggy_status','EV Connected') %}Plugged in{% elif is_state('sensor.jyggy_location','Home')%}unplugged{% else %}not at home{% endif %}"
+                  inline_keyboard:
+                    - 'Fast:/jyggy_fast, Eco+:/jyggy_ecoplus'
+                    - 'Eco:/jyggy_eco, Stop:/jyggy_stop' 
+                    - 'Refresh:/jyggy_refresh, OK:/remove_keyboard'     
+                    
+            # jyggy
+          - conditions: "{{trigger.event.data.text.lower() == 'jyggy' }}"
+            sequence:
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"
+                  message: "Jyggy ({{states('sensor.jyggy_battery_level')}}%) is {% if states('sensor.zappi_jyggy_mode') != 'Stopped' %}Charging ({{states('sensor.zappi_jyggy_mode')}}) @ {{states('sensor.zappi_jyggy_power')}}kW{% elif is_state('sensor.zappi_jyggy_status','EV Connected') %}Plugged in{% elif is_state('sensor.jyggy_location','Home')%}unplugged{% else %}not at home{% endif %}"
+                  inline_keyboard:
+                    - 'Fast:/jyggy_fast, Eco+:/jyggy_ecoplus'
+                    - 'Eco:/jyggy_eco, Stop:/jyggy_stop' 
+                    - 'Refresh:/jyggy_refresh, OK:/remove_keyboard'         
+                    
+            # picture
+          - conditions: "{{trigger.event.data.text.lower() == 'picture' or trigger.event.data.text.lower() == 'camera'}}"
+            sequence: 
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"
+                  message: "Which camera do you want to see?"
+                  inline_keyboard:
+                    - 'Drive:/still_drive, Bins:/still_bins'
+                    - 'Patio:/still_patio, Gazebo:/still_gazebo' 
+                    - 'Hall:/still_hall, Lounge:/still_lounge'
+                    - 'Kitchen 1:/still_kitchen, Kitchen 2:/still_kitchen_2'             
+                    - 'Bar:/still_bar, Landing:/still_landing'                         
+                    - 'OK:/remove_keyboard'
+            # video
+          - conditions: "{{trigger.event.data.text.lower() == 'video'}}"
+            sequence: 
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"
+                  message: "Which camera do you want to see?"
+                  inline_keyboard:
+                    - 'Drive:/video_drive, Bins:/video_bins'
+                    - 'Patio:/video_patio, Gazebo:/video_gazebo' 
+                    - 'Hall:/video_hall, Lounge:/video_lounge'
+                    - 'Kitchen 1:/video_kitchen, Kitchen 2:/video_kitchen_2'             
+                    - 'Bar:/video_bar, Landing:/video_landing'                         
+                    - 'OK:/remove_keyboard'            
+            # tub              
+          - conditions: "{{trigger.event.data.text.lower() == 'tub' or trigger.event.data.text.lower() == 'hottub' or trigger.event.data.text.lower() == 'hot tub'}}"
+            sequence: 
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"          
+                  message: >
+                    Hottub is {{states('sensor.hottub_summary')}} at {{states('input_number.hottub_water_temp')|int(0)}}°C.  
+                    
+                    Schedule {{states('input_boolean.hottub_scheduled')}}: {{states('input_number.hottub_water_target')|int(0)}}°C by {{states('input_datetime.hottub_ready_by')}}
+                  inline_keyboard:
+                    - 'Set Time:/tub_set_time, Schedule On:/tub_sched_on'
+                    - 'Set Temp:/tub_set_temp, Schedule Off:/tub_sched_off' 
+                    - 'OK:/remove_keyboard'  
+                    
+            # help                    
+          - conditions: "{{trigger.event.data.text.lower() == 'help'}}"
+            sequence:
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"
+                  message: >
+                    You can type commands such as:
+                    
+                    /tub     /litter
+                    
+                    /status    /camera
+                    
+                    /alarm     /hottub
+                    
+                    /cars     /solar
+                    
+                    or you can type text like:
+                    
+                    set the hot tub to 37C at 08:00
+                    
+                    Arm the Alarm
+
+
+#      # Picture with camera name
+#          - conditions: >
+#              {% if ('picture' in trigger.event.data.text.lower()) and }
+#            sequence:
+
+            # Alarm Disarm already disarmed
+          - conditions: "{{((trigger.event.data.text.lower()|regex_match('.*alarm.*disarm.*')) or (trigger.event.data.text.lower()|regex_match('.*disarm.*alarm.*'))) and is_state('alarm_control_panel.texecom','disarmed')}}"
+            sequence:  
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"
+                  message: "Alarm is already Disarmed"
+                  inline_keyboard:
+                    - 'Arm:/arm_away'
+                    - 'Home:/arm_home, Night:/arm_night'
+                    - 'OK:/remove_keyboard'                  
+
+            # Alarm Disarm
+          - conditions: "{{(trigger.event.data.text.lower()|regex_match('.*alarm.*disarm.*')) or (trigger.event.data.text.lower()|regex_match('.*disarm.*alarm.*'))}}"
+            sequence:  
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"
+                  message: "Alarm disarming.............."
+                  message_tag: alarm_disarming                  
+              - service: alarm_control_panel.alarm_disarm 
+                data:
+                  entity_id: alarm_control_panel.texecom
+                  code: !secret alarm_code
+              - wait_template: "{{is_state('alarm_control_panel.texecom','disarmed')}}"
+                timeout: 00:00:10
+              - service: telegram_bot.edit_message
+                data:
+                  chat_id: "{{trigger.event.data.chat_id}}"
+                  message_id: "{{states('input_text.alarm_disarming_message_id')}}"                     
+                  message: "Alarm is now {{states('alarm_control_panel.texecom').replace('_',' ')}}"
+                   
+
+
+            # Alarm Arm already armed 
+          - conditions: "{{((trigger.event.data.text.lower()|regex_match('.*alarm.*arm.*')) or (trigger.event.data.text.lower()|regex_match('.*arm.*alarm.*')) or (trigger.event.data.text.lower()|regex_match('.*set.*alarm.*') or trigger.event.data.text.lower()|regex_match('.*alarm.*night.*')) or (trigger.event.data.text.lower()|regex_match('.*night.*alarm.*'))) and states('alarm_control_panel.texecom')[0:6]=='armed_'}}"
+            sequence:  
+              - service: alarm_control_panel.alarm_arm_night 
+                data:
+                  entity_id: alarm_control_panel.texecom
+                  code: !secret alarm_code
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"
+                  message: "Alarm already set to {{states('alarm_control_panel.texecom').replace('_',' ')}}"
+                  inline_keyboard:
+                    - 'Disarm:/disarm'
+                    - 'OK:/remove_keyboard'   
+
+            # Alarm Night
+          - conditions: "{{(trigger.event.data.text.lower()|regex_match('.*alarm.*night.*')) or (trigger.event.data.text.lower()|regex_match('.*night.*alarm.*'))}}"
+            sequence:  
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"
+                  message: "Alarm arming.............."
+                  message_tag: alarm_arming   
+              - service: alarm_control_panel.alarm_arm_night 
+                data:
+                  entity_id: alarm_control_panel.texecom
+                  code: !secret alarm_code
+              - wait_for_trigger:
+                  - platform: state
+                    entity_id: alarm_control_panel.texecom
+                    to: armed_night
+                timeout: 00:00:20
+              - service: telegram_bot.edit_message
+                data:
+                  message_id: "{{states('input_text.alarm_arming_message_id')}}"                
+                  chat_id: "{{trigger.event.data.chat_id}}"
+                  message: "Alarm currently {{states('alarm_control_panel.texecom').replace('_',' ')}}"
+                  
+      # Alarm Home
+          - conditions: "{{(trigger.event.data.text.lower()|regex_match('.*alarm.*home.*')) or (trigger.event.data.text.lower()|regex_match('.*home.*alarm.*')) or (trigger.event.data.text.lower()|regex_match('.*alarm.*home.*')) or (trigger.event.data.text.lower()|regex_match('.*arm.*home.*')) or (trigger.event.data.text.lower()|regex_match('.*home.*arm.*')) or (trigger.event.data.text.lower()|regex_match('.*shed.*alarm.*')) or (trigger.event.data.text.lower()|regex_match('.*garage.*alarm.*')) or (trigger.event.data.text.lower()|regex_match('.*alarm.*shed.*')) or (trigger.event.data.text.lower()|regex_match('.*alarm.*garage.*'))}}"            
+            sequence:  
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"
+                  message: "Alarm arming.............."
+                  message_tag: alarm_arming   
+              - service: alarm_control_panel.alarm_arm_home 
+                data:
+                  entity_id: alarm_control_panel.texecom
+                  code: !secret alarm_code
+              - wait_for_trigger:
+                  - platform: state
+                    entity_id: alarm_control_panel.texecom
+                    to: armed_home
+                timeout: 00:00:20
+              - service: telegram_bot.edit_message
+                data:
+                  message_id: "{{states('input_text.alarm_arming_message_id')}}"                
+                  chat_id: "{{trigger.event.data.chat_id}}"
+                  message: "Alarm currently {{states('alarm_control_panel.texecom').replace('_',' ')}}"
+            
+      # Alarm Arm
+          - conditions: "{{(trigger.event.data.text.lower()|regex_match('.*alarm.*arm.*')) or (trigger.event.data.text.lower()|regex_match('.*arm.*alarm.*')) or (trigger.event.data.text.lower()|regex_match('.*set.*alarm.*'))}}"
+            sequence:
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"
+                  message: "Alarm arming.............."
+                  message_tag: alarm_arming                   
+              - service: alarm_control_panel.alarm_arm_away 
+                data:
+                  entity_id: alarm_control_panel.texecom
+                  code: !secret alarm_code
+              - wait_for_trigger:
+                  - platform: state
+                    entity_id: alarm_control_panel.texecom
+                    to: armed_away
+                timeout: 00:00:20
+              - service: telegram_bot.edit_message
+                data:
+                  message_id: "{{states('input_text.alarm_arming_message_id')}}"                
+                  chat_id: "{{trigger.event.data.chat_id}}"
+                  message: "Alarm currently {{states('alarm_control_panel.texecom').replace('_',' ')}}"
+                  
+            # Hot tub set with only time
+          - conditions: "{{(trigger.event.data.text.lower()|regex_match('.*tub.*[0-9][0-9]:[0-9][0-9].*')) or (trigger.event.data.text.lower()|regex_match('.*tub.*[0-9][0-9]:[0-9][0-9].*'))}}"
+            sequence:
+              - service:  input_datetime.set_datetime
+                data:
+                  entity_id: input_datetime.hottub_ready_by
+                  time: "{{trigger.event.data.text|regex_findall_index('[0-9][0-9]:[0-9][0-9]')}}"
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"          
+                  message: >
+                    Hottub is {{states('sensor.hottub_summary')}} at {{states('input_number.hottub_water_temp')|int(0)}}°C.  
+                    
+                    Schedule {{states('input_boolean.hottub_scheduled')}}: {{states('input_number.hottub_water_target')|int(0)}}°C by {{states('input_datetime.hottub_ready_by')}}
+                  inline_keyboard:
+                    - 'Set Time:/tub_set_time, Schedule On:/tub_sched_on'
+                    - 'Set Temp:/tub_set_temp, Schedule Off:/tub_sched_off' 
+                    - 'OK:/remove_keyboard'        
+
+            # Hot tub set with only temp
+          - conditions: "{{(trigger.event.data.text.lower()|regex_match('.*tub.*[0-9][0-9].*')) or (trigger.event.data.text.lower()|regex_match('.*tub.*[0-9][0-9].*'))}}"
+            sequence:
+              - service:  input_number.set_value
+                data:
+                  entity_id: input_number.hottub_water_target
+                  value: "{{trigger.event.data.text|regex_findall_index('[0-9][0-9]')}}"
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"          
+                  message: >
+                    Hottub is {{states('sensor.hottub_summary')}} at {{states('input_number.hottub_water_temp')|int(0)}}°C.  
+                    
+                    Schedule {{states('input_boolean.hottub_scheduled')}}: {{states('input_number.hottub_water_target')|int(0)}}°C by {{states('input_datetime.hottub_ready_by')}}
+                  inline_keyboard:
+                    - 'Set Time:/tub_set_time, Schedule On:/tub_sched_on'
+                    - 'Set Temp:/tub_set_temp, Schedule Off:/tub_sched_off' 
+                    - 'OK:/remove_keyboard'                               
+                  
+            # Water off
+          - conditions: "{{trigger.event.data.text.lower()|regex_match('.*water.*off.*') }}"
+            sequence:
+              - service: switch.turn_off
+                target:
+                  entity_id: switch.shutoff_valve
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"                
+                  message: "Water turned {{ states('switch.shutoff_valve') }}"
+                  inline_keyboard:
+                    - 'Turn On:/water_on'
+                    - 'OK:/remove_keyboard'  
+
+            # Water on
+          - conditions: "{{trigger.event.data.text.lower()|regex_match('.*water.*on.*') }}"
+            sequence:
+              - service: switch.turn_on
+                target:
+                  entity_id: switch.shutoff_valve
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"                
+                  message: "Water turned {{ states('switch.shutoff_valve') }}"
+                  inline_keyboard:
+                    - 'Turn Off:/water_off'
+                    - 'OK:/remove_keyboard'  
+                    
+            # Water 
+          - conditions: "{{trigger.event.data.text.lower() == 'water' }}"
+            sequence:
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{trigger.event.data.chat_id}}"                
+                  message: "Water turned {{ states('switch.shutoff_valve') }}"
+                  inline_keyboard:
+                    - "{{'Turn On:/water_on' if is_state('switch.shutoff_valve','off') else 'Turn Off:/water_off'}}"
+                    - 'OK:/remove_keyboard'  
+                    
+        default:
+          - service: telegram_bot.send_message
+            data:
+              target: "{{trigger.event.data.chat_id}}"          
+              message: "eh? try typing help"      
+          

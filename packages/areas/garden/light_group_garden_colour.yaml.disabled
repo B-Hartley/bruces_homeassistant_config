@@ -1,0 +1,9 @@
+light:           
+  - platform: group
+    unique_id: light_group_garden_colour
+    name: Garden Colour
+    entities:
+    - light.garden_colour_1
+    - light.garden_colour_2
+    - light.garden_colour_3
+    - light.garden_colour_4

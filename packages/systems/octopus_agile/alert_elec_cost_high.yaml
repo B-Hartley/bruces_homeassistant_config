@@ -1,0 +1,19 @@
+alert:
+  alert_elec_cost_high:
+    name: Electricity Cost High
+    done_message: Electricity cost is ok
+    entity_id: binary_sensor.elec_high_cost
+    state: 'on'
+    repeat:
+      - 10
+      - 20
+      - 30
+      - 60
+      - 120
+      - 240
+      - 480
+      - 960
+    can_acknowledge: true
+    skip_first: true
+    notifiers:
+      - telegram_bruce_and_sarah

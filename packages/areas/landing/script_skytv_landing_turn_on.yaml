@@ -1,0 +1,10 @@
+script:
+    'skytv_landing_turn_on':
+      alias: sky TV Turn On Landing
+      sequence:
+      - service: media_player.turn_on
+        entity_id: media_player.samsung_ue55ju6400
+      - service: media_player.turn_on
+        entity_id: media_player.landing_skyq
+#      - service: input_boolean.turn_on
+#        entity_id: input_boolean.watching_skytv

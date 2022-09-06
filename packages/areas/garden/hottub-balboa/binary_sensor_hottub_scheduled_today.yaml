@@ -1,0 +1,7 @@
+template:
+  binary_sensor:
+    - name: "HotTub Scheduled Today"
+      unique_id: hottub_scheduled_today
+      #availability: "{{ states('binary_sensor.bwa_wi_fi_module') }}"      
+      state: "{{ (as_timestamp(states('input_datetime.hottub_ready_by')) - as_timestamp(now())) < (24*3600) and is_state('input_boolean.hottub_scheduled','on')  }}"
+      #device_class: 

@@ -1,0 +1,8 @@
+template:
+  sensor:
+    - name: "HotTub Target Temp"
+      unique_id: hottub_target_temp
+      availability: "{{ states('binary_sensor.bwa_wi_fi_module') }}"
+      device_class: temperature
+      unit_of_measurement: '°C'
+      state: "{{ state_attr('climate.spa_thermostat','temperature') }}"

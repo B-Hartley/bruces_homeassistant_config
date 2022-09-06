@@ -1,0 +1,11 @@
+group:
+  patio_lights_group:
+    name: Patio Lights
+    entities:
+    - light.patio_light
+    - light.patio_gazebo
+    - light.patio_gazebo_wall
+    - light.patio_garage
+    - light.back_door
+    - light.garden_colour
+    - light.shed_light

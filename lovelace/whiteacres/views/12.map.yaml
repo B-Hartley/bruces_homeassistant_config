@@ -1,0 +1,37 @@
+icon: 'mdi:map'
+panel: true
+path: map
+title: Map
+visible:
+  - user: 86df00251766415c9acf21b3b3e51496
+  - user: 990bb6b8fa704d2ab36d42d63b8ad19e
+  - user: 1de5d8e2c14c47939a8174d6e4147f31
+  - user: 5b3b262300294eb5ae1308855791b6a2
+badges: []
+cards:
+  - cards:
+      - entities:
+          - entity: person.bruce_hartley
+          - entity: person.sarah_hartley
+          - entity: person.sophie_hartley
+          - entity: person.kate_hartley
+          - entity: person.jyggy
+          - entity: person.moira
+          - entity: person.paddy
+          - entity: person.mo
+          - entity: person.chas
+        hours_to_show: 24
+        title: Last 24 Hours
+        type: map
+      - icon: 'mdi:menu'
+        show_icon: true
+        show_name: false
+        styles:
+          card:
+            - height: 90px
+        tap_action:
+          action: navigate
+          haptic: success
+          navigation_path: /lovelace-switchboard/menu
+        type: 'custom:button-card'
+    type: vertical-stack

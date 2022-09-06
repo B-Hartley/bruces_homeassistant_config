@@ -1,0 +1,23 @@
+automation:
+  - id: phone_connected_to_jyggy
+    alias: Phone connected to Jyggy
+    trigger:
+      - platform: event
+        event_type: ios.action_fired  
+        event_data:
+          actionName: 'JyggyBruce'
+    action:
+      - service: notify.telegram_bruce_and_sarah
+        data:
+          title: Jyggy
+          message: 'Bruce in Jyggy'
+#          data:
+#            push:
+#              thread-id: "jyggy"
+#            apns_headers:
+#              apns-collapse-id: jyggy_doors
+#      - service: persistent_notification.create
+#        data:
+#          title: Jyggy
+#          message: 'Bruce in Jyggy'
+#          notification_id: jyggy_doors

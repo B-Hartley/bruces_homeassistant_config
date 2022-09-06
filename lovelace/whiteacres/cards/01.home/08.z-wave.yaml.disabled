@@ -1,0 +1,9 @@
+entities:
+  - entity: zwave.z_wave_me_zme_uzb1_usb_stick
+  - entity: zwave.tkb_home_tz68_on_off_switch_socket_1
+  - entity: zwave.tkb_home_tz68_on_off_switch_socket_2
+show_empty: false
+state_filter:
+  - operator: '!='
+	value: ready
+type: entity-filter

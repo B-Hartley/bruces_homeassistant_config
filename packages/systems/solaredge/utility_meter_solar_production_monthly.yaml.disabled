@@ -1,0 +1,4 @@
+utility_meter:
+    solar_energy_monthly_kwh:
+      source: sensor.solaredge_mb_ac_energy_kwh
+      cycle: monthly

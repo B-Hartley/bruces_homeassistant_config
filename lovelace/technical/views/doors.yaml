@@ -1,0 +1,69 @@
+title: doors
+path: doors
+icon: 'mdi:door'
+badges: []
+cards:
+  - entities:
+      - entity: binary_sensor.front_door
+        name: Front
+      - entity: binary_sensor.back_door    
+        name: Back
+      - entity: binary_sensor.conservatory_door
+        name: Conservatory   
+      - entity: binary_sensor.back_gate_door    
+        name: Back Gate
+    type: glance      
+  
+  - entities:    
+  
+      - entity: binary_sensor.lounge_door
+        name: Lounge
+      - entity: binary_sensor.under_stairs_door
+        name: Under Stairs
+
+      - entity: binary_sensor.bar_door
+        name: Bar
+      - entity: binary_sensor.kitchen_door
+        name: Kitchen
+      - entity: binary_sensor.downstairs_toilet_door
+        name: Loo
+    type: glance      
+
+  - entities:    
+      - entity: binary_sensor.fridge_door
+        name: Fridge
+      - entity: binary_sensor.fridge_freezer_door
+        name: Freezer        
+    type: glance      
+
+  - entities:
+      - entity: binary_sensor.guest_bedroom_door
+        name: Guest Bed
+      - entity: binary_sensor.kates_bedroom_door
+        name: Kate Bed
+      - entity: binary_sensor.sophies_bedroom_door
+        name: Sophie Bed
+      - entity: binary_sensor.master_bedroom_door
+        name: Master Bed
+      - entity: binary_sensor.master_bedroom_ensuite_door
+        name: Ensuite
+      - entity: binary_sensor.main_bathroom_door
+        name: Bathrooom
+      - entity: binary_sensor.drum_room_door
+        name: Drum Room
+    type: glance
+    
+  - entities:
+      - entity: binary_sensor.master_bedroom_wardrobe_door_1
+        name: Wardrobe 1
+      - entity: binary_sensor.master_bedroom_wardrobe_door_2
+        name: Wardrobe 2
+    type: glance    
+
+#  - entities:
+#      - entity: timer.downstairs_loo
+#      - entity: binary_sensor.downstairs_toilet_door
+#      - entity: light.downstairs_toilet_light
+#      - entity: input_boolean.room_occupied_downstairs_loo
+#      - entity: binary_sensor.downstairs_toilet_motion
+#    type: entities

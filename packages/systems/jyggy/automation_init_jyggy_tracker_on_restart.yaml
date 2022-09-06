@@ -1,0 +1,14 @@
+automation:
+  - id: init_jyggy_tracker
+    alias: 'Init Jyggy Tracker'
+    
+    description: >
+      init Jyggy Tracker on Home Assistant Restart
+      
+    trigger:
+      - platform: homeassistant
+        id: "start"
+        event: start
+        
+    action:
+      - service: script.initjyggytracker

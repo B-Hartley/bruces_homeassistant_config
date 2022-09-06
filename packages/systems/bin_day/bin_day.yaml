@@ -1,0 +1,31 @@
+rest:
+  - resource: !secret binday_server_resource
+    sensor:
+      - name: Bin Day Rubbish
+        value_template: "{{  'none' if value_json.Rubbish == [] else value_json.Rubbish[0].collectionDate }}"
+        json_attributes_path: Rubbish[0]
+        json_attributes:
+          - nextCollectionDate
+      - name: Bin Day Garden
+        value_template: "{{ 'none' if value_json.Garden == [] else  value_json.Garden[0].collectionDate }}"
+        json_attributes_path: Garden[0]
+        json_attributes:
+          - nextCollectionDate          
+      - name: Bin Day Recycling
+        value_template: "{{ 'none' if value_json.Recycling == [] else value_json.Recycling[0].collectionDate }}"
+        json_attributes_path: Recycling[0]
+        json_attributes:
+          - nextCollectionDate  
+    binary_sensor:
+      - name: Put Out Garden
+        value_template: >
+          {{ 'none' if value_json.Garden == [] else (value_json.Garden[0].collectionDate == (as_timestamp(now()) + 86400)|timestamp_custom('%A %-d %B', True)) or 
+          (value_json.Garden[0].collectionDate == (as_timestamp(now()) )|timestamp_custom('%A %-d %B',True)) }}    
+      - name: Put Out Rubbish
+        value_template: >
+          {{ 'none' if value_json.Rubbish == [] else (value_json.Rubbish[0].collectionDate == (as_timestamp(now()) + 86400)|timestamp_custom('%A %-d %B', True)) or 
+          (value_json.Rubbish[0].collectionDate == (as_timestamp(now()) )|timestamp_custom('%A %-d %B',True)) }}              
+      - name: Put Out Recycling
+        value_template: >
+          {{ 'none' if value_json.Recycling == [] else (value_json.Recycling[0].collectionDate == (as_timestamp(now()) + 86400)|timestamp_custom('%A %-d %B', True)) or 
+          (value_json.Recycling[0].collectionDate == (as_timestamp(now()) )|timestamp_custom('%A %-d %B',True)) }}               

@@ -1,0 +1,8 @@
+sensor:
+  - platform: mqtt_room
+    #unique_id: espresence_sophie_iphone
+    device_id: !secret sophie_iphone_ra
+    name: 'EsPresence Sophie iPhone'
+    state_topic: 'espresense/rooms'
+    timeout: 60
+    away_timeout: 120

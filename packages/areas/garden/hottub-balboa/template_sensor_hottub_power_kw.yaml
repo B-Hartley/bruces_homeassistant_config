@@ -1,0 +1,10 @@
+template:
+  sensor:
+    - name: "HotTub Power KW"
+      unique_id: hottub_power_kw  
+      availability: "{{ states('sensor.shellyem_garage_hottub_power')|is_number }}"
+      device_class: power
+      unit_of_measurement: 'kW'
+      state: "{{ (states('sensor.shellyem_garage_hottub_power')|float(0)/1000.0)|round(2,'',0) }}"
+      
+      

@@ -1,0 +1,64 @@
+script:
+  store_and_flash_lights:
+    alias: save current state
+    sequence:
+      - service: python_script.light_store
+        data:
+          store_name: flash_store
+          entity_id:
+              - light.conservatory_lamp
+              - light.conservatory_wall_light
+              - light.conservatory_fan_light
+              - light.conservatory_left
+              - light.conservatory_right
+              - light.downstairs_toilet_light
+              - light.drum_room_light
+              - light.guest_bedroom_light
+              - light.guest_bedroom_bedside
+              - light.guest_bedroom_lamp
+              - light.hall_light
+              - light.kates_bedroom_light
+              - light.kates_bedroom_lamp
+              - light.landing_1
+              - light.landing_2
+              - light.landing_3
+              - light.lounge_tv_right
+              - light.lounge_tv_left
+              - light.lounge_right
+              - light.lounge_fire
+              - light.lounge_left_back
+              - light.lounge_bar_cart
+              - light.lounge_left_front
+              - light.master_bedroom_wall_left
+              - light.master_bedroom_wall_right
+              - light.master_bedroom_bedside_left
+              - light.master_bedroom_bedside_right
+              - light.master_bedroom_wardrobe
+              - light.master_bedroom_wardrobe_bars
+              - light.sophies_bedroom_lamp
+              - light.sophies_bedroom_light
+   #           - light.studio_lamp
+              - light.under_stairs_light
+              - light.utility_light
+      - service: light.turn_on
+        data:
+          entity_id: light.downstairs
+          transition: 0
+          color_name: red
+      - service: light.turn_on
+        data:
+          entity_id: light.downstairs
+          flash: short
+      - service: python_script.light_store
+        data:
+          store_name: flash_store
+          operation: restore
+          
+          
+  restore_lights:
+    alias: Restore saved lights to the way they were
+    sequence:
+      - service: python_script.light_store
+        data:
+          store_name: flash_store
+          operation: restore

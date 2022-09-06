@@ -1,0 +1,17 @@
+icon: 'mdi:car'
+panel: true
+path: drive
+title: Drive
+visible:
+  - user: 86df00251766415c9acf21b3b3e51496
+  - user: 1de5d8e2c14c47939a8174d6e4147f31
+badges: []
+cards:
+  - aspect_ratio: 50%
+    camera_image: camera.drive_medium
+    camera_view: live
+    entity: camera.drive_medium
+    name: Drive
+    show_name: false
+    show_state: false
+    type: picture-entity

@@ -1,0 +1,103 @@
+card:
+  show_state: false
+  type: glance
+entities:
+  - entity: light.front_door_and_drive
+    name: Drive
+    hold_action:
+      action: more-info
+    tap_action:
+      action: toggle
+  - entity: light.kitchen_all
+    name: Kitchen
+    hold_action:
+      action: more-info
+    tap_action:
+      action: toggle
+  - entity: light.bar_lights
+    name: Bar
+    hold_action:
+      action: more-info
+    tap_action:
+      action: toggle
+  - entity: light.lounge_lights
+    name: Lounge
+    hold_action:
+      action: more-info
+    tap_action:
+      action: toggle
+  - entity: light.conservatory_lights
+    name: Conservatory
+    hold_action:
+      action: more-info
+    tap_action:
+      action: toggle
+  - entity: light.hall
+    name: Hall
+    hold_action:
+      action: more-info
+    tap_action:
+      action: toggle
+  - entity: light.downstairs_toilet_light
+    name: Downstairs Loo
+    hold_action:
+      action: more-info
+    tap_action:
+      action: toggle
+  - entity: light.under_stairs_light
+    name: UnderStairs
+    hold_action:
+      action: more-info
+    tap_action:
+      action: toggle
+  - entity: light.patio_lights
+    name: Patio
+    hold_action:
+      action: more-info
+    tap_action:
+      action: toggle
+  - entity: light.utility_light
+    name: Utility
+    hold_action:
+      action: more-info
+    tap_action:
+      action: toggle
+  - entity: light.landing_lights
+    name: Landing
+    hold_action:
+      action: more-info
+    tap_action:
+      action: toggle
+  - entity: light.master_bedroom_lights
+    hold_action:
+      action: more-info
+    tap_action:
+      action: toggle
+  - entity: light.kates_bedroom_all
+    name: Kate's Room
+    hold_action:
+      action: more-info
+    tap_action:
+      action: toggle
+  - entity: light.sophies_bedroom_all
+    name: Sophie's Room
+    hold_action:
+      action: more-info
+    tap_action:
+      action: toggle
+  - entity: light.guest_bedroom_lights
+    name: Guest Room
+    hold_action:
+      action: more-info
+    tap_action:
+      action: toggle
+  - entity: light.drum_room
+    name: Drum Room
+    hold_action:
+      action: more-info
+    tap_action:
+      action: toggle
+show_empty: false
+state_filter:
+  - 'on'
+type: entity-filter

@@ -1,0 +1,11 @@
+automation:
+  - id: hottub_change_target
+    alias: HotTub Change Target
+    trigger:
+      platform: state
+      entity_id: input_number.hottub_water_target
+    action:
+      - service: rest_command.hottub_temp_set
+        data_template: 
+          hottub_api_did: !secret hottub_api_did
+          hottub_water_target: "{{ states('input_number.hottub_water_target') | int}}"

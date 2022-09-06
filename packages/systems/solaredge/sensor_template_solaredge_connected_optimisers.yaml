@@ -1,0 +1,5 @@
+template:
+  sensor:
+    - name: "Solaredge Optimisers"
+      unique_id: solaredge_optimisers
+      state: "{{ state_attr('sensor.solaredge_inverters','inverters')[0].connectedOptimizers }}"

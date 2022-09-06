@@ -1,0 +1,41 @@
+type: conditional
+#view_layout:
+#  position: sidebar
+conditions:
+  - entity: input_boolean.floorplan_show_master_bedroom_switches
+    state: "on"
+card:
+ type: entities
+ entities:
+  - entity: light.master_bedroom_bedside_left
+    hide_state: true
+    name: Bedside Left
+    type: 'custom:slider-entity-row'
+  - entity: light.master_bedroom_bedside_right
+    hide_state: true
+    name: Bedside Right
+    type: 'custom:slider-entity-row'
+  - entity: light.master_bedroom_wall_left
+    hide_state: true
+    name: Wall Left
+    type: 'custom:slider-entity-row'
+  - entity: light.master_bedroom_wall_right
+    hide_state: true
+    name: Wall Right
+    type: 'custom:slider-entity-row'    
+  - entity: light.master_bedroom_lamp
+    hide_state: true
+    name: Lamp
+    type: 'custom:slider-entity-row'    
+  - entity: light.master_bedroom_wardrobe
+    hide_state: true
+    name: Wardrobe
+    type: 'custom:slider-entity-row'    
+  - entity: light.master_bedroom_wardrobe_bars
+    hide_state: true
+    name: Wardrobe Bars
+  - entity: input_boolean.floorplan_show_master_bedroom_switches
+    name: Show These Switches    
+
+
+  

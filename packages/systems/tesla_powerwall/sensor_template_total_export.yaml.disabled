@@ -1,0 +1,8 @@
+template:
+  sensor:
+    - name: "Powerwall Total Export"	  
+	  unique_id: powerwall_total_export
+      availability: "{{ states('binary_sensor.powerwall_connected_to_tesla') != 'Unavailable' }}"
+      state: "{{ state_attr('sensor.powerwall_battery_now','energy_exported_(in_kW)') }}"
+      device_class: energy
+      unit_of_measurement: kWh

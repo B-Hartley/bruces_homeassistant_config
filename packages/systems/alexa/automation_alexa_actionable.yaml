@@ -1,0 +1,22 @@
+automation:
+  - id: alexa_actionable_hall_light_left_on
+    alias: 'Hall Light Left On'
+    
+    description: >
+      Hall Light Left On
+
+    trigger:
+      platform: state
+      entity_id: light.hall_light
+      to: 'on'
+      for:
+        minutes: 100
+
+    action:
+      - service: script.activate_alexa_actionable_notification
+#should this be data not data_template
+        data_template:
+          text: 'The Hall light has been on for 100 minutes, would you like me to turn it off?'
+          event_id: 'actionable_notification_hall_light_off'
+          alexa_device: 'media_player.lounge_echo_dot'
+          

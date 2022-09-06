@@ -1,0 +1,56 @@
+automation:
+  - id: unifi_protect_person_detected_doorbell_entry
+    alias: Send message when person detected doorbell and then door opens
+    mode: restart
+    
+    description: >
+      send a photo when person seen and then door opens
+      
+    trigger:  
+      - platform: state
+        id: 'person'
+        entity_id:  sensor.doorbell_detected_object
+        to: person
+        
+    variables:   
+      base_url: !secret base_url
+      thumbnail: "{{ state_attr('sensor.doorbell_detected_object','event_thumbnail') }}"
+      
+    action:
+    # Need event to end so can get thumbnail and door to open
+      - alias: "Wait for Front door to open or event to end"
+        wait_for_trigger:
+          - platform: state
+            id: "cleared"
+            entity_id: sensor.doorbell_detected_object
+            from: "person"
+            to: "none"
+          - platform: state
+            id: "door open"
+            entity_id: binary_sensor.front_door
+            from: "off"            
+            to: "on"
+        timeout: "00:01:00"     
+        continue_on_timeout: false        
+        
+      - alias: "Wait for Front door to open or event to end"
+        wait_for_trigger:
+          - platform: state
+            id: "cleared"
+            entity_id: sensor.doorbell_detected_object
+            from: "person"            
+            to: "none"
+          - platform: state
+            id: "door open"
+            entity_id: binary_sensor.front_door
+            from: "off"
+            to: "on"            
+        timeout: "00:01:00"     
+        continue_on_timeout: false        
+
+      - alias: "send photo by telegram"
+        service: telegram_bot.send_photo
+        data:
+          caption: "Somone has arrived and opened the front door"
+          url: "{{ base_url + thumbnail }}"
+          target: !secret telegram_chat_id_bruce_and_sarah             

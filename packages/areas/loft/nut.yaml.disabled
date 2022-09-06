@@ -1,0 +1,13 @@
+# is this done through UI now ?
+
+sensor:
+  - platform: nut
+    name: apc_ups
+    host: a0d7b954-nut
+    username: !secret nut_username
+    password: !secret nut_password
+    resources:
+      - battery.charge
+      - battery.runtime
+      - ups.load
+      - ups.status

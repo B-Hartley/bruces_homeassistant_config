@@ -1,0 +1,10 @@
+template:
+  - sensor:
+      - name: "Water Pressure - Bar"
+        unique_id: water_pressure_bar
+        unit_of_measurement: bar
+        device_class: pressure
+        availability: "{{states('sensor.water_pressure')|is_number}}"
+        state: "{{ (states('sensor.water_pressure')|float*0.0689476)|round(2)}}"
+        state_class: measurement  
+

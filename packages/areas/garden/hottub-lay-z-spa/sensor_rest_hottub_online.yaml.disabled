@@ -1,0 +1,9 @@
+sensor:
+  - platform: rest
+    name: hottub_online
+    resource: "https://mobileapi.lay-z-spa.co.uk/v1/gizwits/is_online"
+    headers:
+      Content-Type: application/x-www-form-urlencoded
+    method: POST
+    payload: !secret hottub_api_did
+    value_template: "{{ value_json.data }}"

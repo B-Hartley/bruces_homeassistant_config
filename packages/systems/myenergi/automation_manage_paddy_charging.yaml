@@ -1,0 +1,38 @@
+automation:
+  - id: manage_paddy_charging
+    alias: 'Manage Paddy Charging'
+    mode: queued 
+    
+    description: >
+      Manage Car Charging
+      FAST - if needs charge AND (Plunge Pricing or below charging price)
+      STOPPED - If unplugged or notr charge required of Peak Pricing or SolarEdge Sleep (nighttime)
+      ECO+ - otherwise
+
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.powerwall_charge_corrected
+        above: 95
+      - platform: homeassistant
+        event: start
+      - platform: event
+        event_type: automation_reloaded      
+      - platform: state
+        entity_id: 
+          - binary_sensor.agile_peak
+          - binary_sensor.agile_plunge            
+          - binary_sensor.paddy_below_max_charge_cost
+          - binary_sensor.paddy_needs_charge          
+          - sensor.solaredge_status_text       
+          - binary_sensor.go_cheap
+      - platform: state
+        entity_id: sensor.myenergi_paddy_plug_status
+        to: 'EV Connected'          
+     
+    action:
+      - alias: Set Zappi Jyggy to required Mode
+        service: select.select_option
+        target: 
+          entity_id: select.myenergi_paddy_charge_mode
+        data:
+          option: "{%- if is_state('binary_sensor.agile_plunge','on') or is_state('binary_sensor.paddy_below_max_charge_cost','on') -%}Fast{%- elif is_state('sensor.myenergi_paddy_plug_status','EV Disconnected') or is_state('binary_sensor.agile_peak','on') or is_state('sensor.solaredge_status_text','Sleep') -%}Stopped{%- else -%}Eco+{%- endif -%}"          

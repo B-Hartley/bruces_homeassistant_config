@@ -1,0 +1,9 @@
+mqtt:
+  binary_sensor:
+    - unique_id: conservatory_mqtt_room  
+      name: conservatory Mqtt Room
+      state_topic: espresense/rooms/conservatory/status
+      json_attributes_topic: espresense/rooms/conservatory/telemetry
+      payload_on: online
+      payload_off: offline
+      device_class: connectivity

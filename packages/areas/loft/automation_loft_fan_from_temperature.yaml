@@ -1,0 +1,84 @@
+automation:
+  - id: loft_fan_on_when_cabinet_above_set_value
+    alias: 'Turn on loft fan with temp sensor'
+    
+    description: >
+      Turn on loft fan when cabinet hot or CPU hotter
+
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.nuc_cpu_temperature
+        above: 49
+        for: 
+          minutes: 2
+      - platform: numeric_state
+        entity_id: sensor.nuc_cpu_temperature
+        below: 46
+        for:
+          minutes: 2
+      - platform: numeric_state
+        entity_id: sensor.loft_cabinet_temperature
+        above: input_number.loft_fan_thermostat
+      - platform: numeric_state
+        entity_id: sensor.loft_cabinet_temperature
+        above: input_number.loft_fan_thermostat
+        for: 
+          minutes: 2
+      - platform: numeric_state
+        entity_id: sensor.loft_cabinet_temperature
+        below: input_number.loft_fan_thermostat
+        for: 
+          minutes: 2          
+      - platform: state
+        entity_id: input_number.loft_fan_thermostat
+      - platform: homeassistant
+        id: "start"
+        event: start
+      - platform: event
+        id: "reload"
+        event_type: automation_reloaded   
+
+    action:
+      - choose:
+            # NUC processor below 46c and cabinet 2C or more below set value
+          - conditions: "{{ ( states('sensor.nuc_cpu_temperature')|float(50)<46.0 ) and ((states('input_number.loft_fan_thermostat')|float(50)-states('sensor.loft_cabinet_temperature')|float(50))>2.0 ) }}"
+            sequence:
+              - condition: state
+                entity_id: fan.loft_fan
+                state: "on"      
+              - service: fan.turn_off
+                entity_id: fan.loft_fan            
+#              - service: telegram_bot.send_message
+#                data:
+#                  target: !secret telegram_chat_id_bruce
+#                  message: >
+#                    Loft Fan has Turned off
+#                
+#                    Cabinet: {{ states('sensor.loft_cabinet_temperature') }}°C
+#                 
+#                    CPU: {{ states('sensor.nuc_cpu_temperature') }}°C            
+#              - condition: template
+#                value_template: "{{ states('input_text.loft_fan_message_id') != '0' }}"
+#              - service: telegram_bot.delete_message
+#                data:
+#                  message_id: "{{ states('input_text.loft_fan_message_id') }}"
+#                  chat_id: !secret telegram_chat_id_bruce   
+#              - service: input_text.set_value
+#                data:
+#                  entity_id: input_text.loft_fan_message_id
+#                  value: 0          
+
+          - conditions: "{{ is_state('fan.loft_fan','off') }}"                
+            sequence:
+              - service: fan.turn_on
+                entity_id: fan.loft_fan
+#              - service: telegram_bot.send_message
+#                data:
+#                  target: !secret telegram_chat_id_bruce
+#                  message_tag: loft_fan
+#                  message: >
+#                    Loft Fan has Turned on
+#                    
+#                    Cabinet: {{ states('sensor.loft_cabinet_temperature') }}°C
+#                    
+#                    CPU: {{ states('sensor.nuc_cpu_temperature') }}°C

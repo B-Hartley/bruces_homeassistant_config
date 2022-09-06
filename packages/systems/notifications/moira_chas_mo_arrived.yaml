@@ -1,0 +1,18 @@
+automation:
+    - id: moira_chas_mo_arrived
+      alias: Moira Chas or Mo Arrived
+      mode: single
+      trigger:
+        - platform: state
+          entity_id: 
+            - person.chas
+            - person.mo
+            - person.moira
+          from: not_home
+          to: home
+      action:
+        - service: telegram_bot.send_message
+          data:
+            target: !secret telegram_chat_id_bruce_and_sarah
+            message: "{{ trigger.friendly_name }} has just arrived."
+        - delay: 00:05:00

@@ -1,0 +1,22 @@
+automation:
+- id: hottub_off_after_five_mins
+  alias: Hot Tub Filter off after five minutes
+  description: 'Turn off filter if not heating after five minutes'
+  mode: single
+  trigger:
+  - platform: homeassistant
+    event: start
+  - platform: event
+    event_type: automation_reloaded    
+  - platform: state
+    entity_id: switch.hottub_filter
+    from: 'off'
+    to: 'on'
+    for: 00:05:00
+  condition:
+  - condition: state
+    entity_id: switch.hottub_heat
+    state: 'off'
+  action:
+  - service: switch.turn_off
+    entity_id: switch.hottub_power

@@ -1,0 +1,10 @@
+#moved into UI
+light:
+  - platform: group
+    unique_id: bar_palm_group
+    name: Bar Palm
+    entities:
+    - light.bar_palm_1
+    - light.bar_palm_2
+    - light.bar_palm_3
+  

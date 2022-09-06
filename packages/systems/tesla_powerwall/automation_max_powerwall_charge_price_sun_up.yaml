@@ -1,0 +1,35 @@
+automation:
+  - id: set_max_powerwall_charge_price_sun_up
+    alias: "Powerwall charge below 1p when sun up"
+    mode: single
+    
+    description: >
+      When sun comes up, set charge below price to 1p
+      
+    trigger:
+      - platform: state
+        entity_id: sensor.solaredge_status_text
+        from: "Sleep"
+        to: "Working"
+      - platform: homeassistant
+        event: start
+      - platform: event
+        event_type: automation_reloaded     
+        
+    condition:
+      - condition: state
+        entity_id: sensor.solaredge_status_text
+        state: "Working"
+        
+
+    action:
+      - service: input_number.set_value
+        target:
+          entity_id: input_number.overnight_powerwall_max_charge
+        data:
+          value: 0
+      - service: input_number.set_value
+        target:
+          entity_id: input_number.powerwall_charge_below_x_pence
+        data:
+          value: 1

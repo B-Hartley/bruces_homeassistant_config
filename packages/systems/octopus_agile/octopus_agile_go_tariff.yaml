@@ -1,0 +1,61 @@
+octopusagile:
+  region_code: "L"
+  mpan: !secret octopus_mpan
+  serial: !secret octopus_serial
+  auth: !secret octopus_auth
+  startdate: "2020-07-22"
+  consumption: false
+
+# Easily switch between agile and go rates.
+  # If you include gorate, it'll override
+  # the times for the times specified in gotimes
+  
+  gorate: 5
+  
+  # You can leave godayrate out to go by
+  # Agile rates outside of offpeak period
+  godayrate: 16.26
+  gotimes:
+  - "23:30:00"
+  - "00:00:00"
+  - "00:30:00"
+  - "01:00:00"
+  - "01:30:00"
+  - "02:00:00"
+  - "02:30:00"
+  - "03:00:00"  
+  
+#  moneymakers:
+#  - switch.water_heater: null
+#  - climate.downstairs: 
+#      params:
+#        temp: 25
+  #timers:
+  #- day_from: today
+  #  day_to: tomorrow
+  #  entity_id: switch.not_used
+  #  numHrs: 5
+  #  params: null
+  #  requirements:
+  #    - day_from: today
+  #      day_to: tomorrow
+  #      numHrs: 1
+  #      time_from: '19:00:00'
+  #      time_to: '06:00:00'
+  #    - day_from: tomorrow
+  #      day_to: tomorrow
+  #      numHrs: 1
+  #      time_from: '10:00:00'
+  #      time_to: '16:00:00'
+  #  time_from: '19:00:00'
+  #  time_to: '19:00:00'
+
+#  run_devices:
+#  - energy_time: 2.5
+#    entity_id: dishwasher
+#    run_before: '08:00:00'
+#    run_time: 3.0
+#  - energy_time: 2.5
+#    entity_id: washer
+#    run_before: '08:00:00'
+#    run_time: 2.5

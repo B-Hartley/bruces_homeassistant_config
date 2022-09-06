@@ -1,0 +1,10 @@
+script:
+  restart_dream_machine:
+    sequence:
+      - service: switch.turn_off
+        target:
+          entity_id: switch.dream_machine
+      - delay: 5
+      - service: switch.turn_on
+        target:
+          entity_id: switch.dream_machine      

@@ -1,0 +1,9 @@
+mqtt:
+  sensor:
+    - name: "Export Meter"
+      state_topic: !secret smart_hild_state_topic
+      unit_of_measurement: 'kWh'
+      device_class: energy
+      icon: mdi:speedometer
+      value_template: "{{ (value_json['elecMtr']['0702']['00']['01']|int(base=16) * value_json['elecMtr']['0702']['03']['01']|int(base=16) / value_json['elecMtr']['0702']['03']['02']|int(base=16))|round(2) }}"
+      state_class: total_increasing    

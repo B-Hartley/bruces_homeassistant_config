@@ -1,0 +1,30 @@
+automation:
+    - id: set_cleaner_home_or_away_based_on_phone
+      alias: 'Set Cleaner Home or Away based on phone'
+      
+      description: >
+        Terri Phone Device tracker, set location_name
+        
+      trigger:
+        - platform: homeassistant
+          id: "start"
+          event: start
+        - platform: event
+          id: "reload"
+          event_type: automation_reloaded         
+        - platform: state
+          id: "phone arrive"
+          entity_id: device_tracker.terri_phone
+          to: 'home'
+        - platform: state
+          id: "phone leave"        
+          entity_id: device_tracker.terri_phone
+          to: 'not_home'
+          for: '00:05:00'
+              
+          
+      action:
+        - service: device_tracker.see
+          data:
+            dev_id: cleaner
+            location_name: "{{ states('device_tracker.terri_phone') }}"

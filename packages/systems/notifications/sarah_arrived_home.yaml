@@ -1,0 +1,14 @@
+automation:
+    - id: sarah_arrived
+      alias: Sarah Arrived Home
+      mode: single
+      trigger:
+        - platform: state
+          entity_id: person.sarah_hartley
+          to: home
+      action:
+        - service: telegram_bot.send_message
+          data:
+            target: !secret telegram_chat_id_bruce
+            message: Sarah has arrived home
+        - delay: 00:05:00

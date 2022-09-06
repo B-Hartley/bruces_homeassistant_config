@@ -1,0 +1,40 @@
+automation:
+  - id: reset_jyggy_charge_amps
+    alias: 'Set Charge Amps to 32 for cheap charging'
+    mode: queued 
+    
+    description: >
+      Manage Jyggy Charging
+      32 - if needs charge AND (Plunge Pricing or below charging price)
+          
+    trigger:
+      - platform: state
+        id: "plunge"
+        entity_id: binary_sensor.agile_plunge    
+        to: 'on'   
+      - platform: state
+        id: "go_cheap"
+        entity_id: binary_sensor.go_cheap
+        to: 'on'       
+      - platform: state
+        id: "below_max"
+        entity_id: binary_sensor.jyggy_below_max_charge_cost
+        to: 'on'           
+    
+    action:
+      - choose:
+          - conditions: 
+          # Is this logic correct ??
+              - condition: not
+                conditions:
+                  - condition: state
+                    entity_id: 'sensor.solaredge_status_text'
+                    state: 'Working'
+                  - condition: trigger
+                    id: "below_max"
+                    
+            sequence:      
+              - service: rest_command.jyggy_api
+                data:
+                  teslafi_token: !secret teslafi_token                 
+                  jyggy_command: "set_charging_amps&charging_amps=32"    

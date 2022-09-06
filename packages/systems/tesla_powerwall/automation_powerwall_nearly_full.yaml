@@ -1,0 +1,24 @@
+automation:
+  - id: powerwall_nearly_full
+    alias: 'Powerwall Nearly at 100'
+    mode: single
+    
+    description: >
+      notify soon to be full
+
+    trigger:
+      - platform: numeric_state
+        id: 'nearly_full'
+        entity_id: sensor.powerwall_charge
+        above: 97
+        
+    condition:
+      - condition: numeric_state
+        entity_id: sensor.solaredge_mb_ac_power
+        above: 500
+        
+    action:
+      - service: telegram_bot.send_message
+        data:
+          target: !secret telegram_chat_id_bruce
+          message: "The powerwall will soon be full, solar production at {{ states('sensor.solaredge_mb_ac_power') }}W"

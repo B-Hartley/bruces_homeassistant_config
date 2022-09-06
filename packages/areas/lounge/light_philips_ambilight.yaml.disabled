@@ -1,0 +1,7 @@
+light:
+# Lounge TV - Ambilight
+  - platform: philips_ambilight
+    name: Lounge Ambilight
+    host: !secret lounge_tv_ip
+    username: !secret lounge_tv_username
+    password: !secret lounge_tv_password

@@ -1,0 +1,1 @@
+"""The Google Vision component."""
